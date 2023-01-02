@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- ### Change assignment number ### -->
+    <title>COMP 2012H Assignment 5: Deque</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="comp2012h_pa5_files/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="comp2012h_pa5_files/blog-home.css" rel="stylesheet">
+
+    <!-- Prism syntax highlighter -->
+    <link href="comp2012h_pa5_files/prism.css" rel="stylesheet">
+
+    <style>
+        pre {
+            background: #f4f4f4 !important;
+            border: 1px solid #ddd !important;
+            border-left: 3px solid #f36d33 !important;
+            color: #666 !important;
+            page-break-inside: avoid !important;
+            font-family: monospace !important;
+            font-size: 14px !important;
+            line-height: 1.6 !important;
+            margin-bottom: 1.6em !important;
+            max-width: 100% !important;
+            overflow: auto !important;
+            padding: 1em 1.5em !important;
+            display: block !important;
+            word-wrap: break-word !important;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 5px;
+        }
+        th {
+            text-align: left;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="comp2012h_pa5_files/prettify.css">
+    <script src="comp2012h_pa5_files/prompt.js"></script>
+</head>
+
+<body data-new-gr-c-s-check-loaded="8.880.0" data-gr-ext-installed="">
+<script src="comp2012h_pa5_files/prism.js"></script>
+
+<!-- Page Content -->
+<div class="container">
+
+    <div class="row">
+
+        <!-- Entries Column -->
+        <div class="col-md-9">
+
+            <h2 class="my-4">
+                <span style="color:darkblue">COMP 2012H</span>
+                <small>Honors Object-Oriented Programming and Data Structures</small>
+            </h2>
+
+            <!-- ### Change assignment number and title ### -->
+            <h3 class="my-4">
+                Assignment 5
+                <span style="color:#660066">Deque</span>
+            </h3>
+
+            <!-- Honor Code section -->
+            <div class="card mb-4">
+                <div class="card-body" id="honor" style="background-color:#f4f4f4">
+                    <h3 class="card-title">Honor Code</h3>
+                    <p class="card-text">
+                        We value academic integrity very highly. Please read the <a href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a> section on our course webpage to make sure you understand what is considered as plagiarism and what the penalties are.
+                        The following are some of the highlights:
+                    </p><ul>
+                    <li>
+                        Do NOT try your "luck" - we use sophisticated plagiarism detection software to find cheaters.
+                        We also review codes for potential cases manually.
+                    </li>
+                    <li>
+                        The penalty (for <b>BOTH</b> the copier and the copiee) is not just getting a zero in your assignment.
+                        Please read the <a href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a> thoroughly.
+                    </li>
+                    <li>
+                        Serious offenders will fail the course immediately, and there will be additional disciplinary actions
+                        from the department and university, upto and including expulsion.
+                    </li>
+                </ul>
+                    <p></p>
+                </div>
+                <div class="card-footer text-muted">
+                    End of Honor Code
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body" id="objective" style="background-color:#f4f4f4">
+                    <h3 class="card-title">Objectives & Intended Learning Outcomes</h3>
+                    <p class="card-text">
+                        The objective of this assignment is to provide you with practice on structs, pointers, linked lists
+                        and file IO. Upon completion of this assignment, you should be able to:
+                    </p>
+                    <ol>
+                        <li>
+                            Use pointers to manipulate data
+                        </li>
+                        <li>
+                            Implement a linked list and its variants
+                        </li>
+                        <li>
+                            Use structs to define new data types.
+                        </li>
+                        <li>
+                            Use File IO to read from / write to files.
+                        </li>
+                    </ol>
+                    <p></p>
+                </div>
+                <div class="card-footer text-muted">
+                    End of Objectives & Intended Learning Outcomes
+                </div>
+            </div>
+
+            <!-- Introduction section -->
+            <!-- ### Complete introduction section for the assignment ### -->
+            <div class="card mb-4">
+                <!-- ### Add an image representing the assignment content here ### -->
+                <img class="card-img-top" src="comp2012h_pa5_files/images/deque-banner.jpg" alt="Card image cap"
+                     style="width: 70%;">
+                <div class="card-body" id="introduction">
+                    <p class="card-text">
+                        <small>
+                            <em>
+                                "Deque" is a special data structure,
+                                where elements can be added to or removed from either the front (head) or back (tail).
+                                <br> Source:
+                                <a href="https://learnersbucket.com/tutorials/data-structures/implement-deque-data-structure-in-javascript/" target="_blank">
+                                    https://learnersbucket.com/tutorials/data-structures/implement-deque-data-structure-in-javascript/</a>
+                            </em>
+                        </small>
+                    </p>
+                    <h3 class="card-title">Introduction</h3>
+                    <p class="card-text">
+                        The goal of this assignment is to implement a "deque", which is a special data structure,
+                        with the help of "circular doubly-linked list with a sentinel node",
+                        a variant of the linked list we saw during class.
+                    </p>
+
+                    <p class="card-text">
+                        A "double-ended queue", or "deque" (pronounced deck) is a special data structure,
+                        for which elements can be added to or removed from either the front (head) or back (tail).
+                    </p>
+
+                    <br>
+
+                    <h4>Circular doubly-linked list with a sentinel node</h4>
+                    <p class="card-text">
+                        Don't worry about the long name, let's break it down step by step.
+                    </p>
+
+                    <h5>Doubly-linked list</h5>
+                    <p class="card-text">
+                        In the singly-linked list, "delete" is not a handy stuff.
+                        Whenever you want to delete a node, you need to first delete it,
+                        and then connect its previous node with its next node.
+                        However, we cannot visit its previous node from itself, so
+                        we need to iterate though the list and always keep track of the
+                        previous node of current node.
+                    </p>
+
+                    <div style="text-align: center;">
+                        <img class="card-img-top" src="comp2012h_pa5_files/images/doubly-linked.png" alt="doubly-linked"
+                             style="width: 70%;">
+                    </div>
+
+                    <p class="card-text">
+                        To solve this problem, we can connect two nodes in both ways:
+                        if <code>node_x.next = node_y</code>, then we also have
+                        <code>node_y.prev = node_x</code>. Now, we can access the previous node from the node itself,
+                        and when we delete node <code>curr</code>, we can simply do
+                        <code>curr.prev.next = curr.next</code>, which means "for the previous node of the deleted node,
+                        its <code>next</code> pointer will point to the next node of the deleted node now";
+                        we also need to update "the previous node of
+                        the next node", i.e., <code>curr.next.prev = curr.prev</code>.
+                        (Note: special cases will be handled below, when the list only has 0 or 1 items)
+                    </p>
+
+                    <div style="text-align: center;">
+                        <img class="card-img-top" src="comp2012h_pa5_files/images/doubly-linked-deletion.png" alt="doubly-linked-deletion"
+                             style="width: 70%;">
+                    </div>
+
+                    <p class="card-text">
+                        This frees us from always keeping track of the previous node of current node.
+                        Usually in doubly-linked list, we will store both first node and last node
+                        of the list, so that we can iterate either from first to last or from last
+                        to first backwards.
+                    </p>
+
+                    <h5>Sentinel node</h5>
+                    <p class="card-text">
+                        In the singly-linked list taught during lectures, you may have already noticed
+                        something annoying: <em>when we insert or delete an item, we ALWAYS need to check
+                        some special cases, e.g., if the list is empty, or if the list contains only
+                        one element.</em> The <b>doubly-linked list</b> alone will not solve the problem.
+                        For example, when you want to delete an element in the list, you need
+                        to consider:
+                    </p>
+                    <ol>
+                        <li>When the element is the first element</li>
+                        <li>When the element is the last element</li>
+                        <li>Other cases</li>
+                    </ol>
+                    <p class="card-text">
+                        Example implementation in code:
+                    </p>
+                    <pre>
+<code class="language-cpp">if (curr -> prev != nullptr) curr -> prev -> next = curr -> next;
+        else first = curr -> next;
+if (curr -> next != nullptr) curr -> next -> prev = curr -> prev;
+        else last = curr -> prev;
+</code></pre>
+
+                    <p class="card-text">
+                        To avoid having to check for different cases each time we perform list operation,
+                        we can put a dummy <b>"sentinel node"</b> at the beginning of the list,
+                        no matter whether the list is empty or not:
+                    </p>
+
+                    <div style="text-align: center;">
+                        <img class="card-img-top" src="comp2012h_pa5_files/images/sentinel.png" alt="sentinel"
+                             style="width: 70%;">
+                    </div>
+
+                    <p class="card-text">
+                        Now the code becomes:
+                    </p>
+                    <pre>
+<code class="language-cpp">curr -> prev -> next = curr -> next;
+if (curr -> next != nullptr) curr -> next -> prev = curr -> prev;
+        else last = curr -> prev;
+</code></pre>
+
+
+                    <h5>Circular list with a sentinel</h5>
+                    <p class="card-text">
+                        The sentinel node is never selected for deletion, so we no longer need to check if 
+                        the deleted node is at the beginning of the list.
+                        This simplifies the number of cases, but we still need to check if
+                        the node to delete is the last element. A solution is to add another sentinel node 
+                        at the end; however, it can be more efficient to reuse the existing sentinel node:
+                    </p>
+
+                    <div style="text-align: center;">
+                        <img class="card-img-top" src="comp2012h_pa5_files/images/circular-sentinel.png" alt="circular-dllist"
+                             style="width: 70%;">
+                    </div>
+
+                    <p class="card-text">
+                        Since the last element is connected with the sentinel node, we say
+                        the list is <b>circular</b>. Then there is no need to worry
+                        whether the element we are going to delete is the first or last:
+                        they will never be! The code now becomes:
+                    </p>
+                    <pre>
+<code class="language-cpp">curr -> prev -> next = curr -> next;
+curr -> next -> prev = curr -> prev;
+</code></pre>
+
+                    <p class="card-text">
+                        That's a <b>circular doubly-linked list with a sentinel</b>.
+                        This kind of list should be very simple to implement because there are
+                        no special cases to consider!
+                    </p>
+
+
+                </div>
+                <div class="card-footer text-muted">
+                    End of Introduction
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body" id="description">
+                    <h3 class="card-title">Description</h3>
+                    <p class="card-text">
+                        Please read the <a href="#faq">FAQ</a> section for some common clarifications. You should check that
+                        a day before the deadline to make sure you don't miss any clarification, even if you have already
+                        submitted your work by then.
+                    </p>
+                    <br>
+
+                    <h4>How does a deque look like?</h4>
+                    <p class="card-text">
+                        In C++ STL (Standard Template Library), deque is provided as a standard container
+                        in <code>#include &lt;deque&gt;</code>. It is implemented using "a bunch of arrays with fixed size".
+                    </p>
+
+                    <div style="text-align: center;">
+                        <img class="card-img-top" src="comp2012h_pa5_files/images/stl-deque.png" alt="stl-deque"
+                             style="width: 40%;">
+                        <br>
+                        <small>Source: <a href="https://stackoverflow.com/questions/6292332/what-really-is-a-deque-in-stl">
+                            https://stackoverflow.com/questions/6292332/what-really-is-a-deque-in-stl
+                        </a></small>
+                    </div>
+
+                    <p class="card-text">
+                        They do this because this structure supports very fast "random access".
+                        For example, if we want to get the 30-th element in the deque, we can
+                        find out which chunk to look at, and which position the element locates in the chunk
+                        <em>by computation</em>, instead of iterating through 30 items from the beginning.
+                    </p>
+
+                    <p class="card-text">
+                        However, this is relatively difficult to implement and manipulate. In this assignment,
+                        we will <b>replace the "map" shown in the figure above, with a "circular doubly-linked list
+                        with a sentinel", where each node in the list is a fixed-size array.</b>
+                    </p>
+
+                    <br>
+                    <h4>Iterator</h4>
+                    <p class="card-text">
+                        In C++ STL, an <b>iterator</b> is used to point to
+                        the memory address of the container (like deque).
+                        For better understanding, you can relate them with a pointer, to some extent.
+                    </p>
+
+                    <p class="card-text">
+                        Why do we need the iterator? Consider the following case: when you now points
+                        at the last item in a node, and you want to move on to next item, you need to
+                        move to next node in your list. However, it is not possible with only a pointer:
+                        you don't know which node you are currently at, not to mention where is your next node!
+                    </p>
+
+                    <p class="card-text">
+                        To solve that situation, we <b>wrap the pointer and which node we are currently at</b>,
+                        into a structure. To be more convenient later, we will record the first and last
+                        address of this node, and also keep them in the structure.
+                        That's an <b>iterator</b>, and that's exactly what C++ does in its STL.
+                    </p>
+
+                    <div style="text-align: center;">
+                        <img class="card-img-top" src="comp2012h_pa5_files/images/iterator.png" alt="iterator"
+                             style="width: 80%;">
+                    </div>
+
+                    <pre><code class="language-cpp">struct Node {
+    int arr[CHUNK_SIZE];        // the chunk
+    Node* prev;                 // previous Node
+    Node* next;                 // next Node
+};
+
+struct Iterator {
+    int* current;           // current position
+    int* first;             // begin of the chunk, i.e., the position of first item
+    int* last;              // end of the chunk, i.e., the position after the last item
+    const Node* node;       // current Node
+};</code></pre>
+
+                    <p class="card-text">
+                        Back to the situation we discussed above, when we need to move on to next node,
+                        we will have:
+                    </p>
+
+                    <div style="text-align: center;">
+                        <img class="card-img-top" src="comp2012h_pa5_files/images/iterator-move.png" alt="iterator-move"
+                             style="width: 85%;">
+                    </div>
+
+                    <p class="card-text">
+                        You may notice that the "last", or "end" (if we use STL) pointer in the
+                        iterator always points at
+                        <b>the position next to the last item</b>. This is designed in such a way
+                        to distinguish when a container is empty / has one item.
+                        Meanwhile the "first", or "start" (if we use STL) pointer always points
+                        at <b>the first item</b>.
+                    </p>
+
+                    <div style="text-align: center;">
+                        <img class="card-img-top" src="comp2012h_pa5_files/images/iterator-end.png" alt="iterator-end-pointer"
+                             style="width: 85%;">
+                    </div>
+
+                    <br>
+                    <h4>A Deque</h4>
+                    <p class="card-text">
+                        Now, what we need in a deque is (1) <b>two iterators</b>, representing the position of first item
+                        and the position next to the last item in the deque, as well as (2)
+                        <b>a circular doubly-linked list with sentinel</b>, where each node is an array of
+                        fixed size. We use 8 in this assignment
+                        (stored in a const variable <code>CHUNK_SIZE</code>).
+                    </p>
+
+                    <pre><code class="language-cpp">struct Deque {
+    Iterator start;     // the position of first item in deque
+    Iterator end;       // the position after last item in deque
+
+    Node* sentinel;     // sentinel of the circular doubly-linked list
+    int ll_size;        // size of linked list, this is number of chunks, not items
+};</code></pre>
+
+                    <div style="text-align: center;">
+                        <img class="card-img-top" src="comp2012h_pa5_files/images/whole-deque.png" alt="deque-structure"
+                             style="width: 95%;">
+                    </div>
+                    <br>
+                    <p class="card-text">
+                        In this assignment, you are required to:
+                    </p>
+                    <ul>
+                        <li>
+                            Implement the basic functions of a deque <b>Iterator</b>.
+                        </li>
+                        <li>
+                            Implement the basic functions of a <b>deque</b>.
+                        </li>
+                    </ul>
+
+                    <br>
+                    <h4>Additional Remarks</h4>
+                    <p class="card-text">
+                    </p>
+                    <ul>
+                        <li>
+                            You are required to implement
+                            <ul>
+                                <li>
+                                    All <a href="#tasks-part1">part I tasks</a> in <code>Deque_Iterator.cpp</code>,
+                                </li>
+                                <li>
+                                    All <a href="#tasks-part2">part II tasks</a> in <code>Deque.cpp</code>,
+                                </li>
+                            </ul>
+                            You need to create these two files on your own, and <b>submit only these two files to ZINC
+                            for grading</b>.
+                        </li>
+                        <li>
+                            You are allowed to define your own helper functions, but be careful as ZINC won't be able to know
+                            of their existence. This shouldn't be a problem as long as the tasks' function
+                            return values are as expected.
+                        </li>
+                        <li>
+                            All the task functions are in global scope, and you are allowed to have the task functions call
+                            each other for easier implementation. Be careful when two or more functions call each other
+                            reciprocally, as they may enter an infinite loop.
+                        </li>
+                        <li>
+                            You are only allowed to use two header files <code>#include &lt;iostream&gt;</code>
+                            and <code>#include &lt;fstream&gt;</code> for File IO, in addition to the two header files
+                            <code>Deque_Iterator.h</code> and <code>Deque.h</code> we provided.
+                        </li>
+                        <li>
+                            <strong>You are strictly forbidden to modify the two header files we provide,</strong>.
+                            i.e., <code>Deque_Iterator.h</code> and <code>Deque.h</code>.
+                            However, you can overload the functions in them. When we grade your program, if we cannot find
+                            the exact function whose signature is what we given in
+                            the header files, you will have <strong>no score</strong> for that task.
+                            This situation is unlikely to occur if you never modified the <code>main</code> function
+                            and if it runs well.
+                        </li>
+                    </ul>
+                    <p></p>
+                </div>
+                <div class="card-footer text-muted">
+                    End of Description
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body" id="tasks">
+                    <h3 class="card-title">Tasks</h3>
+                    <p class="card-text">
+                        This section describes the functions that you will need to implement.
+                        Please refer to the <code>main</code> function given in
+                        <a href="#download">skeleton</a> to see how they are invoked.
+                    </p>
+                    <br>
+
+                    <h3 style="text-align: center" id="tasks-part1">Part I: Deque Iterator</h3>
+                    <br>
+                    <h4>Task 1 - Implement the <code>equal()</code> and <code>value()</code> functions</h4>
+
+                    <pre><code class="language-cpp">bool equal(const Iterator& it1, const Iterator& it2);
+int value(const Iterator& it);</code></pre>
+
+                    <p class="card-text">
+                        The <code>equal()</code> function checks whether the two iterators point to
+                        the same address, i.e., whether their current positions are the same.
+                        If they point to the same address, we consider they are equal, and return
+                        <code>true</code>; otherwise, return <code>false</code>.
+                    </p>
+
+                    <p class="card-text">
+                        The <code>value()</code> function returns the value that the iterator is
+                        currently pointing at. It should be a value in the deque.
+                    </p>
+
+                    <p class="card-text">
+                        You don't need any validity checking. We assure the iterators passed in
+                        are always well-initialized and point to meaningful addresses during grading.
+                        However, if you use them in other tasks later, make sure you pass valid parameters.
+                    </p>
+
+                    <br>
+                    <h4>Task 2 - Move the Iterators</h4>
+
+                    <pre><code class="language-cpp">void set_node(Iterator& it, Node* new_node);
+Iterator next(const Iterator& it);
+Iterator prev(const Iterator& it);</code></pre>
+
+                    <p class="card-text">
+                        The <code>set_node()</code> function will let the iterator <code>it</code> point
+                        at node <code>new_node</code>. Note that you should not update <code>it.current</code>,
+                        since this pointer is not determined by the node, while other variables in
+                        the iterator should be determined by the new node.
+                    </p>
+
+                    <p class="card-text">
+                        The <code>next()</code> function returns an iterator that points to
+                        the position next to the given <code>it</code>.
+                        You should <b style="color:red">not</b> modify the <code>it</code> passed in, you need to
+                        create a new iterator and return it, so we passed <code>it</code>
+                        by <code>const</code> to avoid modifying.
+                    </p>
+
+                    <p class="card-text">
+                        The <code>prev()</code> function is similar to <code>next()</code>,
+                        but returns an iterator that points to
+                        the position before the given <code>it</code>.
+                    </p>
+
+                    <p class="card-text">
+                        You don't need any validity checking. We assure the iterators passed in
+                        are always well-initialized and point to meaningful addresses during grading.
+                        However, if you use them in other tasks later, make sure you pass valid parameters.
+                    </p>
+
+                    <br>
+                    <p class="card-text">
+                        <b>Note for Part I: </b>The sample <code>main()</code> function we provided
+                        (i.e., the sample input/output) does not directly call those functions in Part I
+                        (other than <code>prev</code> being used for one function call).
+                        It is mainly used to check the correctness of your deque in Part II; nevertheless,
+                        many Part II functions require Part I implementations to work properly.
+                        However, please bear in mind that we <b>will directly call those functions
+                        in Part I during actual grading.</b>
+                    </p>
+
+
+                    <br>
+                    <h3 style="text-align: center" id="tasks-part2">Part II: Deque</h3>
+                    <br>
+                    <h4>Task 3 - Create and destroy the deque</h4>
+                    <pre><code class="language-cpp">Deque create_deque();
+void destroy_deque(Deque& deque);</code></pre>
+
+                    <p class="card-text">
+                        The <code>create_deque()</code> function returns an empty deque containing
+                        no elements. However, the linked list should contain
+                        <b>one sentinel node</b> and <b>at least one normal node with no element in its array</b>,
+                        so that the <code>start</code> and <code>end</code> Iterator of the deque
+                        both point at <b>some position of the array in a normal node</b>.
+                        (Recall that they should point at same position for an empty deque,
+                        but for simplicity you don't have to let them both point at the first position as the image
+                        shown below)
+                    </p>
+
+                    <div style="text-align: center;">
+                        <img class="card-img-top" src="comp2012h_pa5_files/images/empty-deque.png" alt="empty-deque"
+                             style="width: 85%;">
+                    </div>
+
+                    <p class="card-text">
+                        The <code>destroy_deque()</code> function destroys the deque given.
+                        It should deallocated all memories allocated for this deque, if any,
+                        and also set <code>sentinel</code> to a <code>nullptr</code>.
+                        After the deque is destroyed, the deque becomes "empty" and should never be used again.
+                    </p>
+
+                    <br>
+                    <h4>Task 4 - Front and back of the deque</h4>
+                    <pre><code class="language-cpp">Iterator begin(const Deque& deque);
+Iterator end(const Deque& deque);
+int front(const Deque& deque);
+int back(const Deque& deque);</code></pre>
+
+                    <p class="card-text">
+                        The <code>begin()</code> and <code>end()</code> function
+                        simply return iterators that represent the start and end iterator of the deque.
+                        Recall that <code>end()</code> should point to the position next to the
+                        last element in the deque. (hence the address may not belong to the deque,
+                        that's ok)
+                    </p>
+
+                    <p class="card-text">
+                        The <code>front()</code> and <code>back()</code> function
+                        returns the value of first and last element in the deque.
+                        If the deque is empty, you should print
+                    </p>
+                    <pre><code class="language-cpp">cout << "Cannot get front: deque is empty" << endl;
+// or
+cout << "Cannot get back: deque is empty" << endl;</code></pre>
+                    <p class="card-text">
+                        and we will not care about the return value, you may just return <code>-1</code>
+                        or any unused integer. <em>(Additional note: in STL, get the first/last element
+                        in an empty deque will raise an error. In this PA, we simply
+                        do this because we haven't learned how to raise an error)</em>
+                    </p>
+
+                    <br>
+                    <h4>Task 5 - Size of the deque</h4>
+                    <pre><code class="language-cpp">bool empty(const Deque& deque);
+int size(const Deque& deque);</code></pre>
+
+                    <p class="card-text">
+                        As indicated by their names, <code>empty()</code> returns
+                        <code>true</code> if the deque is empty, and <code>false</code> otherwise;
+                        while <code>size()</code> returns the number of elements in
+                        the deque. <em>Hint:</em> you don't need to iterate through the deque
+                        to get this value, you can compute it since each node has a fixed size of array.
+                    </p>
+
+                    <br>
+                    <h4>Task 6 - Operate the deque at front or back</h4>
+                    <pre><code class="language-cpp">void push_back(Deque& deque, int val);
+void push_front(Deque& deque, int val);
+void pop_back(Deque& deque);
+void pop_front(Deque& deque);</code></pre>
+
+                    <p class="card-text">
+                        The <code>push_back()</code> function inserts the <code>val</code>
+                        as the last element in the deque, while <code>push_front()</code>
+                        function inserts the <code>val</code> as the first element.
+                    </p>
+
+                    <p class="card-text">
+                        On the other hand, the <code>pop_back()</code> function removes
+                        the last element in the deque while <code>pop_front()</code>
+                        removes the first element. If the deque is empty, you should print
+                    </p>
+                    <pre><code class="language-cpp">cout << "Cannot pop_back: deque is empty" << endl;
+// or
+cout << "Cannot pop_front: deque is empty" << endl;</code></pre>
+                    <p class="card-text">
+                        and the function does nothing other than printing the message.
+                        <em>(Additional note: in STL, pop from an empty deque will raise an error.
+                            In this PA, we simply
+                            do this because we haven't learned how to raise an error)</em>
+                    </p>
+
+                    <p class="card-text">
+                        These four operations are basic operations for a deque, which is where
+                        the name of deque (double-ended queue) comes from.
+                    </p>
+
+                    <p class="card-text">
+                        <em>Hint: </em>You may need to create a new node or delete an existing node
+                        when you insert or delete an element.
+                    </p>
+
+                    <p class="card-text">
+                        <em>Hint: </em>Values outside the <code>deque.start</code> and <code>deque.end</code> range
+                        are treated as garbage values and would be overwritten if new values are added at their positions.
+                        In other words, you don't need to worry about deleting/setting the <code>int</code> values to 0
+                        when removing an element from the deque.
+                    </p>
+
+                    <br>
+                    <h4>Task 7 - Print the deque</h4>
+                    <pre><code class="language-cpp">void print_deque(const Deque& deque);</code></pre>
+
+                    <p class="card-text">
+                        This function prints the whole deque, in the format like
+                        <code>[2, 1, 3]</code> (you may see examples in sample output).
+                        If the deque is empty, simply print <code>[]</code>.
+                        The print should end with an <code>endl</code> (see sample output).
+                    </p>
+
+                    <p class="card-text">
+                        <em>Hint: </em>You may use iterator to walk through the deque, from start to end.
+                    </p>
+
+                    <br>
+                    <h4>Task 8 - Insert into / erase from the deque</h4>
+                    <pre><code class="language-cpp">void insert(Deque& deque, const Iterator& pos, int val);
+void erase(Deque& deque, const Iterator& pos);</code></pre>
+
+                    <p class="card-text">
+                        The <code>insert()</code> function insert the given value <code>val</code> into the deque,
+                        before the <b style="color:red">item</b> indicated by <code>pos</code>. For example, if <code>pos</code>
+                        points to the first item in deque, then we insert <code>val</code> before the first item,
+                        i.e., <code>val</code> will be the first item in the new deque.
+                    </p>
+
+                    <p class="card-text">
+                        The <code>erase()</code> function remove the value at the position indicated by
+                        <code>pos</code>. After removal, elements after <code>pos</code> should be moved
+                        forward, i.e., each array should be continuous, there should not exist a "blank position".
+                        For example, if we remove 3 in <code>[2, 3, 1]</code>, it should become
+                        <code>[2, 1]</code> rather than <code>[2, _ , 1]</code>
+                    </p>
+
+                    <p class="card-text">
+                        During actual grading, the <code>pos</code> iterator will always be valid.
+                        For example, we will never call <code>erase()</code> on <code>deque.end</code> iterator,
+                        which points outside the deque.
+                    </p>
+
+                    <p class="card-text">
+                        <em>Additional note:</em> Though we usually operate at the beginning or end of a deque,
+                        these two operations
+                        are still supported by the deque in STL. However, instead of using indices,
+                        we use iterators to represent positions. This will be much easier to implement.
+                    </p>
+
+                    <p class="card-text">
+                        <em>Hint: </em>You may need to create a new node or delete an existing node
+                        when you insert or delete an element.
+                    </p>
+
+                    <br>
+                    <h4>Task 9 - Serialize the deque</h4>
+                    <pre><code class="language-cpp">void store_deque(const Deque& deque, const char* filename);
+Deque load_deque(const char* filename);</code></pre>
+
+                    <p class="card-text">
+                        In most computer programs, if you close the software, or even shutdown your computer,
+                        your data will still be kept after you restart the software.
+                        This is usually done by writing your data into a file and then re-load the data
+                        from the file later.
+                        If an object (like deque here) supports such operations, we say it is <b>serializable</b>.
+                    </p>
+
+                    <p class="card-text">
+                        The <code>store_deque()</code> stores all information of the given deque
+                        in the file identified by <code>filename</code>.
+                        Meanwhile, the <code>load_deque()</code> function loads the
+                        deque stored in file <code>filename</code>.
+                    </p>
+
+                    <p class="card-text">
+                        You may write anything to the file <code>filename</code>,
+                        as long as you are able to load deque from that file later.
+                        During the grading process when we do <code>load_deque</code>,
+                        the file <code>filename</code> always exists, and
+                        is always written by your program via <code>store_deque()</code>.
+                    </p>
+
+                    <p class="card-text">
+                        You don't need to ensure the <b>structure of the deque</b> loaded from file is exactly the
+                        same as the one you stored. As long as their contents are the same, that will be fine.
+                    </p>
+
+
+                </div>
+                <div class="card-footer text-muted">
+                    End of Tasks
+                </div>
+            </div>
+
+            <!-- Download section -->
+            <!-- ### Complete download section for the assignment ### -->
+            <div class="card mb-4">
+                <div class="card-body" id="download">
+                    <h3 class="card-title">Resources &amp; Sample I/O</h3>
+                    <ul>
+                        <li>
+                            Skeleton code: <a href="../Resources/PA5_skeleton.zip">
+                            download here</a>
+                        </li>
+                        <li>
+                            Demo programs: We don't provide demo programs for this PA,
+                            since deque is an "Abstract Data Type (ADT)". The <code>main.cpp</code>
+                            should have provided a good reference on how to invoke each functions
+                            you implemented and how to test them. They are quite similar
+                            to what we will do later in actual grading.
+                        </li>
+                        <li>
+                            Sample program outputs: you should get the following outputs by directly
+                            run the <code>main.cpp</code> we provided without any modification.
+                            <a href="https://www.diffchecker.com/">Here</a> is an online file compare tool.
+                        </li>
+                        <br>
+                        <pre>===== Test create and destroy deque =====
+Deque created
+The deque now is: []
+Deque destroyed
+===== End Test =====
+
+===== Test push back =====
+The deque now is: [10, 2012, 2022]
+===== End Test =====
+
+===== Test push front =====
+The deque now is: [2022, 2012, 10]
+===== End Test =====
+
+===== Test get front and back =====
+Cannot get front: deque is empty
+Cannot get back: deque is empty
+front: 10, back: 10
+front: 10, back: 15
+front: 20, back: 15
+===== End Test =====
+
+===== Test empty and size =====
+deque is empty: true
+size of deque: 0
+deque is empty: false
+size of deque: 1
+deque is empty: false
+size of deque: 2
+deque is empty: false
+size of deque: 3
+===== End Test =====
+
+===== Test pop back =====
+Cannot pop_back: deque is empty
+The deque now is: [20, 10, 15]
+The deque now is: [20, 10]
+The deque now is: [20]
+===== End Test =====
+
+===== Test pop front =====
+Cannot pop_front: deque is empty
+The deque now is: [20, 10, 15]
+The deque now is: [10, 15]
+The deque now is: [15]
+===== End Test =====
+
+===== Test insert =====
+The deque now is: [10, 15, 25]
+The deque now is: [5, 10, 15, 25]
+The deque now is: [5, 10, 15, 20, 25]
+===== End Test =====
+
+===== Test erase =====
+The deque now is: [10, 15, 25]
+The deque now is: [15, 25]
+The deque now is: [15]
+===== End Test =====
+
+===== Test store and load deque =====
+The deque now is: [10, 15, 25]
+Successfully stored deque to 'deque_demo.txt'
+The restored deque is: [10, 15, 25]
+===== End Test =====</pre>
+                    </ul>
+                </div>
+                <div class="card-footer text-muted">
+                    End of Resources &amp; Sample I/O
+                </div>
+            </div>
+
+            <!-- Submission and grading section -->
+            <!-- ### Complete submission and grading section for the assignment ### -->
+            <div class="card mb-4">
+                <div class="card-body" id="submission">
+                    <h3 class="card-title">Submission &amp; Grading</h3>
+                    <p class="card-text">
+                        <strong>Deadline: <span style="color: red;">Sat, 15/10/22</span> HKT 23:59.</strong><br>
+                            Compress the two source code files <code>Deque_Iterator.cpp</code>
+                            and <code>Deque.cpp</code> as <code>PA5.zip</code>
+                            for submission to the <a href="https://zinc.cse.ust.hk/">ZINC Autograding System</a>.
+                            The ZINC submisssion portal for PA3 will be available soon after the announcement of this assignment.
+                    </p>
+                    <p class="card-text">
+                        <strong>Late Policy:</strong><br>
+                        Please refer to the <a href="https://course.cse.ust.hk/comp2012h/#assignments">3-day late budget policy</a>.
+                    </p>
+                    <p class="card-text">
+                        The <code>main.cpp</code> we given in skeleton will be replaced when we grade your program.
+                        <strong>You are strictly forbidden from modifying the given header files</strong>.
+                        However, you can overload the functions in them. When we grade your program,
+                        you should not submit the header files, and we will use the ones provided in skeleton code.
+                        If we cannot find the exact functions whose signature is given in
+                        the two skeleton header files, you will have <strong>no score</strong> for that task.
+                        This situation is unlikely to occur if you do not modify <code>main.cpp</code> and it runs without error.
+                    </p>
+                    <p class="card-text">
+                        Before deadline, the test cases on ZINC will only contain a few cases. If you passed
+                        those tests, it only means your program can successfully run on ZINC and can pass
+                        those test cases. The result is by no mean complete and the score are irrelevant to
+                        your actual score.
+                        In actual grading stage after deadline, we will use a <strong>different set of
+                        test cases</strong>, which is expected to be more complete and more strict,
+                        to test the correctness your program. Your score will be determined based on 
+                        the number of test cases you passed.
+                    </p>
+                    <p class="card-text">
+                        Please bear in mind that we will also check <b>memory leak</b> in test cases.
+                        If your program has memory leak for a test case, you may lose 50% of the score for that case.
+                    </p>
+                    <br>
+                    <h4>Grading Scheme</h4>
+                    <p class="card-text">
+                        The actual grading will use <a href="https://en.wikipedia.org/wiki/Unit_testing", target="_blank">Unit Testing</a>,
+                        i.e., we will test each functions individually, invoke the function you implemented,
+                        and check the return value/expected behavior of that function.
+                        The actual grading will also only be triggered, with the scores and test cases revealed, after the
+                        deadline. This hidden grading policy is for all the PAs in order to prevent reverse-engineering of
+                        the test cases, since the PAs are a significant part of the course assessment and course grade.
+                    </p>
+                    <p class="card-text">
+                        However, please bear in mind that for some functions, <b>we cannot test it without the help
+                        of other functions you implemented</b>. For example, if we want to test <code>print_deque()</code>,
+                        we must first push, or insert some items into the deque.
+                        This is only possible if we invoke your functions like <code>push_back()</code>,
+                        since each student may have a different deque structure and we cannot
+                        directly modify the inner structure of deque.
+                        If any test case fails because of another function you implemented is wrong,
+                        it is possible that you may submit an appeal and ask TA to manually check
+                        your implementation. More details will be provided after grading process.
+                    </p>
+                    <p class="card-text">
+                        We will execute unit testing on the task functions individually, and some
+                        test cases may include invalid input values.
+                        All situations for possible invalid inputs have been described in
+                        <a href="#tasks">Tasks section</a>. You don't have to check other special cases.
+                    </p>
+
+                    <p class="card-text">
+                        Please ensure that you submit to ZINC well before the deadline as <strong>all late submissions will
+                        be automatically rejected</strong>.
+                    </p>
+
+                </div>
+                <div class="card-footer text-muted">
+                    End of Submission &amp; Grading
+                </div>
+            </div>
+
+            <!-- FAQ section -->
+            <!-- ### Complete FAQ section for the assignment ### -->
+            <div class="card mb-4">
+                <div class="card-body" id="faq">
+                    <h3 class="card-title">Frequently Asked Questions</h3>
+                    <p>
+                        <b>Q</b>: My code doesn't work, there is an error/bug, here is the code, can you help me fix it?<br>
+                        <b>A</b>: As the assignment is a major course assessment, to be fair, you are supposed to work on it
+                        on your own and we should not finish the tasks for you. We are happy to help with explanations and
+                        advice, but we shall not directly debug the code for you.
+                    </p>
+                    <p>
+                        <b>Q</b>: What are the restrictions regarding modifying the header files, writing our own helper
+                        functions, including extra header files, etc.? <br>
+                        <b>A</b>: The only hard restriction is that you can only submit <code>Deque_Iterator.cpp</code>
+                        and <code>Deque.cpp</code> to ZINC,
+                        and can only use two header files <code>#include &lt;iostream&gt;</code> and
+                        <code>#include &lt;fstream&gt;</code> in addition to the two header files
+                        <code>Deque_Iterator.h</code> and <code>Deque.h</code> we provided.
+                        Anything else
+                        that you do, while not strictly prohibited, <strong>will be at your own risk regarding the PA5
+                        grading result</strong>. Please keep in mind that there is a grade penalty for all grade appeals that
+                        include modifications to your already submitted code (no matter how trivial the modification is).
+                    </p>
+                    <p>
+                        <b>Q</b>: Am I allowed to use local function declarations (function declaration inside an existing
+                        function) for my helper functions? <br>
+                        <b>A</b>: You are strongly discouraged from doing so, as that "feature" is a leftover merely for
+                        backwards compatibility with C. In C++, it is superseded with class functions and lambda functions,
+                        which will be taught later in this course.
+                    </p>
+                    <p>
+                        <b>Q</b>: I am confused about the <code>first</code>, <code>last</code>, <code>start</code>
+                        and <code>end</code> pointers.<br>
+                        <b>A</b>:
+                        <ul>
+                            <li>
+                                <code>first</code> and <code>last</code> <em>pointers</em> are data members of <b>Iterator</b>
+                                that <b>point to the beginning and end of the Node's array</b>. Essentially, 
+                                <code>first</code>, <code>last</code> and <code>node</code> should always be updated together
+                                to point to the Node containing the item being pointed at by <code>current</code>.
+                                They don't care about the Deque structure or how it is implemented (but you can assume
+                                the current Node's <code>next</code> and <code>prev</code> are pointing at valid Nodes).
+                            </li>
+                            <li>
+                                <code>start</code> and <code>end</code> <em>Iterators</em> are data members of <b>Deque</b>
+                                that <b>point to the start and end of the Deque's data range</b>. Their purpose is to tell the
+                                Deque which range of items are actually data of the Deque, and any items outside the range
+                                are treated as "garbage" values. These should be updated accordingly when the number of items 
+                                in the Deque is changed via element insertion or deletion.
+                            </li>
+                        </ul>
+                    </p>
+                    <p>
+                        <b>Q</b>: When doing <code>insert()</code> and <code>erase()</code>, should we move the elements
+                        on the left or right of the inserted/deleted element?<br>
+                        <b>A</b>: Either is fine, as long as the Deque is printed out correctly. For example, if your current
+                        Deque looks like:<br><br>
+                        [_ _ _ _ 1 2 3 4] [5 6 7 8 _ _ _ _] <br><br>
+                        and item 5 is deleted, your implementation can cause the Deque to become either of these: <br><br>
+                        [_ _ _ _ 1 2 3 4] [6 7 8 _ _ _ _ _] <br>
+                        [_ _ _ _ _ 1 2 3] [4 6 7 8 _ _ _ _] <br><br>
+                        but as long as the Deque is printed as <code>[1, 2, 3, 4, 6, 7, 8]</code>, then you should get the point 
+                        for relevant test cases.
+                    </p>
+                    <p>
+                        <b>Q</b>: After adding the last item to a Node (for example, <code>push_back()</code> on a Deque
+                        so that the final Node's <code>arr[7]</code> is updated), should Iterator <code>end</code> be
+                        pointing at the position after <code>arr[7]</code> in the Node, or at the first item in the next
+                        Node (<code>node.next->arr[0]</code>)?<br>
+                        <b>A</b>: It should point at <b>the first item in the next Node</b> (you may need to make a new Node).
+                        Recall that <code>end</code> is an Iterator, so <code>end.current</code> can only point at positions
+                        <code>arr[0]</code> to <code>arr[7]</code>.
+                    </p>
+                    <p>
+                        <b>Q</b>: Does <code>deque.ll_size</code> count the Sentinel node? For a newly initialized Deque,
+                        should <code>deque.ll_size</code> be 1 or 2?<br>
+                        <b>A</b>: Strictly speaking, <code>deque.ll_size</code> does not count the Sentinel node because
+                        it does not contribute to the Deque's items. So for a newly initialized Deque, <code>ll_size</code>
+                        is 1. However, this property is only for you to help maintain the Deque structure and assist in
+                        counting number of items, and not tested in any of the test cases. As long as you maintain this variable
+                        and use it correctly, there should be no problem.
+                    </p>
+                    <p>
+                        <b>Q</b>: What does it mean by items having "garbage" values?<br>
+                        <b>A</b>: Whenever you initialize a Node with array of size 8, the 8 array elements might hold some 
+                        garbage random int values, or set to some value upon initialization. But we don't say that an item 
+                        is "deleted" when its value is 0, because it is still a valid integer value. The only thing 
+                        determining whether an item is in the Deque or not is if its position is between the 
+                        <code>start</code> and <code>end</code> Iterators.
+                        <br><br>
+                        For more concrete example, suppose your Deque looks like this:
+<pre>
+[ 1, 2, 3, 4, 5, 6, 7, 8 ] [ 9, 10, 11, 12, 13, 14, 15, 16]
+        ^                                ^
+        start.current                    end.current
+</pre>
+                        where <code>deque.start.current</code> points at 3 and <code>end.start.current</code> points at 12. What this means is 
+                        that the Deque values are from 3 to 11 (remember end points to the position after last element) 
+                        - in other words, if you print out the Deque, it should be:
+                        <br><br>
+                        [3, 4, 5, 6, 7, 8, 9, 10, 11]
+                        <br><br>
+                        Even if the remaining array positions hold values 1, 2, 13, 14, 15, 16, they don't belong in the 
+                        Deque, so we don't care what values they hold. Now, if you "delete" element 7 by simply changing 
+                        its value, the new value just becomes a new element in the Deque. You need to maintain the 
+                        <code>start</code> and <code>end</code> Iterators, such as: <br><br>
+<pre>
+[ 1, 2, 3, 4, 5, 6, 8, 9 ] [ 10, 11, 11, 12, 13, 14, 15, 16]
+        ^                             ^
+        start.current                 end.current
+</pre>
+                        Now, when printing the Deque, element 7 is truly deleted:
+                        <br><br>
+                        [3, 4, 5, 6, 8, 9, 10, 11]
+                    </p>
+                </div>
+                <div class="card-footer text-muted">
+                    End of FAQ
+                </div>
+            </div>
+
+            <div class="card mb-4">            
+                <div class="card-body" id="changelog">
+                  <h3 class="card-title">Change Log</h3>
+                    <p>
+                        <b>17:30 30/9/22</b>
+                        <ul>
+                            <li>Fixed description of Task 2: You should <b style="color:red">not</b> modify the <code>it</code> passed in...
+                            </li>
+                        </ul>
+                    </p>
+                    <p>
+                        <b>19:30 07/10/22</b>
+                        <ul>
+                            <li>Added new FAQ questions to clarify some concepts.
+                            </li>
+                        </ul>
+                    </p>
+                    <p>
+                        <b>14:30 09/10/22</b>
+                        <ul>
+                            <li>Added new FAQ question to clarify Iterator <code>end</code> behaviour.
+                            </li>
+                        </ul>
+                    </p>
+                    <p>
+                        <b>18:15 10/10/22</b>
+                        <ul>
+                            <li>Added new FAQ question to clarify <code>ll_size</code> and item deletion.
+                            </li>
+                        </ul>
+                    </p>
+                    <p>
+                        <b>15:20 13/10/22</b>
+                        <ul>
+                            <li>Fixed description of Task 8: The <code>insert()</code> function insert the given value <code>val</code> into the deque, before the <s>position</s> <b style="color:red">item</b> indicated by <code>pos</code>.
+                            </li>
+                            <li>
+                            	Clarification on the definition above: Suppose a Deque is [0, 1, 2, 3], and
+                            	<code>pos</code> points to 2. Calling <code>insert(deque, pos, 4)</code>
+                            	should modify the Deque to become [0, 1, 4, 2, 3].
+                            </li>
+                        </ul>
+                    </p>
+                </div>
+                <div class="card-footer text-muted">
+                  End of Change Log
+                </div>          
+            </div>
+
+        </div>
+
+        <!-- Sidebar Widgets Column -->
+        <div class="col-md-3">
+            <div class="sticky-top">
+                <!-- Menu Widget -->
+                <div class="card my-12">
+                    <h5 class="card-header">Menu</h5>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ul class="mb-0" style="padding-left:20px" type="circle">
+                                    <li>
+                                        <a href="#honor">Honor Code</a>
+                                    </li>
+                                    <li>
+                                        <a href="#objective">Objectives & ILOs</a>
+                                    </li>
+                                    <li>
+                                        <a href="#introduction">Introduction</a>
+                                    </li>
+                                    <li>
+                                        <a href="#description">Description</a>
+                                    </li>
+                                    <li>
+                                        <a href="#tasks">Tasks</a>
+                                        <ul style="margin-left: -25px">
+                                            <li>
+                                                <a href="#tasks-part1">Part I: Deque Iterator</a>
+                                            </li>
+                                            <li>
+                                                <a href="#tasks-part2">Part II: Deque</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#download">Resources &amp; Sample I/O</a>
+                                    </li>
+                                    <li>
+                                        <a href="#submission">Submission &amp; Grading</a>
+                                    </li>
+                                    <li>
+                                        <a href="#faq">FAQ</a>
+                                    </li>
+                                    <li>
+                                        <a href="#changelog">Change Log</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Maintenance widget -->
+                <div class="card my-4">
+                    <h5 class="card-header">Page maintained by</h5>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ul class="list-unstyled mb-0">
+                                    <li>
+                                        DINH, Anh Dung
+                                    </li>
+                                    <li>
+                                        Email: <a href="mailto:dzung@ust.hk">dzung@ust.hk</a>
+                                    </li>
+                                    <li>Last Modified: <script type="text/javascript">document.write(document.lastModified);</script></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Homepage widget -->
+                <div class="card my-4">
+                    <h5 class="card-header">Homepage</h5>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ul class="list-unstyled mb-0">
+                                    <li>
+                                        <a href="http://course.cse.ust.hk/comp2012h">Course Homepage</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+
+</div>
+<!-- /.container -->
+
+<!-- Footer -->
+<footer class="py-5 bg-dark">
+    <div class="container">
+        <p class="m-0 text-center text-white">Maintained by COMP 2012H Teaching Team © 2022 HKUST Computer Science
+            and Engineering</p>
+    </div>
+    <!-- /.container -->
+</footer>
+
+<!-- Bootstrap core JavaScript -->
+<script src="comp2012h_pa5_files/jquery.js"></script>
+<script src="comp2012h_pa5_files/bootstrap.js"></script>
+
+
+
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></html>
