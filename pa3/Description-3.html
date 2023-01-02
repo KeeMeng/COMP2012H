@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- ### Change assignment number ### -->
+    <title>COMP 2012H Assignment 3: Nonogram</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="comp2012h_pa3_files/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="comp2012h_pa3_files/blog-home.css" rel="stylesheet">
+	
+    <!-- Prism syntax highlighter -->
+    <link href="comp2012h_pa3_files/prism.css" rel="stylesheet">
+
+		<style>
+			pre {
+				background: #f4f4f4 !important;
+				border: 1px solid #ddd !important;
+				border-left: 3px solid #f36d33 !important;
+				color: #666 !important;
+				page-break-inside: avoid !important;
+				font-family: monospace !important;
+				font-size: 14px !important;
+				line-height: 1.6 !important;
+				margin-bottom: 1.6em !important;
+				max-width: 100% !important;
+				overflow: auto !important;
+				padding: 1em 1.5em !important;
+				display: block !important;
+				word-wrap: break-word !important;
+			}
+
+			table, th, td {
+				border: 1px solid black;
+			}
+			th, td {
+				padding: 5px;
+			}
+			th {
+				text-align: left;
+			}
+    </style>
+    <link rel="stylesheet" type="text/css" href="comp2012h_pa3_files/prettify.css">
+  	<script src="comp2012h_pa3_files/prompt.js"></script>
+	</head>
+
+  <body data-new-gr-c-s-check-loaded="8.880.0" data-gr-ext-installed="">
+    <script src="comp2012h_pa3_files/prism.js"></script>
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <div class="row">
+
+        <!-- Entries Column -->
+        <div class="col-md-9">
+
+          <h2 class="my-4">
+            <span style="color:darkblue">COMP 2012H</span>
+            <small>Honors Object-Oriented Programming and Data Structures</small>
+          </h2>
+
+          <!-- ### Change assignment number and title ### -->
+          <h3 class="my-4">
+            Assignment 3
+            <span style="color:#660066">Nonogram</span>
+          </h3>
+		  
+			<!-- Honor Code section -->
+			<div class="card mb-4">
+			<div class="card-body" id="honor" style="background-color:#f4f4f4">
+				<h3 class="card-title">Honor Code</h3>
+				<p class="card-text">
+				We value academic integrity very highly. Please read the <a href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a> section on our course webpage to make sure you understand what is considered as plagiarism and what the penalties are.
+				The following are some of the highlights:
+				</p><ul>
+					<li>
+					Do NOT try your "luck" - we use sophisticated plagiarism detection software to find cheaters.
+					We also review codes for potential cases manually.
+					</li>
+					<li>
+					The penalty (for <b>BOTH</b> the copier and the copiee) is not just getting a zero in your assignment.
+					Please read the <a href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a> thoroughly.
+					</li>
+					<li>
+						Serious offenders will fail the course immediately, and there will be additional disciplinary actions
+						from the department and university, upto and including expulsion.
+					</li>
+				</ul>
+				<p></p>
+			</div>
+			<div class="card-footer text-muted">
+							End of Honor Code
+						</div>
+			</div>
+
+			<div class="card mb-4">
+				<div class="card-body" id="objective" style="background-color:#f4f4f4">
+					<h3 class="card-title">Objectives & Intended Learning Outcomes</h3>
+					<p class="card-text">
+						The objective of this assignment is to provide you with practice on arrays, functions, and recursion.
+						Upon completion of this assignment, you should be able to:
+					</p>
+					<ol>
+						<li>
+							Define and use arrays to store data
+						</li>
+						<li>
+							Modularize your program in functions
+						</li>
+						<li>
+							Develop recursive functions to solve computational problems
+						</li>
+					</ol>
+					<p></p>
+				</div>
+				<div class="card-footer text-muted">
+					End of Objectives & Intended Learning Outcomes
+				</div>
+			</div>
+
+			<!-- Introduction section -->
+			<!-- ### Complete introduction section for the assignment ### -->
+			<div class="card mb-4">
+				<!-- ### Add an image representing the assignment content here ### -->
+				<img class="card-img-top" src="comp2012h_pa3_files/banner-nonogram.png" alt="Card image cap"
+					 style="width: 70%;">
+				<div class="card-body" id="introduction">
+					<p class="card-text">
+						<small>
+							<em>
+								"Nonograms" are picture logic puzzles in which cells in a grid must be colored
+								or left blank according to numbers at the side of the grid to
+								reveal a hidden pixel art-like picture. <br> Source:
+								<a href="https://en.wikipedia.org/wiki/Nonogram#/media/File:Nonogram_wiki.svg" target="_blank">
+									https://en.wikipedia.org/wiki/Nonogram#/media/File:Nonogram_wiki.svg</a>
+							</em>
+						</small>
+					</p>
+					<h3 class="card-title">Introduction</h3>
+					<p class="card-text">
+						The goal of this assignment is to implement a text-based "Nonogram" game. You can check this
+						Wikipedia link <a href="https://en.wikipedia.org/wiki/Nonogram" target="_blank">here</a>
+						for a historical overview of this genre of games.
+					</p>
+
+					<p class="card-text">
+						Nonogram is like "a combination of Minesweeper" and "Sudoku". Each cell on the board must be
+						colored or left blank according to numbers at the side of the board (we call them
+						"row constraints" and "column constraints")
+						to reveal a hidden pixel art-like picture.
+					</p>
+
+					<p class="card-text">
+						The numbers (i.e., "row constraints" and "column constraints")
+						measures how many unbroken lines of filled-in squares there are in any given row or column.
+						For example, a constraint of "4 8 3" would mean there are sets of four, eight, and three
+						filled squares, <it>in that order</it>, with <it>at least one blank square</it>
+						between successive sets.
+						You may check the <a href="#introduction">banner above</a> to see how constraints work.
+						That banner is a solved nonogram.
+					</p>
+
+					<br>
+					<p class="card-text">
+						In this assignment, you are required to:
+					</p>
+					<ul>
+						<li>
+							Implement the game mechanisms outlined in Tasks 1 - 4.
+						</li>
+						<li>
+							Implement a <i>solver</i>, which generate a Nonogram solution
+							(or any, if there are multiple solutions) that satisfies
+							all the constraints (Tasks 5 - 9).
+						</li>
+					</ul>
+					<br>
+
+				</div>
+				<div class="card-footer text-muted">
+					End of Introduction
+				</div>
+			</div>
+
+			<div class="card mb-4">
+				<div class="card-body" id="description">
+					<h3 class="card-title">Description</h3>
+					<p class="card-text">
+						Please read the <a href="#faq">FAQ</a> section for some common clarifications. You should check that
+						a day before the deadline to make sure you don't miss any clarification, even if you have already
+						submitted your work by then.
+					</p>
+					<br>
+
+
+					<h4>Gameplay</h4>
+					<p class="card-text">
+						During each round, the game interface displays a menu asking the user to select an action:
+					</p>
+					<ul>
+						<li>
+							<code>p</code> (print) - print the current board
+						</li>
+						<li>
+							<code>m</code> (modify) - user set/unset (color/leave blank) a certain cell
+						</li>
+						<li>
+							<code>c</code> (check) - check if the current board is a valid solution
+						</li>
+						<li>
+							<code>s</code> (solve) - invoke Nonogram solver to solve the game
+						</li>
+						<li>
+							<code>q</code> (quit) - quit the game and ends the program
+						</li>
+					</ul>
+					<br>
+
+					<h4 id="description-solver">Solver</h4>
+					<p class="card-text">
+						You are required to write a solver that (most likely) uses recursion.
+						Please refer to <a href="comp2012h_pa3_files/nonogram-paper.pdf">this paper</a>
+						about an overview of how the solver works.
+						You don't need to know what is DFS or backtracking, just reading the process in
+						<strong>III. USING DFS TO SOLVE NONOGRAM PUZZLE</strong> is good enough.
+					</p>
+
+					<p class="card-text">
+						Don't worry if you are still confused about how to implement such an algorithm after
+						reading the paper. We will give you detailed instructions on
+						implementing some helper functions (Task 5 - 8), and we hope they will
+						help you come up with an idea about how to design a solver with the help of them.
+					</p>
+
+					<p class="card-text">
+						During grading process, we ensure the board we input has <strong>only one</strong> valid solution.
+						So you don't need to worry the cases when (1) there is no solution, or
+						(2) there are multiple solutions. When you are implementing the solver, you may choose
+						either to (1) quit after finding one solution, or (2) quit after finding all solutions.
+						However, we suggest you do the former, since if your solver takes too much time during
+						execution, you may lose some scores.
+					</p>
+
+					<br>
+
+					<h4 id="description-global-var">Global variables</h4>
+					<p class="card-text">
+						Since some variables that representing game states will be used in many functions,
+						we make them global for simplicity. Here are a list of them:
+					</p>
+					<ul>
+						<strong>Global Constants:</strong> (defined at the beginning)
+						<li>
+							<code>const int MAX_ROW = 15, MAX_COL = 15, MAX_CONSTRAINT_NUM = 15</code>
+							- maximum number of rows/columns/constraints of the game board in this assignment.
+						</li>
+						<strong>For game board:</strong> (defined at the beginning)
+						<li>
+							<code>int num_rows, num_cols</code> - number of rows / columns in the game board.
+						</li>
+						<li>
+							<code>char board[MAX_ROW][MAX_COL]</code> - the game board represented by a 2D character array,
+							<code>'.'</code> means the cell is left blank,
+							<code>'X'</code> means colored.
+						</li>
+						<li>
+							<code>int num_row_constraints[MAX_ROW], num_col_constraints[MAX_COL]</code> -
+							number of constraints for each row / column. For example, if
+							row 0 has constraint "4 3 5", then
+							<code>num_row_constraints[0] = 3</code>.
+							This actually records the length of
+							<code>int row_constraints[][], col_constraints[][]</code> below.
+						</li>
+						<li>
+							<code>int row_constraints[MAX_ROW][MAX_CONSTRAINT_NUM],
+								col_constraints[MAX_COL][MAX_CONSTRAINT_NUM]</code> -
+							row / column constraints. For each row / column, there are
+							multiple numbers in its constraint, so we need an array to store it.
+							The length of array is stored in
+							<code>int num_row_constraints[], num_col_constraints[]</code>
+							introduced above.
+						</li>
+						<br>
+						<strong>For solver:</strong> (defined after Task 6)
+						<li>
+							<code>int num_row_perms[MAX_ROW]</code> - number of valid permutations for each row.
+						</li>
+						<li>
+							<code>char row_perms[MAX_ROW][MAX_PERM][MAX_COL]</code> -
+							stores all valid permutations for each row.
+							For example, <code>char row_perms[i][j][k]</code> represents
+							for row <code>i</code>, in the <code>j</code>-th valid permutation,
+							whether the cell at column <code>k</code> is colored or left blank.
+						</li>
+					</ul>
+
+
+					<h4>Additional Remarks</h4>
+					<p class="card-text">
+					</p>
+					<ul>
+						<li>
+							You are allowed to define your own helper functions, but be careful as ZINC won't be able to know
+							of their existence. This shouldn't be a problem as long as the changes to the game state variables
+							and task function return values are as expected.
+						</li>
+						<li>
+							All the task functions are in global scope, and you are allowed to have the task functions call
+							each other for easier implementation. Be careful when two or more functions call each other
+							reciprocally, as they may enter an infinite loop.
+						</li>
+						<li>
+							You are free (but not strictly required) to use recursion in any of the task functions. Some
+							recursion hints are given in the tasks, but otherwise the final decision is up to you. Avoid
+							accidental infinite recursion.
+						</li>
+						<li>
+							You are only allowed to use one header file <code>#include &lt;iostream&gt;</code>.
+						</li>
+						<li>
+							<strong>You are strongly discouraged to modify the <code>main</code> function given in
+							skeleton.</strong> It will be replaced when we grade your program.
+							<strong>You are strictly forbidden to modify the signature of task functions</strong>.
+							However, you can overload them. When we grade your program, if we cannot find
+							the exact function whose signature is what we described in
+							<a href="#tasks">Tasks section</a>, you will have <strong>no score</strong> for that task.
+							This situation is unlikely to occur if you never modified the <code>main</code> function.
+						</li>
+					</ul>
+					<p></p>
+				</div>
+				<div class="card-footer text-muted">
+					End of Description
+				</div>
+			</div>
+
+          <div class="card mb-4">      
+            <div class="card-body" id="tasks">
+              <h3 class="card-title">Tasks</h3>
+				<p class="card-text">
+					This section describes the functions that you will need to implement.
+					Please refer to the <code>main</code> function given in
+					<a href="#download">skeleton</a> to see how they are invoked.
+				</p>
+				<br>
+
+				<h3 style="text-align: center" id="tasks-part1">Part I: Initialize the board.</h3>
+				<br>
+				<h4 id="task1">Task 1 - Implement the <code>get_input_board()</code> function</h4>
+				<p class="card-text">
+					<b>Description</b> - This function asks user to input the board size and constraints,
+					check if the constraints are valid,
+					store the information in global variables and finally initialize the board.
+				</p>
+
+				<p class="card-text">
+					<b>Read constraints</b> - The function will ask user to input constraints
+					row by row, and then column by column. For each row / column, user need to
+					input a list of numbers, separated by a space, to indicate the constraint for
+					this row / column. Since the constraint can be of any length, the user will
+					enter <code>-1</code> at the end, meaning that the constraint for this row / column
+					is ended. If there is no constraint for this row / column, the user should
+					simply enter -1. You may refer to the example below for details.
+				</p>
+
+				<p class="card-text">
+					<b>Validity checking</b> - It is not easy to check if the constraints are valid, for example,
+					you may think if the constraints result in no solution, they are invalid. However,
+					in current stage we are unable to check such complex stuff. So in this function,
+					you only need to check <strong>if the row / column has enough space to possibly
+					hold such constraints</strong>. For example, if a row constraint is "4 3 5", since
+					two adjacent groups require at least 1 blank cell between, we at least need
+					4 + 1 + 3 + 1 + 5 = 14 cells in this row. Hence, if <code>num_cols</code>
+					is smaller than 14, this is invalid. You only need to check this situation.
+				</p>
+				<pre><code class="language-cpp">void get_input_board();</code></pre>
+
+				<p class="card-text">
+					<b>Notes</b>
+				</p>
+				<ul>
+					<li>
+						You may assume the user always input a valid integer for number of rows / columns,
+						i.e., an integer between <code>1</code> and <code>MAX_ROW / MAX_COL</code>.
+					</li>
+					<li>
+						You may assume the user always input positive integers for row / column constraints,
+						except for the -1 used to flag input termination.
+					</li>
+					<li>
+						You may assume the number of user input row/column constraints never exceeds the number of the row/columns, e.g.,
+						if the board size is 3 row by 4 col, the user will input &le; 3 row constraints for each row and &le; 4 column constraints.
+					</li>
+					<li>
+						If the constraints input by user is not valid, this function will
+						tell the user "Invalid row / column constraint, please try again.", and
+						keep asking user to re-input the constraint.
+					</li>
+					<li>
+						Some code snippets have been given for you in the skeleton.
+						You may directly use them for output format.
+					</li>
+				</ul>
+				<br>
+
+				<p class="card-text">
+					<b>Example: </b> (user input is highlighted in <span style="color: red">red</span>)
+					Note that this is just an example, this board may have no solution.
+				</p>
+				<pre>Enter the number of rows: <span style="color: red">3</span>
+Enter the number of columns: <span style="color: red">4</span>
+Enter the number of constraints for row 0 (end with -1): <span style="color: red">-1</span>
+Enter the number of constraints for row 1 (end with -1): <span style="color: red">1 1 -1</span>
+Enter the number of constraints for row 2 (end with -1): <span style="color: red">1 1 1 -1</span>
+Invalid row constraint, please try again.
+Enter the number of constraints for row 2 (end with -1): <span style="color: red">1 3 -1</span>
+Invalid row constraint, please try again.
+Enter the number of constraints for row 2 (end with -1): <span style="color: red">2 1 -1</span>
+Enter the number of constraints for column 0 (end with -1): <span style="color: red">1 1 1 -1</span>
+Invalid column constraint, please try again.
+Enter the number of constraints for column 0 (end with -1): <span style="color: red">1 2 -1</span>
+Invalid column constraint, please try again.
+Enter the number of constraints for column 0 (end with -1): <span style="color: red">2 -1</span>
+Enter the number of constraints for column 1 (end with -1): <span style="color: red">1 -1</span>
+Enter the number of constraints for column 2 (end with -1): <span style="color: red">-1</span>
+Enter the number of constraints for column 3 (end with -1): <span style="color: red">1 1 -1</span>
+[Then this function ends, program will print the board. Remaining parts are ignored.]</pre>
+
+				<br>
+				<h4 id="task2">Task 2 - Implement the <code>print_board()</code> function</h4>
+				<p class="card-text">
+					<b>Description</b> - This function prints the board and the constraints for each row and column.
+					Constraints should be printed at the bottom of each column (top-aligned) and
+					on the left of each row (right-aligned).
+					We will also output row / column index for each row / column.
+					Row indices are numbered in 0, 1, 2, ..., while column indices are numbered in A, B, C, ... .
+					Please note that to distinguish row indices and row constraints,
+					we will print an extra <code>|</code> between each row index and its constraints.
+					You may refer to the example below for details.
+				</p>
+				<pre><code class="language-cpp">void print_board();</code></pre>
+
+				<p class="card-text">
+					<b>Notes</b>
+				</p>
+				<ul>
+					<li>
+						Each cell, or each number in constraint, or each index in the same row
+						is separated by a space, as shown in example below.
+					</li>
+					<li>
+						Each cell, or each number in constraint, or each <strong>column</strong> index
+						occupies one character. However, each row index occupies two characters, and
+						they should be right-aligned, as shown in example below.
+					</li>
+					<li>
+						It's ok to have trailing spaces at the end of each line.
+						We will ignore them during grading process.
+					</li>
+					<li>
+						You may assume constraints will <strong>never contain numbers larger than 9</strong>.
+						So they are always a single digit.
+					</li>
+					<li>You may also assume there will be <strong>no more than <code>MAX_ROW=15</code> rows and
+						<code>MAX_COL=15</code> columns</strong>. The column indices are single characters ranging from
+						<code>A</code> to <code>O</code>. However, there <strong>can be more than 9 rows</strong>,
+						that's why we said each row index needs to take 2 characters.
+					</li>
+				</ul>
+
+				<p class="card-text">
+					<b>Example: </b> (user input is highlighted in <span style="color: red">red</span>)
+					Note that this is just an example, this board may have no solution.
+				</p>
+				<pre>Enter the number of rows: <span style="color: red">5</span>
+Enter the number of columns: <span style="color: red">5</span>
+Enter the number of constraints for row 0 (end with -1): <span style="color: red">2 2 -1</span>
+Enter the number of constraints for row 1 (end with -1): <span style="color: red">2 2 -1</span>
+Enter the number of constraints for row 2 (end with -1): <span style="color: red">-1</span>
+Enter the number of constraints for row 3 (end with -1): <span style="color: red">1 1 -1</span>
+Enter the number of constraints for row 4 (end with -1): <span style="color: red">3 -1</span>
+Enter the number of constraints for column 0 (end with -1): <span style="color: red">2 1 -1</span>
+Enter the number of constraints for column 1 (end with -1): <span style="color: red">2 1 -1</span>
+Enter the number of constraints for column 2 (end with -1): <span style="color: red">1 -1</span>
+Enter the number of constraints for column 3 (end with -1): <span style="color: red">2 1 -1</span>
+Enter the number of constraints for column 4 (end with -1): <span style="color: red">2 1 -1</span>
+         A B C D E
+2 2 |  0 . . . . .
+2 2 |  1 . . . . .
+    |  2 . . . . .
+1 1 |  3 . . . . .
+  3 |  4 . . . . .
+         2 2 1 2 2
+         1 1   1 1
+[Then program will print menu, as shown in main function. Remaining parts are ignored.]</pre>
+
+				<p class="card-text">
+					<b>Another example: </b> when there are more than 9 rows. Here user inputs are ignored
+					and only shows the board.
+				</p>
+				<pre>             A B C D E F G H I J K L
+2 1 2 4 |  0 . . . . . . . . . . . .
+    5 2 |  1 . . . . . . . . . . . .
+1 1 3 1 |  2 . . . . . . . . . . . .
+  2 2 3 |  3 . . . . . . . . . . . .
+  4 1 3 |  4 . . . . . . . . . . . .
+  1 1 8 |  5 . . . . . . . . . . . .
+2 1 1 1 |  6 . . . . . . . . . . . .
+1 2 2 3 |  7 . . . . . . . . . . . .
+    5 4 |  8 . . . . . . . . . . . .
+  2 1 1 |  9 . . . . . . . . . . . .
+    2 6 | 10 . . . . . . . . . . . .
+3 1 1 3 | 11 . . . . . . . . . . . .
+             1 1 2 2 3 4 3 2 1 6 2 1
+             5 2 2 1 6 1 3 1 1 2 7 2
+             1 3 1 3   1 1 3 1 2 1 2
+               2 1 1   2     1     1
+                             1       </pre>
+
+				<br>
+
+				<h3 style="text-align: center" id="tasks-part2">Part II: User play on board.</h3>
+				<br>
+				<h4 id="task3">Task 3 - Implement the <code>user_operate_board()</code> function</h4>
+				<p class="card-text">
+					<b>Description</b> - This function will be called when user choose to set/unset a cell.
+					It will:
+				</p>
+				<ol>
+					<li>
+						Ask user to input which cell he/she wants to modify.
+						The user will need to first enter the column index, followed
+						by a space, and then the row index. For example, "A 2".
+						You may always assume user will first enter a capital letter,
+						followed by a space, and then an integer.
+					</li>
+					<li>
+						Check if the user input is a valid cell(i.e., it is within the board).
+						If invalid, keep asking the user to input until a valid cell is received.
+					</li>
+					<li>
+						Set / unset (color / leave blank) the cell.
+						If the cell was set before, then unset it, and vice versa.
+					</li>
+				</ol>
+				<pre><code class="language-cpp">void user_operate_board();</code></pre>
+				<br>
+
+				<p class="card-text">
+					<b>Example: </b> (user input is highlighted in <span style="color: red">red</span>,
+					and original board is highlighted in <span style="color: blue">blue</span>.)
+					Note that this is just an example, this board may have no solution.
+				</p>
+				<pre><span style="color: blue">         A B C D E
+2 2 |  0 . . . . .
+2 2 |  1 . . . . .
+    |  2 . . . . .
+1 1 |  3 . . . . .
+  3 |  4 . . . . .
+         2 2 1 2 2
+         1 1   1 1</span>
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">m</span>
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">A -1</span>
+Invalid row or column. Try again.
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">A 5</span>
+Invalid row or column. Try again.
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">F 3</span>
+Invalid row or column. Try again.
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">Z 100</span>
+Invalid row or column. Try again.
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">A 0</span>
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">m</span>
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">B 2</span>
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">m</span>
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">A 0</span>
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">m</span>
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">A 0</span>
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">m</span>
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">B 2</span>
+[Then program will print menu. Remaining parts are ignored.]</pre>
+
+
+
+				<h4>Task 4 - Implement the <code>check_whole_board_valid()</code> function</h4>
+				<p class="card-text">
+					<b>Description</b> - This function will be called after user finish filling the whole board.
+					You need to check whether his/her solution is correct,
+					i.e., satisfy all constraints.
+					You don't need to print the result, it has been handled in
+					<code>main()</code> function in the skeleton.
+				</p>
+				<pre><code class="language-cpp">bool check_whole_board_valid();</code></pre>
+
+				<p class="card-text">
+					<b>Return value</b> - <code>true</code>, if the solution is correct,
+					<code>false</code>, otherwise.
+				</p>
+				<p class="card-text">
+					<b>Example: </b> (user input is highlighted in <span style="color: red">red</span>,
+					and original board is highlighted in <span style="color: blue">blue</span>.)
+				</p>
+				<pre><span style="color: blue">         A B C D E
+2 2 |  0 X X . X X
+2 2 |  1 X X . X X
+    |  2 . . . . .
+1 1 |  3 X . . . X
+  3 |  4 . X X X .
+         2 2 1 2 2
+         1 1   1 1</span>
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">c</span>
+Congratulations! Your solution is correct!
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">m</span>
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">A 0</span>
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">c</span>
+Ahh, your solution is incorrect, try again.
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">m</span>
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">A 3</span>
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">c</span>
+Ahh, your solution is incorrect, try again.
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">m</span>
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">A 0</span>
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">m</span>
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">A 3</span>
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">c</span>
+Congratulations! Your solution is correct!</pre>
+
+				<br>
+
+				<h3 style="text-align: center" id="tasks-part3">Part III: A nonogram solver.</h3>
+				<br>
+				<p class="card-text">
+					Please make sure you have read the paper in <a href="#description-solver">description section</a>
+					about how we are going to implement the solver.
+				</p>
+				<p class="card-text">
+					Basically, the steps are:
+				</p>
+				<ol>
+					<li>
+						For each row, choose one permutation and fill it on the board
+					</li>
+					<li>
+						Check if current board does not violate column constraints.
+						(It cannot violate row constraints, since we used a valid row permutation)
+						<ul>
+							<li>
+								If not violate, proceed on next row, until all rows are filled
+							</li>
+							<li>
+								If violate, go to step 1, choose another permutation
+							</li>
+						</ul>
+					</li>
+				</ol>
+
+				<p class="card-text">
+					Now the problems are: (1) how to generate permutations for each row,
+					and (2) how to check a board does not violate column constraints. Notice here
+					the board is incomplete.
+				</p>
+
+				<p class="card-text">
+					For generating permutations, we can first generate a left-aligned permutation as
+					a starter. For example, if the row constraint is <code>{2, 1, 3}</code>, and
+					there are 12 columns, then a left-aligned permutation is:
+					<code>[X X . X . X X X . . . .]</code>, i.e., start filling cells from left most,
+					and separate each group by only one empty cell.
+				</p>
+
+				<p class="card-text">
+					Then, to generate other permutations <it>based on the starter</it>, we check
+					if any group can be shifted to the right. In the example above, the last group
+					can be shifted to the right by 1, 2, 3, or 4 cells (more shifts will hit the boundary),
+					which will produce 4 other permutations.
+					And after the last group is shifted, you may also check
+					if the second group can be shifted. For example, when the last group is shifted
+					by 2 cells, the second group can be shifted to the right by 1 or 2 cells.
+					(more shifts will hit the last group)
+					The same process should be done on the first group. In this way you are able
+					to generate all permutations for a row.
+				</p>
+
+				<p class="card-text">
+					<b>Task 7</b> asks you to generate all permutations for a certain row,
+					and <b>Task 6</b> asks you to check if a certain group can be shifted, as we described above.
+					<b>Task 5</b> acts as a useful helper function, since it's convenient for us to only
+					focus on <i>which column does each group start</i>, rather than how the row really looks like.
+				</p>
+
+				<br>
+
+				<p class="card-text">
+					For checking whether current board violates column constraints, it is similar to what
+					we have done in <code>check_whole_board_valid()</code>, except for
+				</p>
+				<ul>
+					<li>
+						We don't need to check the row constraints, since the row permutations we generated must
+						not violate row constraints.
+					</li>
+					<li>
+						We don't check the whole board. The board is not complete yet, we only need to check
+						the rows that we have finished.
+					</li>
+				</ul>
+				<p class="card-text">
+					You will be asked to implement this function in <b>Task 8</b>.
+				</p>
+
+				<br>
+
+				<p class="card-text">
+					Finally, you will be asked to implement the complete solver in <b>Task 9</b>.
+					We expect you to make use of those previous functions that you have written.
+				</p>
+				<br>
+
+				<h4>Task 5 - Implement the <code>positions_to_row()</code> function</h4>
+				<p class="card-text">
+					<b>Description</b> - This function coverts a <strong>position vector</strong> of a row
+					into a <strong>real row</strong>, where
+				</p>
+				<ul>
+					<li>
+						A <strong>position vector</strong> is a 1D integer array, with known length.
+						It stores the beginning indices for each colored group in the row.
+						For example, if a row has 2 constraints, we expect there are 2 colored groups,
+						and the position vector will record at which column do the 2 groups starts.
+					</li>
+					<li>
+						A <strong>real row</strong> is a 1D character array. If a
+						<strong>position vector</strong> is given, along with the row constraints,
+						you will be able to figure out how the row looks like.
+					</li>
+					<li>
+						For example, if <code>num_col = 8, position vector = {0, 3, 5},</code>
+						row_constraint for this row is <code>{2, 1, 1}</code>, then the row should be:
+						<code>[X X . X . X . .]</code><br>
+						Explanation: there are 3 groups in this row, since there are 3 numbers in row constraint.
+						Hence the position vector should have 3 elements.
+						The first <code>0</code> means the 1st group starts at column 0, and since we
+						know the first constraint is 2, so column 0 and column 1 must be colored.
+						Similarly, the <code>3</code> in the position vector means the 2nd group
+						starts at column 3, and since we know the second constraint is 1, so only column 3 is colored.
+					</li>
+				</ul>
+				<pre><code class="language-cpp">void positions_to_row(int row_idx, const int positions[], int num_pos, char result_row[]);</code></pre>
+				<p class="card-text">
+					<b>Parameters</b>
+				</p>
+				<ul>
+					<li>
+						<code class="language-cpp">int row_idx</code> - which row we are working on.
+					</li>
+					<li>
+						<code class="language-cpp">int positions[]</code> - the position array given.
+					</li>
+					<li>
+						<code class="language-cpp">int num_pos</code> - the length of the given position array.
+					</li>
+					<li>
+						<code class="language-cpp">char result_row[]</code> - you need to store your
+						converted <string>real row</string> in this array.
+						Note that you don't need to specify the length, it must have the length of
+						<code>num_cols</code>.
+					</li>
+				</ul>
+				<p class="card-text">
+					<b>Notes</b>
+				</p>
+				<ul>
+					<li>
+						You may assume the parameters passed into this function are always valid
+						<i>during grading process</i>. However, since this function is used as a helper function
+						in later tasks, you need to be careful that you always pass in valid parameters
+						when you invoke it in other functions.
+					</li>
+
+				</ul>
+
+				<br>
+
+				<h4>Task 6 - Implement the <code>block_can_shift()</code> function</h4>
+				<p class="card-text">
+					<b>Description</b> - This function checks if the given block on given row can be shifted to the
+					right for one cell.
+				</p>
+				<p>
+					For example, if the position vector is <code>{0, 4, 6}</code>, <code>num_col = 8</code>,
+					row_constraint for this row is <code>{2, 1, 1}</code>,
+					then the row is: <code>[X X . . X . X .]</code>, and there are 3 blocks.
+					Then,
+				</p>
+				<ul>
+					<li>
+						<code>block_can_shift(row_idx, 0, {0, 4, 6}) = true,</code>
+					</li>
+					<li>
+						<code>block_can_shift(row_idx, 1, {0, 4, 6}) = false,</code>
+						since it will hit 2nd block after shift
+					</li>
+					<li>
+						<code>block_can_shift(row_idx, 2, {0, 4, 6}) = true,</code>
+					</li>
+				</ul>
+
+				<pre><code class="language-cpp">bool block_can_shift(int row_idx, int block_idx, const int positions[], int num_pos)</code></pre>
+				<p class="card-text">
+					<b>Parameters</b>
+				</p>
+				<ul>
+					<li>
+						<code class="language-cpp">int row_idx</code> - which row we are working on.
+					</li>
+					<li>
+						<code class="language-cpp">int block_idx</code> - which block we are going to shift.
+					</li>
+					<li>
+						<code class="language-cpp">int positions[]</code> - the position array given.
+					</li>
+					<li>
+						<code class="language-cpp">int num_pos</code> - the length of the given position array.
+					</li>
+				</ul>
+				<p class="card-text">
+					<b>Return value</b> - <code>true</code>, if the block can be shifted to the right for one cell;
+					<code>false</code>, otherwise.
+				</p>
+				<p class="card-text">
+					<b>Notes</b>
+				</p>
+				<ul>
+					<li>
+						You may assume the parameters passed into this function are always valid
+						<i>during grading process</i>. However, since this function is used as a helper function
+						in later tasks, you need to be careful that you always pass in valid parameters
+						when you invoke it in other functions.
+					</li>
+
+				</ul>
+
+				<br>
+
+				<h4>Task 7 - Implement the <code>get_row_perms()</code> function</h4>
+				<p class="card-text">
+					<b>Description</b> - This function gets all valid permutations for a row,
+					and store all results in global variables <code>row_perms</code>
+					and <code>num_row_perms</code>. See <a href="#description-global-var">description section</a>
+					for explanations about global variables used here.
+				</p>
+
+				<p class="card-text">
+					<b>Hint</b>: you may use recursion. First generate a starter permutation,
+					then try to shift each of the groups on that row, in order to produce
+					other permutations. See instructions before Task 5 for more details.
+				</p>
+
+
+				<pre><code class="language-cpp">void get_row_perms(int row_idx);</code></pre>
+				<p class="card-text">
+					<b>Parameters</b>
+				</p>
+				<ul>
+					<li>
+						<code class="language-cpp">int row_idx</code> - which row we will generate permutations for.
+					</li>
+				</ul>
+				<p class="card-text">
+					<b>Notes</b>
+				</p>
+				<ul>
+					<li>
+						You may assume the parameters passed into this function are always valid
+						<i>during grading process</i>. However, since this function is used as a helper function
+						in later tasks, you need to be careful that you always pass in valid parameters
+						when you invoke it in other functions.
+					</li>
+
+				</ul>
+
+				<br>
+
+				<h4>Task 8 - Implement the <code>check_rows_valid()</code> function</h4>
+				<p class="card-text">
+					<b>Description</b> - This function checks if current state is valid, after
+					we finish filling <code>num_complete_rows</code> rows.
+					For example, if <code>num_complete_rows = 2</code>, it will only check
+					if the first two rows (with index 0 and 1) do not break column constraints.
+				</p>
+
+				<p class="card-text">
+					As we have discussed before, this function is similar to what
+					we have done in <code>check_whole_board_valid()</code>, except for
+				</p>
+				<ul>
+					<li>
+						We don't need to check the row constraints, since the row permutations we generated must
+						not violate row constraints.
+					</li>
+					<li>
+						We don't check the whole board. The board is not complete yet, we only need to check
+						the rows that we have finished.
+					</li>
+				</ul>
+
+
+				<pre><code class="language-cpp">bool check_rows_valid(int num_complete_rows);</code></pre>
+				<p class="card-text">
+					<b>Parameters</b>
+				</p>
+				<ul>
+					<li>
+						<code class="language-cpp">int num_complete_rows</code> -
+						how many rows have we completed. We will only check those rows.
+					</li>
+				</ul>
+				<p class="card-text">
+					<b>Return value</b> - <code>true</code>, if the current board state is valid;
+					<code>false</code>, otherwise.
+				</p>
+
+				<p class="card-text">
+					<b>Notes</b>
+				</p>
+				<ul>
+					<li>
+						You may assume the parameters passed into this function are always valid
+						<i>during grading process</i>. However, since this function is used as a helper function
+						in later tasks, you need to be careful that you always pass in valid parameters
+						when you invoke it in other functions.
+					</li>
+
+				</ul>
+
+				<br>
+
+				<h4>Task 9 - Implement the <code>solve()</code> function</h4>
+				<p class="card-text">
+					<b>Description</b> - This function will solve the board, and store the solution
+					into global variable <code>board</code> directly.
+					You may assume there are only one solution for the board given.
+				</p>
+
+				<p class="card-text">
+					<b>Hint</b>: you may use recursion. Choose a permutation for first row,
+					check if the current board is valid: if so, proceed on next row, otherwise,
+					choose another permutation. End recursion when we have finished
+					filling the last row.
+					See instructions before Task 5 for more details.
+				</p>
+
+
+				<pre><code class="language-cpp">void solve();</code></pre>
+
+				<p class="card-text">
+					<b>Notes</b>
+				</p>
+				<ul>
+					<li>
+						You may assume the given game has only one solution
+						<i>during grading process</i>. However, when you are testing your own board / constraints,
+						the board may have 0 / 1 / more than 1 solutions.
+					</li>
+
+				</ul>
+
+				<p class="card-text">
+					<b>Example: </b> (user input is highlighted in <span style="color: red">red</span>,
+					and original board is highlighted in <span style="color: blue">blue</span>.)
+				</p>
+				<pre><span style="color: blue">         A B C D E
+2 2 |  0 . . . . .
+2 2 |  1 . . . . .
+    |  2 . . . . .
+1 1 |  3 . . . . .
+  3 |  4 . . . . .
+         2 2 1 2 2
+         1 1   1 1 </span>
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">s</span>
+Generating solution:
+         A B C D E
+2 2 |  0 X X . X X
+2 2 |  1 X X . X X
+    |  2 . . . . .
+1 1 |  3 X . . . X
+  3 |  4 . X X X .
+         2 2 1 2 2
+         1 1   1 1</pre>
+
+            </div>
+            <div class="card-footer text-muted">
+              End of Tasks
+            </div>
+          </div>
+
+          <!-- Download section -->
+			<!-- ### Complete download section for the assignment ### -->
+          <div class="card mb-4">            
+            <div class="card-body" id="download">
+              <h3 class="card-title">Resources &amp; Sample I/O</h3>
+				<ul>
+					<li>
+						Skeleton code: <a href="../Resources/skeleton.cpp">
+						download here</a>
+					</li>
+					<li>
+						Demo programs:
+						<a href="../Resources/demo/PA3_nonogram_win.exe">Windows</a> /
+						<a href="../Resources/demo/PA3_nonogram_mac_intel">MacOS Intel</a> /
+						<a href="../Resources/demo/PA3_nonogram_mac_silicon">MacOS Apple Silicon</a> /
+						<a href="../Resources/demo/PA3_nonogram_linux">Linux</a>
+					</li>
+					<li>
+						Sample program outputs: (user input is highlighted in <span style="color: red">red</span>)
+						- Download <a href="../Resources/sample/sample_input.txt">sample input</a>,
+						<a href="../Resources/sample/sample_output.txt">sample output</a>.
+						<br>
+						You may use <pre>g++ -o main main.cpp -Wall -std=c++11
+./main < sample_input.txt > my_output.txt</pre> to let
+						your program reads input from <code>sample_input.txt</code>, and output results
+						to <code>my_output.txt</code>. Then you only need to compare
+						<code>my_output.txt</code> with <code>sample_output.txt</code>.
+						<a href="https://www.diffchecker.com/">Here</a> is an online file compare tool.
+
+					</li>
+					<br>
+					<pre>Enter the number of rows: <span style="color: red">5</span>
+Enter the number of columns: <span style="color: red">5</span>
+Enter the number of constraints for row 0 (end with -1): <span style="color: red">2 2 2 -1</span>
+Invalid row constraint, please try again.
+Enter the number of constraints for row 0 (end with -1): <span style="color: red">2 2 1 -1</span>
+Invalid row constraint, please try again.
+Enter the number of constraints for row 0 (end with -1): <span style="color: red">2 1 1 -1</span>
+Invalid row constraint, please try again.
+Enter the number of constraints for row 0 (end with -1): <span style="color: red">2 2 -1</span>
+Enter the number of constraints for row 1 (end with -1): <span style="color: red">2 2 -1</span>
+Enter the number of constraints for row 2 (end with -1): <span style="color: red">-1</span>
+Enter the number of constraints for row 3 (end with -1): <span style="color: red">1 1 -1</span>
+Enter the number of constraints for row 4 (end with -1): <span style="color: red">3 -1</span>
+Enter the number of constraints for column 0 (end with -1): <span style="color: red">2 2 1 -1</span>
+Invalid column constraint, please try again.
+Enter the number of constraints for column 0 (end with -1): <span style="color: red">2 1 -1</span>
+Enter the number of constraints for column 1 (end with -1): <span style="color: red">2 1 -1</span>
+Enter the number of constraints for column 2 (end with -1): <span style="color: red">1 -1</span>
+Enter the number of constraints for column 3 (end with -1): <span style="color: red">2 1 -1</span>
+Enter the number of constraints for column 4 (end with -1): <span style="color: red">2 1 -1</span>
+         A B C D E
+2 2 |  0 . . . . .
+2 2 |  1 . . . . .
+    |  2 . . . . .
+1 1 |  3 . . . . .
+  3 |  4 . . . . .
+         2 2 1 2 2
+         1 1   1 1
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">p</span>
+         A B C D E
+2 2 |  0 . . . . .
+2 2 |  1 . . . . .
+    |  2 . . . . .
+1 1 |  3 . . . . .
+  3 |  4 . . . . .
+         2 2 1 2 2
+         1 1   1 1
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">m</span>
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">A 2</span>
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">m</span>
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">A 0</span>
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">m</span>
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">A 8</span>
+Invalid row or column. Try again.
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">F 7</span>
+Invalid row or column. Try again.
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">F 0</span>
+Invalid row or column. Try again.
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">E 0</span>
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">p</span>
+         A B C D E
+2 2 |  0 X . . . X
+2 2 |  1 . . . . .
+    |  2 X . . . .
+1 1 |  3 . . . . .
+  3 |  4 . . . . .
+         2 2 1 2 2
+         1 1   1 1
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">m</span>
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">A 0</span>
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">c</span>
+Ahh, your solution is incorrect, try again.
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">s</span>
+Generating solution:
+         A B C D E
+2 2 |  0 X X . X X
+2 2 |  1 X X . X X
+    |  2 . . . . .
+1 1 |  3 X . . . X
+  3 |  4 . X X X .
+         2 2 1 2 2
+         1 1   1 1
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">c</span>
+Congratulations! Your solution is correct!
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">m</span>
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">A 0</span>
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">c</span>
+Ahh, your solution is incorrect, try again.
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">m</span>
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">E 0</span>
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">m</span>
+Enter the cell you want to modify (e.g. A 2): <span style="color: red">E 1</span>
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">c</span>
+Ahh, your solution is incorrect, try again.
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">s</span>
+Generating solution:
+         A B C D E
+2 2 |  0 X X . X X
+2 2 |  1 X X . X X
+    |  2 . . . . .
+1 1 |  3 X . . . X
+  3 |  4 . X X X .
+         2 2 1 2 2
+         1 1   1 1
+===== Welcome to Nonogram Game =====
+Please enter your choice:
+Enter 'p' to print the current board.
+Enter 'm' to modify a cell.
+Enter 'c' to check your solution.
+Enter 's' to invoke solver.
+Enter 'q' to quit.
+Your choice: <span style="color: red">q</span>
+Bye!</pre>
+				</ul>
+            </div>            
+			<div class="card-footer text-muted">
+              End of Resources &amp; Sample I/O
+            </div>
+          </div>
+		  
+			<!-- Submission and grading section -->
+			<!-- ### Complete submission and grading section for the assignment ### -->
+          <div class="card mb-4">            
+            <div class="card-body" id="submission">
+              <h3 class="card-title">Submission &amp; Grading</h3> 
+				<p class="card-text">
+				<strong>Deadline: <span style="color: red;">Sat, 1/10/22</span> HKT 23:59.</strong><br>
+					Compress the single source code file <code>main.cpp</code> by itself as <code>PA3.zip</code>
+					for submission to the <a href="https://zinc.cse.ust.hk/">ZINC Autograding System</a>.
+					The ZINC submisssion portal is available.
+				</p>
+				<p class="card-text">
+				<strong>Late Policy:</strong><br>
+				Please refer to the <a href="https://course.cse.ust.hk/comp2012h/#assignments">3-day late budget policy</a>.
+				</p>
+				<p class="card-text">
+					<strong>You are strongly discouraged to modify the <code>main</code> function given in
+						skeleton.</strong> It will be replaced when we grade your program.
+					<strong>You are strictly forbidden to modify the signature of task functions</strong>.
+					However, you can overload them. When we grade your program, if we cannot find
+					the exact function whose signature is what we described in
+					<a href="#tasks">Tasks section</a>, you will have <strong>no score</strong> for that task.
+					This situation is unlikely to occur if you never modified the <code>main</code> function.
+				</p>
+				<p class="card-text">
+					Before deadline, the test cases on ZINC will only contain a few cases. If you passed
+					those tests, it only means your program can successfully run on ZINC and can pass
+					those test cases. The result is by no means complete and the score are irrelavent to
+					your actual score.
+					In actual grading stage after deadline, we will use a <strong>totally different set of
+					test cases</strong>, which is expected to be more complete and more strict,
+					to test the correctness your program.<br>
+					<strong>You are hence strongly suggested to test your program thoroughly by thinking about all possible cases.</strong>
+				</p>
+				<br>
+				<h4>Grading Scheme</h4>
+				<p class="card-text">
+					The actual grading will use <a href="https://en.wikipedia.org/wiki/Unit_testing", target="_blank">Unit Testing</a>,
+					i.e., we will test each functions individually, invoke the function you implemented,
+					and check the return value/expected behavior of that function.
+					The actual grading will also only be triggered, with the scores and test cases revealed, after the
+					deadline. This hidden grading policy is for all the PAs in order to prevent reverse-engineering of
+					the test cases, since the PAs are a significant part of the course assessment and course grade.
+				</p>
+				<p class="card-text">
+					We will execute unit testing on the task functions individually, and some
+					of the test cases may include invalid input values. In general, you can assume that:</p>
+				<ul>
+					<li>
+						As long as we are testing solver part, i.e. Task 5 - Task 9, you can assume the parameters
+						passed into those functions are always valid during unit testing.
+						And you can also assume there is <strong>only one final solution</strong> for the board
+						and constraints given.
+					</li>
+					<li>
+						For other input parameters, if you are required to check the validity of parameters,
+						we have explicitly told you what to check in <a href="#tasks">Tasks section</a>.
+						You don't need to consider other cases.
+					</li>
+				</ul>
+
+				<p class="card-text">
+					<strong>Additional remark for solver: </strong>
+					You are strongly discouraged to use another approach to implement solver instead of
+					using the helper functions we described in Task 5 - 8.
+					If you want to do so, you are also required to complete Task 5 - 8 to get scores for those tasks,
+					even if your solver never uses them. Otherwise, even your solver is correct, you
+					will only get the score for Task 9.
+					Please note it's expected that the solver only worth a small part of scores, and Task 5 - 8
+					should worth (more likely) more scores.
+				</p>
+
+            </div>
+						<div class="card-footer text-muted">
+              End of Submission &amp; Grading
+            </div>
+          </div>
+          <div class="card mb-4">            
+            <div class="card-body" id="bonus">
+              <h3 class="card-title">Bonus</h3> 
+				<p class="card-text">
+					Nonogram Puzzles are considered as NP-Complete problems which cannot be completed in polynomial time.
+					And the solution described in this assignment uses recursion and depth-frist search to traverse through
+					all possibilities to find the answer. It has a high time complexity of <code>O(n^2*logn)</code>.<br>
+					In Task 9 of this assignment, we also encourage you to optimize your code to achieve faster solution speed.
+					Your programs will be evaluated on a separate set of randomly generated testcases that is expected to be
+					<strong>harder to solve</strong>, and ranked according to the time spent. Up to 10 bonus points will be given
+					according to the ranking.
+					<ul>
+						<li>
+							Your last submission on ZINC will be used for the ranking. No separate submission will be accepted.
+						</li>
+						<li>
+							Late submission will be excluded from the ranking.
+						</li>
+						<li>
+							Programs that produce wrong solutions in Task 9 will be excluded from the ranking.
+						</li>
+						<li>
+							Programs that run slower than our sample solution will be excluded from the ranking.
+						</li>
+						<li>
+							You can use <code>time path/to/your/program &lt; path/to/your/input.txt</code> on Linux and Mac
+							to know the time spent by your program.
+						</li>
+					</ul>
+				</p>
+            </div>
+						<div class="card-footer text-muted">
+              End of Bonus
+            </div>
+          </div>
+		  
+			<!-- FAQ section -->
+			<!-- ### Complete FAQ section for the assignment ### -->
+          <div class="card mb-4">            
+            <div class="card-body" id="faq">
+              <h3 class="card-title">Frequently Asked Questions</h3>
+				<p>
+				<b>Q</b>: My code doesn't work, there is an error/bug, here is the code, can you help me fix it?<br>
+					<b>A</b>: As the assignment is a major course assessment, to be fair, you are supposed to work on it
+						on your own and we should not finish the tasks for you. We are happy to help with explanations and
+						advice, but we shall not directly debug the code for you.
+					</p>
+					<p>
+						<b>Q</b>: The demo program enters an infinite loop when given unexpected input (e.g. inputting a
+						character when expecting an integer). Is this a bug? <br>
+						<b>A</b>: This is just the behavior of <code>cin &gt;&gt; variable;</code> when given input that is
+						not type-matched. You don't need to worry about such for PA3, you can assume the user always
+						input the correct data type. For example, if we want an <code>int</code>, the user will always
+						input an <code>int</code>, not other weird things. However, the user input can still be
+						invalid, for example, you want an integer between 1800-9999, and the user may input 1700, or
+						12345, etc.
+					</p>
+					<p>
+						<b>Q</b>: What are the restrictions regarding modifying the header files, writing our own helper
+						functions, including extra header files, etc.? <br>
+						<b>A</b>: The only hard restriction is that you can only submit <code>main.cpp</code> to ZINC
+						and can only use one header file <code>#include &lt;iostream&gt;</code>.
+						Anything else
+						that you do, while not strictly prohibited, <strong>will be at your own risk regarding the PA3
+						grading result</strong>. Please keep in mind that there is a grade penalty for all grade appeals that
+						include modifications to your already submitted code (no matter how trivial the modification is).
+					</p>
+					<p>
+						<b>Q</b>: Am I allowed to use local function declarations (function declaration inside an existing
+						function) for my helper functions? <br>
+						<b>A</b>: You are strongly discouraged from doing so, as that "feature" is a leftover merely for
+						backwards compatibility with C. In C++, it is superseded with class functions and lambda functions,
+						which will be taught later in this course.
+					</p>
+            </div>
+		  <div class="card-footer text-muted">
+              End of FAQ
+            </div>          
+          </div>
+		  
+		  
+			<!-- FAQ section -->
+			<!-- ### Complete FAQ section for the assignment ### -->
+          <div class="card mb-4">            
+            <div class="card-body" id="changelog">
+              <h3 class="card-title">Changelog</h3>
+				<p>
+				<b>23:37 15/9/22</b>
+				<ul>
+					<li>Added description of <code>MAX_ROW, MAX_COL, MAX_CONSTRAINT_NUM</code>,
+						please check it <a href="#description-global-var">Here</a>.
+					</li>
+					<li>Added notes to the assumption on user input row/col constraints in Task 1,
+						please check the third note <a href="#task1">Here</a>.
+					</li>
+					<li>Corrected misdescriptions on the number of rows/cols in Task 2,
+						please check the 5th note <a href="#task2">Here</a>.
+					</li>
+				</ul>
+				</p>
+				<p>
+				<b>16:51 16/9/22</b>
+				<ul>
+					<li>Corrected misdescriptions in the <a href="#description-global-var">Global variables</a> section:<br>
+						<del><code>'*'</code> means colored.</code></del><br>
+						<code>'X'</code> means colored.</code>
+					</li>
+				</ul>
+				</p>
+				<p>
+				<b>22:00 19/9/22</b>
+				<ul>
+					<li>Announcement of <a href="#bonus">Bonus</a>.</li>
+					<li>The PA3 submission portal is available on ZINC.</li>
+					<li>In <a href="#task3">Task 3</a>:<br>
+						<del>Print the new board.</del><br>
+						Now, you are <strong>NOT</strong> supposed to print the new board every time the Task 3 function is called. This is to avoid you
+						losing points in Task 3 because of wrongly implemented Task 2.<br>
+						Please download the updated demo executables <a href="#download">Here</a>.
+					</li>
+				</ul>
+				</p>
+            </div>
+		  <div class="card-footer text-muted">
+              End of Changelog
+            </div>          
+          </div>
+        </div>
+				
+        <!-- Sidebar Widgets Column -->
+        <div class="col-md-3">
+		  		<div class="sticky-top">
+            <!-- Menu Widget -->
+            <div class="card my-12">
+              <h5 class="card-header">Menu</h5>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <ul class="mb-0" style="padding-left:20px" type="circle">
+					  <li>
+						<a href="#honor">Honor Code</a>
+					  </li>
+                      <li>
+                        <a href="#objective">Objectives & ILOs</a>
+                      </li>
+						<li>
+							<a href="#introduction">Introduction</a>
+						</li>
+                      <li>
+                        <a href="#description">Description</a>
+                      </li>
+						<li>
+							<a href="#tasks">Tasks</a>
+							<ul style="margin-left: -25px">
+								<li>
+									<a href="#tasks-part1">Part I: Initialize the board.</a>
+								</li>
+								<li>
+									<a href="#tasks-part2">Part II: User play on board.</a>
+								</li>
+								<li>
+									<a href="#tasks-part3">Part III: A nonogram solver.</a>
+								</li>
+							</ul>
+						</li>
+                      <li>
+                        <a href="#download">Resources &amp; Sample I/O</a>
+                      </li>
+			  		  <li>
+					    <a href="#submission">Submission &amp; Grading</a>
+					  </li>
+					  <li>
+					  <a href="#bonus">Bonus</a>
+					</li>
+					  <li>
+					    <a href="#faq">FAQ</a>
+					  </li>
+					  <li>
+					    <a href="#changelog">Changelog</a>
+					  </li>
+                    </ul>
+                  </div>                
+                </div>
+              </div>
+            </div>
+		  
+		    <!-- Maintenance widget -->
+            <div class="card my-4">
+              <h5 class="card-header">Page maintained by</h5>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <ul class="list-unstyled mb-0">
+                      <li>
+                        ZHONG, Shuhan
+                      </li>
+                      <li>
+                        Email: <a href="mailto:szhongaj@connect.ust.hk">szhongaj@connect.ust.hk</a>
+                      </li>
+					  <li>Last Modified: <script type="text/javascript">document.write(document.lastModified);</script></li>
+                    </ul>
+                  </div>				
+                </div>
+              </div>
+            </div>
+		  
+		  
+		    <!-- Homepage widget -->
+            <div class="card my-4">
+              <h5 class="card-header">Homepage</h5>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <ul class="list-unstyled mb-0">
+                      <li>
+                        <a href="http://course.cse.ust.hk/comp2012h">Course Homepage</a>
+                      </li>
+                    </ul>
+                  </div>				
+                </div>
+              </div>
+            </div>
+		  </div>
+        </div>
+      </div>
+      <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Maintained by COMP 2012H Teaching Team © 2022 HKUST Computer Science
+					and Engineering</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="comp2012h_pa3_files/jquery.js"></script>
+    <script src="comp2012h_pa3_files/bootstrap.js"></script>
+  
+
+
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></html>
