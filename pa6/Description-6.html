@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- ### Change assignment number ### -->
+	<title>COMP 2012H Assignment 6: Simple Relational Database Management System</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="misc/bootstrap.css" rel="stylesheet">
+
+	<!-- Custom styles for this template -->
+	<link href="misc/blog-home.css" rel="stylesheet">
+
+	<!-- Prism syntax highlighter -->
+	<link href="misc/prism.css" rel="stylesheet">
+
+	<style>
+		pre {
+			background: #f4f4f4 !important;
+			border: 1px solid #ddd !important;
+			border-left: 3px solid #f36d33 !important;
+			color: #666 !important;
+			page-break-inside: avoid !important;
+			font-family: monospace !important;
+			font-size: 14px !important;
+			line-height: 1.6 !important;
+			margin-bottom: 1.6em !important;
+			max-width: 100% !important;
+			overflow: auto !important;
+			padding: 1em 1.5em !important;
+			display: block !important;
+			word-wrap: break-word !important;
+		}
+
+		table,
+		th,
+		td {
+			border: 1px solid black;
+		}
+
+		th,
+		td {
+			padding: 5px;
+		}
+
+		th {
+			text-align: left;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="misc/prettify.css">
+	<script src="misc/prompt.js"></script>
+</head>
+
+<body data-new-gr-c-s-check-loaded="8.880.0" data-gr-ext-installed="">
+	<script src="misc/prism.js"></script>
+
+	<!-- Page Content -->
+	<div class="container">
+
+		<div class="row">
+
+			<!-- Entries Column -->
+			<div class="col-md-9">
+
+				<h2 class="my-4">
+					<span style="color:darkblue">COMP 2012H</span>
+					<small>Honors Object-Oriented Programming and Data Structures</small>
+				</h2>
+
+				<!-- ### Change assignment number and title ### -->
+				<h3 class="my-4">
+					Assignment 6
+					<span style="color:#660066">Simple Relational Database Management System</span>
+				</h3>
+
+				<!-- Honor Code section -->
+				<div class="card mb-4">
+					<div class="card-body" id="honor" style="background-color:#f4f4f4">
+						<h3 class="card-title">Honor Code</h3>
+						<p class="card-text">
+							We value academic integrity very highly. Please read the <a
+								href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a> section on our
+							course webpage to make sure you understand what is considered as plagiarism and what the
+							penalties are.
+							The following are some of the highlights:
+						</p>
+						<ul>
+							<li>
+								Do NOT try your "luck" - we use sophisticated plagiarism detection software to find
+								cheaters.
+								We also review codes for potential cases manually.
+							</li>
+							<li>
+								The penalty (for <b>BOTH</b> the copier and the copiee) is not just getting a zero in
+								your assignment.
+								Please read the <a href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a>
+								thoroughly.
+							</li>
+							<li>
+								Serious offenders will fail the course immediately, and there will be additional
+								disciplinary actions
+								from the department and university, upto and including expulsion.
+							</li>
+						</ul>
+						<p></p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Honor Code
+					</div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-body" id="objective" style="background-color:#f4f4f4">
+						<h3 class="card-title">Objectives & Intended Learning Outcomes</h3>
+						<p class="card-text">
+							The objective of this assignment is to familiarise you with classes and utilising their
+							constructors & desctructors.
+							After this assignment you should be able to:
+						</p>
+						<ol>
+							<li>
+								Explain the structure of a program involving classes
+							</li>
+							<li>
+								Develop multiple constructors
+							</li>
+							<li>
+								Utilise constructors and desctructors for memory management
+							</li>
+							<li>
+								Perform file I/O and linked-list operations
+							</li>
+						</ol>
+						<p></p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Objectives & Intended Learning Outcomes
+					</div>
+				</div>
+
+				<!-- Introduction section -->
+				<!-- ### Complete introduction section for the assignment ### -->
+				<div class="card mb-4">
+					<!-- ### Add an image representing the assignment content here ### -->
+					<img class="card-img-top" src="misc/pic.jpeg" alt="Card image cap">
+					<div class="card-body language-text" id="introduction">
+						<p class="card-text">
+							<small>
+								<em>
+									Relational Database Management System<br> Source:
+									<a href="https://www.stechies.com/differences-between-dbms-rdbms/"
+										target="_blank">https://www.stechies.com/differences-between-dbms-rdbms/</a>
+								</em>
+							</small>
+						</p>
+						<h3 class="card-title">Introduction</h3>
+
+						<p class="card-text">
+							The goal of this assignment is to implement a menu-driven Relational Database Management
+							System (RDBMS). You can check this
+							<a href="https://en.wikipedia.org/wiki/Relational_database" target="_blank">Wikipedia
+								link</a>
+							to get an understanding of what a Relational Database entails. A relational database is a
+							collection of
+							data in the form of rows and columns that make up one of more tables.
+							An RDBMS is an application used to interact with such relationship-driven databases.
+						</p>
+					</div>
+					<ul class="list-group list-group-flush language-cpp">
+						<li class="list-group-item">
+							<h4 id="concept">RDBMS Concepts</h4>
+							<p>
+								It would be useful to familiarise yourselves with a few RDBMS concepts before
+								beginning with the assignment:
+							</p>
+							<p>
+								A database can be summarised as a collection of tables. These tables can subsequently be
+								summarised as a collection of data. The columns of the tables are referred to as
+								attributes, fields, or simply columns. The rows, on the other hand, are called records,
+								entries, or simply rows. Every field has a data type associated with it and a database
+								admin can choose to enforce the types during entry. Every field also has a name. In our
+								implementation, there will be two types of data: integer and string, but note that both
+								types of data are stored as strings in the implementation.
+							</p>
+							<p>
+								Every table must also have a primary key. This is a field selected that serves as a
+								means of uniquely identifying each record. For example, if a table has an "ID" field
+								that is marked as a primary key, every record must be identifiable using their
+								respective entry of the "ID" field, which means every entry in the "ID" field must be 1)
+								<b>unique</b>, and 2) <b>non-empty</b>. In more advanced implementations, there may be
+								multiple fields that together form the primary key.
+							</p>
+							<p>
+								A database supports adding, deleting, and modifying tables. It may also support
+								operations like joining. In this assignment the inner join operation will be
+								implemented. Inner joining involves selecting two tables and using a certain field from
+								each table as the basis to merge the tables. For instance, if ID_1 is selected from one
+								table, and ID_2 is selected from another table, any records from these two tables where
+								ID_1 matches ID_2 will be merged and placed into a new table, essentially merging their
+								common data.
+							</p>
+							<p>
+								A table itself supports several operations like adding and deleting fields, setting
+								fields as the primary key, and sorting. One may also add, delete, and modify records.
+								These operations serve to facililate data management and organisation.
+							</p>
+							<p>
+								Note that a database and its tables support many more applications. The functionalities
+								of a database have been trimmed and selected for the purpose of this assignment.
+							</p>
+						</li>
+					</ul>
+
+					<div class="card-footer text-muted">
+						End of Introduction
+					</div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-body language-text" id="description">
+						<h3 class="card-title">Description</h3>
+						<p class="card-text">
+							Please read the <a href="#faq">FAQ</a> and <a href="#change">Change Log</a> section
+							regularly, and do check it one day before the deadline to make sure you don't miss any
+							clarification, even if you have already submitted your work by then. You can also raise
+							questions on Piazza and remember to use the "pa6" tag.
+						</p>
+
+						<h4>Code structure</h4>
+						<p class="card-text">
+							The skeleton code structure is as follows:
+						</p>
+						<pre>PA6&#10;├── Database.cpp&#10;├── Database.h&#10;├── Table.cpp&#10;├── Table.h&#10;├── String.cpp&#10;├── String.h&#10;└── main.cpp&#10;</pre>
+						<p class="card-text">
+							<code>main.cpp</code> contains the Database interface;
+
+						<p>
+							<code>Database.cpp</code> and
+							<code>Database.h</code>
+							hold the Database class definition and the class function definitions respectively.
+						</p>
+						<p>
+							<code>Table.cpp</code> and
+							<code>Table.h</code>
+							hold the Table class definition and the class function definitions respectively.
+						</p>
+
+						<p>
+							<code>String.cpp</code> and
+							<code>String.h</code>
+							Provides the definition and functions of the String helper class.
+						</p>
+						<p>
+							Your job is to complete <code>Database.cpp</code> and <code>Table.cpp</code> so that the
+							Database supports all the intended operations.
+						</p>
+						<br>
+
+						<h4>Class structure</h4>
+						<p class="card-text">
+							Please go through <code>Database.h</code> and <code>Table.h</code> for the definition of the
+							classes and structures. The following figure also gives a brief overview:
+						</p>
+						<img class="card-img-top" src="misc/structure.png">
+
+						<h4>Coordinate system of individual Tables</h4>
+						<p class="card-text">
+							Given a table object <code>TABLE</code>, <code>TABLE[i][j]</code> leads to a 2D array-like
+							access of its elements. In this case, <code>i</code> is the column index, and <code>j</code>
+							is the row index. Therefore, <code>TABLE[i][j]</code> returns the entry at (with indexing
+							starting from 0) the <code>i</code>th column and the <code>j</code>th row. And we provide
+							you a <code>operator[]</code> function to facilitate this access. <code>TABLE[5]</code> will
+							return the 6th column of the table and <code>TABLE[5][3]</code> will return the entry at the
+							6th column and 4th row of the table (with indexing starting from 0).
+						</p>
+						<br>
+
+						<h4 id="save">Storing Data</h4>
+						<p>
+							A "save file" is a plaintext file that stores all the data of a database.
+						</p>
+						<ol>
+							<li>
+								The first two lines are the name of the database and the number of tables it
+								has.
+							</li>
+							<li>
+								The next three lines are the name of a table, the number of columns it has,
+								and the number of rows it has.
+							</li>
+							<li>
+								Then comes the field names of the table, in one line, separated by a comma and a
+								space. Every field name is followed by a single space and a number. 0 represents an
+								integer field and 1 represents a string field. The primary key field begins with an
+								asterisk. The order of fields here matches the order in the table.
+							</li>
+							<li>
+								Then comes the data of the table. Each line represents a single row, and the data
+								for each field is separated by a comma and a space. The order of the fields will
+								match the order of the field names. The order of the rows here match the order in
+								the table.
+							</li>
+							<li>
+								The formats specified in 2, 3, and 4 are repeated for each table. The order of tables
+								here matches the order in the database.
+							</li>
+							<li>
+								Lastly, if a database is empty (0 table in total) it will not be followed by any
+								table data. On the other hand, if a table is empty (0 record in total), it will
+								not be followed by any record data.
+							</li>
+							<li>
+								There could be tables with some fields but no record. There won't be tables with no
+								field but some records.
+							</li>
+						</ol><br>
+						<strong>Sample save file:</strong>
+						<pre><code>Sample_DB
+10
+Table_1
+5
+5
+*ID 0, Name 1, Year 0, Location 1, Major 1
+2, Jack, 19, Switzerland, Science
+1, John, 20, UK, Engineering
+4, Alexis, 20, Israel, Fashion
+3, Jill, 22, Japan, Law
+0, Abraham, 18, USA, Politics
+Table_2
+0
+0
+Table_3
+0
+0
+Table_4
+0
+0
+Table_5
+4
+6
+Year 0, Name 1, *SID 0, Interest 1
+2, John, 3, Fishing
+4, Jill, 1, Swimming
+1, Abraham, 0, Snooker
+1, Kimiko, 6, Programming
+3, Frank, 2, Basketball
+2, Alexis, 4, Football
+Table_6
+0
+0
+Table_7
+0
+0
+Table_8
+0
+0
+Table_9
+0
+0
+Table_10
+6
+4
+*CID 0, Name 1, Location 1, Currency 1, Items_Bought 0, Cart_Size 0
+0, Alexis, Israel, ILS, 10, 3
+1, Kimiko, Japan, JPY, 0, 25
+2, Frank, Serbia, RSD, 10, 10
+3, Jack, Switzerland, CHF, 100, 2</code></pre><br>
+
+						<h4>String Helper Class</h4>
+						<p class="card-text">
+							In order to shift the focus of this assignment to classes instead of string operations, a
+							custom written <code>String</code> class has been provided. It is functionally similar to
+							the <code>std::string</code> STL class. As STL is not covered yet at the moment, this
+							simpler
+							implementation has been given.
+						</p>
+						<p class="card-text">
+							The <code>String</code> class allows you do define and manipulate char arrays in a manner
+							that closely resembles normal variables. It is an abstraction of the char array that handles
+							dynamic memory allocation, and it also provides additional functions. The class structure
+							and function descriptions are shown below. You don't need to implement this. But if you are
+							already familiar with the <code>std::string</code> class, please note that there might be
+							subtle differences and some functions are not implemented here. Therefore, please browse
+							through this class at least once before proceeding with the code.
+						</p>
+						<pre class="language-cpp"><code>class String
+{
+private:
+	char *str;
+
+public:
+	String();
+    String(const char *str);
+    String(const String &string);
+    ~String();
+
+    int length() const;
+    friend String operator+(const String &string1, const String &string2);
+    friend String operator+(const String &string1, char a);
+    friend std::ostream &operator<<(std::ostream &os, const String &string);
+    friend std::istream &operator>>(std::istream &is, String &string);
+    friend std::istream &getline(std::istream &is, String &string, char end);
+    String &operator=(const String &string);
+    String substr(int begin, int count) const;
+    friend bool operator==(const String &string1, const String &string2);
+    friend bool operator>(const String &string1, const String &string2);
+    friend bool operator<(const String &string1, const String &string2);
+    friend bool operator>=(const String &string1, const String &string2);
+    friend bool operator<=(const String &string1, const String &string2);
+    friend bool operator!=(const String &string1, const String &string2);
+	friend int strcmp(const String &string1, const String &string2); // Performs C-style comparison. Same as strcmp on char arrays.
+	char &operator[](int index); // Performs C-style accessing of characters in the String. 
+	const char &operator[](int index) const; // Performs C-style accessing of characters in the String. 
+	friend int stoi(const String &string); 
+	const char *getStr() const { return str; } // simple getter for the char array since ifstream and ofstream constructors take char arrays
+};</code></pre>
+
+						<p class="card-text">
+							<code>String</code> objects can be created in the following ways:
+						<pre class="language-cpp"><code>String name; // creates an empty String (same as String name = "" or String name(""))
+String name = "Some Name";
+String name("Some Name");
+String another = name;
+String another(name);
+</code></pre>
+
+						All of the above perform deep copy and dynamic memory allocation. The destructor will deallocate
+						the dynamic memory used.
+						</p>
+						<h6>For the remainder of the String section, assume <code>String name = "Some name";</code> and
+							<code>String another = "Some other name";</code> have been defined beforehand.
+						</h6>
+						<p class="card-text">
+						<pre class="language-cpp"><code>String anotherName = name + another; // stores "Some nameSome other name" in anotherName
+String anotherName = name + "Some other name"; // stores "Some nameSome other name" in anotherName
+String anotherName = name + 'S'; // stores "Some nameS" in anotherName</code></pre>
+						</p>
+						<p class="card-text">
+						<pre class="language-cpp"><code>os << name << anotherName; // outputs "Some nameSome other name" to the the output stream os
+is >> name; // reads input from input stream is into name until newline character \n</code></pre>
+						</p>
+						<p class="card-text">
+						<pre class="language-cpp">getline(is, name, ','); // reads input from input stream is into name until comma ','</code></pre>
+						</p>
+						<p class="card-text">
+						<pre class="language-cpp"><code>String anotherName = name.substr(1, 5); // stores "ome n" in anotherName
+String anotherName = another.substr(3, 7); // stores "e other" in anotherName</code></pre>
+						</p>
+						<p class="card-text">
+						<pre class="language-cpp"><code>// Simple comparison operators
+name > another // returns false because "Some other name" comes after "Some name" alphabetically
+name == name // returns true because the two strings are equal
+name < another // returns true for the same reason name > another returns false</code></pre>
+						</p>
+						<p class="card-text">
+						<pre class="language-cpp"><code>stoi(name) // returns 0 because "Some name" has no integer representaion
+String anotherName = "5000"
+stoi(anotherName) // returns 5000</code></pre>
+						</p>
+
+						<h4>Important Requirements</h4>
+						<p class="card-text">
+							There are a few things you CANNOT do. Failure to observe these rules would potentially
+							result in ZERO mark for your assignment. Please carefully check your code before you submit
+							it.
+						<ul>
+							<li>
+								You are NOT allowed to include any additional libraries.
+							</li>
+						</ul>
+						</p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Description
+					</div>
+				</div>
+
+				<div class="card mb-4 language-text">
+					<div class="card-body" id="part1">
+						<h3 class="card-title">Part 1: Database</h3>
+						<p class="card-text">
+							Implement the following functions of the <code>Database</code> class. Note that the
+							functions do not need to be implemented in this order. Nor do you need to implement part 1
+							before part 2.
+						</p>
+					</div>
+
+					<ul class="list-group list-group-flush language-cpp">
+						<li class="list-group-item">
+							<pre><code class="language-cpp">Database(const String &name, int numTables);</code></pre>
+							Create a new Database. In this function you can assume
+							<code>0 <= numTables && numTables < 100</code>.
+							<ul>
+								<li>
+									Set <code>currentTable</code> to <code>nullptr</code>, <code>this->numTables</code>
+									to be <code>numTables</code>, <code>this->name</code> to be <code>name</code>.
+								</li>
+								<li>
+									Create <code>numTables</code> tables and name them as <code>Table_i</code> where
+									<code>i</code> ranges from 1 to <code>numTables</code> (inclusive). The first table
+									in the linked list (pointed by <code>tableHead</code>) should be
+									<code>Table_1</code>, and so on.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code class="language-cpp">Database(const String &filename);</code></pre>
+							Create a new Database using file provided. Refer to the file <a href="#save">format</a>.
+							<ul>
+								<li>Set <code>currentTable</code> to <code>nullptr</code>.</li>
+								<li>This function may need to call the overloaded table constructor.</li>
+								<li>You can assume the file always exists and the format is correct.</li>
+								<li>You can make use of the <code>>></code> operator or the
+									<code>getline(istream&, String&, char)</code> function to read data into a String
+									object from a file.
+								</li>
+							</ul>
+							<p>
+								Note: you will <strong>need</strong> to make use of <code>String::getStr()</code> to
+								create the filestream object because the constructor for the filestream takes character
+								arrays, and not our custom <code>String</code> class, as a parameter.
+							</p>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>~Database();</code></pre>
+							The destructor that deallocates all of the <code>Table</code> objects added to the Database.
+						</li>
+
+
+						<li class="list-group-item">
+							<pre><code>bool addTable(Table *table);</code></pre>
+							Push the provided table to the end of the <code>Table</code> linked-list.
+							<ul>
+								<li>
+									If <code>table</code> is a null pointer, print
+									<code>Table is a null pointer.\n</code> and return <code>false</code>.
+								</li>
+								<li>
+									If a table with the same name as <code>table</code> already exists in the database,
+									print <code>Table with given name already exists in the database.\n</code> and
+									return <code>false</code>.
+								</li>
+								<li>
+									Otherwise push the new table to the end of the linked list, increase
+									<code>numTables</code> and return <code>true</code>.
+								</li>
+							</ul>
+							You may use the <code>==</code> operator to compare two String-type objects.
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void addTable(const String &name);</code></pre>
+							Create a new table with name <code>name</code>.
+							<ul>
+								<li>
+									If a table with the provided name exists in the database, print
+									<code>Table with given name already exists in the database.\n</code> and return.
+								</li>
+								<li>
+									Otherwise, allocate a new table object, add it to the end of the linked
+									list, and increase <code>numTables</code>.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>Table *findTable(const String &name) const;</code></pre>
+
+							Return a pointer to the table with the name specified by <code>name</code>. Return
+							<code>nullptr</code> if no table with the provided name exists in the database.
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void listTables() const;</code></pre>
+
+							Print the tables in the database in this format:
+							<pre><code>The tables currently existing in the database are:</code>
+<code>Table_1_Name</code>
+<code>Table_2_Name</code>
+<code>...</code>
+<code>Table_LastOne_Name\n</code></pre>
+
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void deleteTable(const String &name);</code></pre>
+
+							Delete the table with the given name from the database.
+							<ul>
+								<li>
+									If no table with the given name exists in the database, print
+									<code>No such table exists in the database.\n</code>
+								</li>
+								<li>
+									Otherwise, deallocate the table, remove it from the linked-list, and decrease
+									<code>numTables</code>.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void setCurrentTable(const String &name);</code></pre>
+
+							Set <code>currentTable</code> to be the table specified by <code>name</code>.
+							<ul>
+								<li>
+									If no table with the given name exists in the database, set
+									<code>currentTable</code> to be <code>nullptr</code> and print
+									<code>No such table exists in the database.\n</code>
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void saveDatabase(const String &filename) const;</code></pre>
+
+							Save the database, its tables, and their data to a file named <code>filename</code>, using
+							the format in the <a href="#save">Storing Data</a> section.
+							You may use the <code><<</code> operator to output <code>String</code> objects and
+							<code>int</code> values to the output filestream.
+							Remember to prepend an asterisk to the primary key field. Remember to use commas as a
+							separation between fields, and <code>\n</code> as a separation between records.
+							Finally, remember that 0 represents a field of type <code>int</code> and 1 represents a
+							field of type <code>String</code>.
+							<p>
+								Note: you will <strong>need</strong> to make use of <code>String::getStr()</code> to
+								create the filestream object because the constructor for the filestream takes character
+								arrays as a parameter.
+							</p>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void innerJoin(Table* table1, Table* table2);</code></pre>
+
+							<b>This is an optional bonus task.</b> Perform inner join on two tables' primary keys, as
+							explained in the <a href="#concept">RDBMS ConceptsM</a> section, create a new table and add
+							it into the
+							current database.
+							<ul>
+								<li>
+									If either of the two tables is a null pointer, print
+									<code>No such table exists in the database.\n</code> and return.
+								</li>
+								<li>
+									If two primary keys have different types, there is an immediate mismatch. Print
+									<code>Type mismatch between target fields.\n</code> and return.
+								</li>
+								<li>
+									Allocate a new table with the name <code>"[name of table1]+[name of table2]"</code>.
+									For instance, if <code>table1</code> is named <code>ONE</code> and
+									<code>table2</code> is named <code>TWO</code>, the new table should be named
+									<code>ONE+TWO</code>. You can assume this name will not conflict
+									with other tables in the database.
+								</li>
+								<li>
+									The first field of the new table should be <code>keyName1+keyName2</code>.
+									For instance, if the first primary key is <code>ID</code> and another primary key is
+									<code>Name</code>, the new field should be named <code>ID+Name</code>. You can
+									assume this name will not conflict with other fields in the new table. Set it as the
+									<code>primaryKey</code> of the new table.
+								</li>
+								<li>
+									The subsequent fields of the new table should be all the remaining fields of
+									<code>table1</code>, followed by all the remaining fields of <code>table2</code>,
+									the relative orders of field should remain. This should hence resemble the
+									example below.
+
+									<img class="card-img-top" src="misc/pic2.png">
+									<img class="card-img-top" src="misc/pic3.png">
+
+									Note that if there is a field with the same name in <code>table1</code> and
+									<code>table2</code>, there is a potential
+									problem with duplicate field names. Hence, the corresponding field from
+									<code>table1</code> will remain the same name, and the corresponding
+									field from <code>table2</code> should be named <code>[fieldName](T2)</code>. See the
+									examples in the figure.
+								</li>
+								<li>
+									The entries of the new table should be the conjunction of all pairs of records from
+									<code>table1</code> and <code>table2</code>
+									where the data in <code>fieldName1</code> matches <code>fieldName2</code>. This can
+									be understood using the figure above.
+								</li>
+								<li>
+									The order of rows in the new table should match their order in <code>table1</code>.
+								</li>
+								<li>
+									<strong>Push this new table into the database at the end of the linked
+										list.</strong>
+								</li>
+							</ul>
+							Be careful about preserving typing, names, and the naming exceptions during name
+							matching. You may use the <code>+</code> operator to concatenate two String objects. For
+							example, <code>"dead"+"beef"</code> would become <code>"deadbeef"</code>.
+						</li>
+					</ul>
+
+					<div class="card-footer text-muted">
+						End of Part 1
+					</div>
+				</div>
+
+				<div class="card mb-4 language-text">
+					<div class="card-body" id="part2">
+						<h3 class="card-title">Part 2: Table</h3>
+						<p class="card-text">
+							Implement the following functions of the <code>Table</code> class. Note that the
+							functions do not need to be implemented in this order. Nor do you need to implement part 1
+							before part 2.
+						</p>
+					</div>
+
+					<ul class="list-group list-group-flush language-cpp">
+						<li class="list-group-item">
+							<pre><code class="language-cpp">Table(const String &name);</code></pre>
+							The constructor. Create a new Table.
+							<ul>
+								<li>
+									Initilaise pointers to <code>nullptr</code>.
+								</li>
+								<li>
+									Initialise <code>numRows</code> and <code>numCols</code> to 0, and
+									<code>tableSize</code> to 100.
+								</li>
+								<li>
+									Set table <code>name</code> as provided.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code class="language-cpp">Table(ifstream &ifs, const String &name);</code></pre>
+							Overloaded Table constructor that takes in an already initialised input filstream and name.
+							This function is related to <code>Database::Database(const String &filename)</code>.
+							<ul>
+								<li>
+									Set table <code>name</code> as provided.
+								</li>
+								<li>
+									Initilaise pointers to <code>nullptr</code>.
+								</li>
+								<li>
+									Read numCols, numRows, field names, and records, as described in the format
+									specified the in the <a href="#save">Storing Data</a> section.
+								</li>
+								<li>
+									Set <code>tableSize</code> to 100, in this function you can assume that number of
+									rows
+									will be less than 100.
+								</li>
+							</ul>
+							Remember that the primary key field has been prepended with an asterisk and every field name
+							is followed by a space and a number indicating its type. The separator between field names
+							and the individual columns is a comma and a space. You may find it more useful to use
+							<code>getline(istream&, String&, char)</code> here because the third parameter describes a
+							delimiter and second paramter is populated with data until that delimiter.
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>~Table();</code></pre>
+							Deallocate all of the fields in the <code>Table</code> object. Remember to deallocate the
+							dynamic array.
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void addRecord(int index, String *record);</code></pre>
+							Adds a record to the provided row <code>index</code> of the table, <code>record</code> is an
+							array containing the values of every field (same order as the fields themselves).
+							<ul>
+								<strong>Null pointer:</strong>
+								<li>
+									If <code>record</code> is a null pointer, print <code>Record is empty.\n</code> and
+									return.
+								</li>
+								<strong>Dimensions mismatch:</strong>
+								<li>
+									If the target index is greater than the number of rows in the table or smaller than
+									0, print
+									<code>Table row index is out of bounds.\n</code> and return.
+								</li>
+								<strong>Primary key error:</strong>
+								<li>
+									If primary key stored in <code>record</code> is empty (<code>""</code>) or is the
+									same as another record, print <code>Empty or duplicate primary key.\n</code> and
+									return.
+								</li>
+								<strong>Type mismatch:</strong>
+								<li>
+									If a field has type <code>INT</code> but the corresponding value in
+									<code>record</code> is not an integer,
+									print <code>Cannot insert non-integer in integer field.\n</code> and return.
+								</li>
+								<li>
+									Do validation according to the order above. For example, if there are both dimension
+									mismatch and primary key error, you print the message of dimension mismatch and
+									return.
+								</li>
+								<strong>Procedure:</strong>
+								<li>
+									If the new record will not be the last row, do some moving to make space for the
+									new record. The relative order of those original records should remain the same.
+								</li>
+								<li>
+									Insert the data from the record and increase numRows.
+								</li>
+								<li>
+									If <code>numRows</code> is equal to <code>tableSize</code> then:
+									<ul>
+										<li>
+											Allocate a new dynamic array with 100 more positions and update
+											<code>tableSize</code>.
+										</li>
+										<li>
+											Copy all the data from the old column to the new column.
+										</li>
+										<li>
+											Deallocate the old column and make the current field point to the new
+											column.
+										</li>
+									</ul>
+								</li>
+							</ul>
+							You may use the <code>==</code> operator to compare two String-type objects. Additionally,
+							you may use the provided
+							<code>isInteger(const String&)</code> function to check whether a particular
+							<code>String</code> object is a number or not.
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void addField(int index, const String &name, TYPE type);</code></pre>
+							Allocate a new <code>Field</code> struct and place it at position <code>index</code> of
+							the linked list.
+							<ul>
+								<strong>Dimensions mismatch:</strong>
+								<li>
+									If the target <code>index</code> is greater than <code>numCols</code> or smaller
+									than 0, print <code>Table column index is out of bounds.\n</code> and return.
+								</li>
+								<strong>Name error:</strong>
+								<li>
+									If a field with the given <code>name</code> already exists in the table, print
+									<code>Field with given name already exists in table.\n</code> and return.
+								</li>
+								<li>
+									Again, do validation according to the order above.
+								</li>
+								<strong>Procedure</strong>
+								<li>
+									Allocate a new field. Additionally, allocate a <code>String</code> array and make
+									<code>Field::column</code> point to it. Increase numCols.
+								</li>
+								<li>
+									Place the field at the appropriate position in the linked-list. For instance, if the
+									the target index is 1, set the new field's index to be the new second (index 1)
+									column.
+								</li>
+								<li>
+									If the field is of type <code>INT</code>, initialise all cells to <code>"0"</code>,
+									otherwise initialize them to <code>""</code>.
+								</li>
+								<li>
+									Additionally, if this the first field to be added to the table, set it to be the
+									primary key.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void deleteRecord(int row);</code></pre>
+							Delete a record from the table.
+							<ul>
+								<li>
+									If <code>row</code> is greater than or equal to the number of rows in the table or
+									smaller than 0, print <code>Table row index is out of bounds.\n</code> and return.
+								</li>
+								<li>
+									Otherwise, delete the row indicated by <code>row</code>. This is done by remove the
+									corresponding value in every field. If the deleted row is not the last row, do some
+									moving
+									to fill the blank. The relative order of the other records should remain the same.
+								</li>
+								<li>
+									Decrease <code>numRows</code>.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void modifyRecord(int row, int column, const String &newVal);</code></pre>
+
+							Modify the cell specified by <code>row</code> and <code>column</code> to hold
+							<code>newVal</code>.
+							<ul>
+								<strong>Dimensions mismatch:</strong>
+								<li>
+									If <code>row</code> is greater than or equal to <code>numRows</code> or less than 0,
+									print
+									<code>Table row index is out of bounds.\n</code> and return.
+								</li>
+								<li>
+									If <code>column</code> is greater than or equal to <code>numCols</code> or less than
+									0, print
+									<code>Table column index is out of bounds.\n</code> and return.
+								</li>
+								<strong>Primary key error:</strong>
+								<li>
+									If this modification is going to trigger a primary key conflict or if the primary
+									key
+									is going to be empty (<code>""</code>),
+									print <code>Empty or duplicate primary key.\n</code> and return.
+								</li>
+								<strong>Type mismatch:</strong>
+								<li>
+									If strVal is a <code>string</code> but the column that it corresponds to is of type
+									<code>INT</code>,
+									print <code>Cannot insert non-integer in integer field.\n</code> and return.
+								</li>
+								<li>
+									Again, do validation according to the order above.
+								</li>
+							</ul>
+							Again, you may use the provided
+							<code>isInteger(const String&)</code> function to check whether a particular
+							<code>String</code> object is a number or not.
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void setPrimaryKey(const String &name);</code></pre>
+
+							Set the field specified by <code>name</code> as the new primary key.
+							<ul>
+								<strong>Errors:</strong>
+								<li>
+									If there is no field with the name <code>name</code> in the table, print
+									<code>No such field with provided name exists.\n</code> and return.
+								</li>
+								<li>
+									If there is such a field, check the column.
+									<ul>
+										<li>
+											If the column has any duplicates, print
+											<code>Cannot set field with duplicate elements as primary key.\n</code> and
+											return.
+										</li>
+										<li>
+											If the column has any empty data (<code>""</code>), print
+											<code>Cannot set field with empty data as primary key.\n</code> and return.
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void setColumnIndex(int index, const String &target);</code></pre>
+
+							Move the field specified by <code>target</code> so that it is at position
+							<code>index</code>.
+							<ul>
+								<li>
+									If no field with the given name exists in the table, print
+									<code>No such field with provided name exists.\n</code> and return.
+								</li>
+								<li>
+									If <code>index</code> is greater than or equal to <code>numCols</code> or less than
+									0, print
+									<code>Table column index is out of bounds.\n</code> and return.
+								</li>
+								<li>
+									Again, do validation according to the order above.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void deleteField(const String &name);</code></pre>
+
+							Delete the field specified by <code>name</code>.
+							<ul>
+								<li>
+									If no field with the given name exists in the table, print
+									<code>No such field with provided name exists.\n</code> and return.
+								</li>
+								<li>
+									If the target field to be deleted is the primary key, print
+									<code>Cannot delete primary key field.\n</code> and return.
+								</li>
+								<li>
+									Otherwise, deallocate the field and the dynamic array, decrease
+									<code>numCols</code>.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>Field* findField(const String &name) const;</code></pre>
+
+							Return a pointer to the field specified by <code>name</code>.
+							<ul>
+								<li>
+									If no field with the given name exists in the table, print
+									<code>No such field with provided name exists.\n</code> and return
+									<code>nullptr</code>.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void sortTable(Field* field);</code></pre>
+
+							Sorts the rows by <code>field</code> in an ascending order. If the field has type
+							<code>INT</code>
+							then ascending order should be numeric. Otherwise, the ascending order should be alphabetic.
+							<ul>
+								<li>
+									If <code>field</code> is a null pointer, print
+									<code>Invalid field provided.\n</code> and
+									return.
+								</li>
+								<li>
+									Otherwise you may assume this <code>field</code> exists in the table and you can
+									start sorting.
+								</li>
+							</ul>
+							For <code>String</code> objects you may use the comparison operators
+							<code>>, <, >=, <=</code> to compare two Strings. These operators check for alphabetical
+							orders. For integers, comparisons must be done after converting them to integers. This can
+							be achieved by using the <code>stoi()</code> function that returns the numeric value of the
+							number held in the String object.
+
+							<b>You may assume that the field to be sorted will not contain duplicate values.</b>
+						</li>
+					</ul>
+
+					<div class="card-footer text-muted">
+						End of Part 2
+					</div>
+				</div>
+
+				<!-- Download section -->
+				<!-- ### Complete download section for the assignment ### -->
+				<div class="card mb-4">
+					<div class="card-body" id="download">
+						<h3 class="card-title">Resources &amp; Sample I/O</h3>
+						<ul>
+							<li>
+								Skeleton code: <a href="../Resources/PA6_Skeleton.zip">
+									PA6_skeleton.zip</a>
+							</li>
+							<li>
+								Demo programs (last update at <b>10/10 12:56</b>):<br>
+								<a href="../Resources/pa6_win.exe">Windows</a> /
+								<a href="../Resources/pa6_linux">Linux</a> /
+								<a href="../Resources/pa6_mac_x86">macOS x86</a> /
+								<a href="../Resources/pa6_mac_arm">macOS arm</a><br>
+								(If you find the demo program doesn't behave as you expect, please first download and
+								try the lastest version, if the problem is still there you can let me know. Thanks!)
+							</li>
+							<li>
+								Sample Save File:
+								<a href="../Resources/sample_database.txt">Sample 1</a>
+							</li>
+						</ul>
+						<p class="card-text">
+							If you encounter problems running the macOS demo programs, you can try look for a Windows PC
+							on campus or use
+							the <a
+								href="https://itsc.hkust.edu.hk/services/academic-teaching-support/facilities/virtual-barn"
+								, target="_blank">Virtual Barn</a>
+							from anywhere to run the Windows demo program.
+						</p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Resources &amp; Sample I/O
+					</div>
+				</div>
+
+				<!-- Submission and grading section -->
+				<!-- ### Complete submission and grading section for the assignment ### -->
+				<div class="card mb-4">
+					<div class="card-body" id="submission">
+						<h3 class="card-title">Submission &amp; Grading</h3>
+						<p class="card-text">
+							<strong>Deadline: 22 October 2022 Saturday HKT 23:59.</strong><br>
+							Submit a zip file to <a href="https://zinc.cse.ust.hk/">ZINC</a>.
+							Compress the source files <code>Database.cpp</code> and <code>Table.cpp</code> directly,
+							<b>not a folder containing them</b>.
+						</p>
+						<h4>Memory Leak</h4>
+						<p class="card-text">
+							Please bear in mind that we will also check memory leak in test cases. If any of your
+							test cases have memory leak, you will receive a 10% penalty. This penalty will be applied
+							only once in this PA.
+						</p>
+
+						<h4>Grading Scheme</h4>
+						<table style="width:95%">
+							<tbody>
+								<tr>
+									<th style="width:90%">Task Function</th>
+									<th>Grade</th>
+								</tr>
+								<tr>
+									<td>Task 1 - <code>Database(const String &name, int numTables);</code></td>
+									<td>3%</td>
+								</tr>
+								<tr>
+									<td>Task 2 - <code>Database(const String &filename);</code></td>
+									<td>4%</td>
+								</tr>
+								<tr>
+									<td>Task 3 - <code>bool addTable(Table *table);</code></td>
+									<td>5%</td>
+								</tr>
+								<tr>
+									<td>Task 4 - <code>void addTable(const String &name);</code></td>
+									<td>5%</td>
+								</tr>
+								<tr>
+									<td>Task 5 - <code>Table *findTable(const String &name) const;</code></td>
+									<td>3%</td>
+								</tr>
+								<tr>
+									<td>Task 6 - <code>void listTables() const;</code></td>
+									<td>3%</td>
+								</tr>
+								<tr>
+									<td>Task 7 - <code>void deleteTable(const String &name);</code></td>
+									<td>7%</td>
+								</tr>
+								<tr>
+									<td>Task 8 - <code>void setCurrentTable(const String &name);</code></td>
+									<td>3%</td>
+								</tr>
+								<tr>
+									<td>Task 9 - <code>void saveDatabase(const String &filename) const;</code></td>
+									<td>6%</td>
+								</tr>
+								<tr>
+									<td>Task 10 - <code>Table(const String &name);</code></td>
+									<td>3%</td>
+								</tr>
+								<tr>
+									<td>Task 11 - <code>Table(ifstream &ifs, const String &name);</code></td>
+									<td>7%</td>
+								</tr>
+								<tr>
+									<td>Task 12 - <code>void addRecord(int index, String *record);</code></td>
+									<td>7%</td>
+								</tr>
+								<tr>
+									<td>Task 13 - <code>void addField(int index, const String &name, TYPE type);</code>
+									</td>
+									<td>7%</td>
+								</tr>
+								<tr>
+									<td>Task 14 - <code>void deleteRecord(int row);</code></td>
+									<td>4%</td>
+								</tr>
+								<tr>
+									<td>Task 15 -
+										<code>void modifyRecord(int row, int column, const String &newVal);</code>
+									</td>
+									<td>7%</td>
+								</tr>
+								<tr>
+									<td>Task 16 - <code>void setPrimaryKey(const String &name);</code></td>
+									<td>5%</td>
+								</tr>
+								<tr>
+									<td>Task 17 - <code>void setColumnIndex(int index, const String &target);</code>
+									</td>
+									<td>5%</td>
+								</tr>
+								<tr>
+									<td>Task 18 - <code>void deleteField(const String &name);</code></td>
+									<td>5%</td>
+								</tr>
+								<tr>
+									<td>Task 19 - <code>Field* findField(const String &name) const;</code></td>
+									<td>4%</td>
+								</tr>
+								<tr>
+									<td>Task 20 - <code>void sortTable(Field* field);</code></td>
+									<td>7%</td>
+								</tr>
+								<tr>
+									<td>Bonus - <code>void innerJoin(Table* table1, Table* table2);</code></td>
+									<td>5%</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="card-footer text-muted">
+						End of Submission &amp; Grading
+					</div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-body" id="change">
+						<h3 class="card-title">Change Log</h3>
+						<ul>
+							<li>
+								<b>10/12 21:41</b>
+								<ol>
+									<li>
+										Addtional description for the bonus task. The order of rows in the new table
+										should match their order in <code>table1</code>. <a
+											href="https://piazza.com/class/l7fy1cnew2r58v/post/200">Piazza@200</a>
+									</li>
+								</ol>
+							</li>
+							<li>
+								<b>10/11 23:23</b>
+								<ol>
+									<li>
+										Add an assumption in <code>Table::sortTable()</code>: the field to be sorted
+										will not contain duplicate values so that the result will be the same no matter
+										your sorting is stable or not. <a
+											href="https://piazza.com/class/l7fy1cnew2r58v/post/194">Piazza@@194</a>
+									</li>
+								</ol>
+							</li>
+							<li>
+								<b>10/10 12:56</b>
+								<ol>
+									<li>
+										Fix <code>String::operator>()</code> and <code>String::operator<()</code>. You
+										can download the new skeleton zip and replace your <code>String.cpp</code> with
+										the new one. But generally, this update should not affect how you implement your
+										parts.
+									</li>
+								</ol>
+							</li>
+							<li>
+								<b>10/8 01:38</b>
+								<ol>
+									<li>
+										Typo. <a href="https://piazza.com/class/l7fy1cnew2r58v/post/163">Piazza@163</a>
+									</li>
+									<li>
+										<code>Table::setPrimaryKey</code> will check 1) if the column has empty data and
+										2) if the column has duplicates, while the priority is not specified. So we
+										guarantee that these two types of errors will not exist at the same time in the
+										test cases. <a
+											href="https://piazza.com/class/l7fy1cnew2r58v/post/163">Piazza@163</a>
+									</li>
+									<li>
+										You can assume that there will be no comma and space in field names. The figure
+										for <code>Database:innerJoin()</code> has been updated. If you cannot see it,
+										clear the cache of your browser and refresh the page.<a
+											href="https://piazza.com/class/l7fy1cnew2r58v/post/163">Piazza@163</a> and
+										<a href="https://piazza.com/class/l7fy1cnew2r58v/post/164">Piazza@164</a>
+									</li>
+								</ol>
+							</li>
+							<li>
+								<b>10/7 23:07</b>
+								<ol>
+									<li>
+										Add an extra assumption to <code>Table::Table(ifstream...)</code> that the
+										number of rows
+										will be less than 100. <a
+											href="https://piazza.com/class/l7fy1cnew2r58v/post/157">Piazza@157</a>
+									</li>
+									<li>
+										Fix typos. <a
+											href="https://piazza.com/class/l7fy1cnew2r58v/post/159">Piazza@159</a>
+									</li>
+									<li>
+										Add a global assumption. In this PA, we will not have integer strings like "01".
+										That means if two strings are not equal by string comparison, then it is
+										guaranteed that their corresponding integers are not equal. <a
+											href="https://piazza.com/class/l7fy1cnew2r58v/post/161">Piazza@161</a>
+									</li>
+								</ol>
+							</li>
+							<li>
+								<b>10/7 19:30</b>
+								<ol>
+									<li>
+										Test case 44 didn't show correct output. It has been fixed and all submissions
+										has started to be regraded. The demo programs are also updated. <a
+											href="https://piazza.com/class/l7fy1cnew2r58v/post/156">Piazza@156</a>
+									</li>
+									<li>
+										Fix an error in the description of <code>Table::addField()</code> and
+										<code>Table::deleteRecord()</code>. The dimension mismatch validation should
+										all check if the index is "smaller than 0". <a
+											href="https://piazza.com/class/l7fy1cnew2r58v/post/155">Piazza@155_f1</a>
+									</li>
+								</ol>
+							</li>
+							<li>
+								<b>10/7 02:10</b>
+								<ol>
+									<li>
+										Fix an error in the description of <code>Table::deleteRecord()</code> and
+										<code>Table::setColumnIndex</code>. The dimension mismatch validation should
+										check if the index is "greater than or equal to" but not <del>"greater
+											than"</del>.
+										<a href="https://piazza.com/class/l7fy1cnew2r58v/post/155">Piazza@155</a>
+									</li>
+								</ol>
+							</li>
+							<li>
+								<b>10/6 13:42</b><br>
+								<ol>
+									<li>
+										Remove the two destructors from grading scheme because they are already covered
+										by memory leak check. Their weights are transferred to other tasks.
+									</li>
+								</ol>
+							</li>
+							<li>
+								<b>10/5 15:13</b><br>
+								<ol>
+									<li>
+										Fix typos on this page. <a
+											href="https://piazza.com/class/l7fy1cnew2r58v/post/144">Piazza@144</a>
+									</li>
+									<li>
+										<code>Database::findTable</code> is now a constant member function in skeleton
+										codes <code>Database.h</code>. Please download the skeleton codes again or
+										simply add it yourself. <a
+											href="https://piazza.com/class/l7fy1cnew2r58v/post/144">Piazza@144</a>
+									</li>
+									<li>
+										<code>Table::modifyRecord</code> will also check if the new primary key is
+										empty. Please read the task description again. <a
+											href="https://piazza.com/class/l7fy1cnew2r58v/post/145">Piazza@145</a>
+									</li>
+								</ol>
+							</li>
+						</ul>
+					</div>
+					<div class="card-footer text-muted">
+						End of Change Log
+					</div>
+				</div>
+
+				<!-- FAQ section -->
+				<!-- ### Complete FAQ section for the assignment ### -->
+				<div class="card mb-4">
+					<div class="card-body" id="faq">
+						<h3 class="card-title">Frequently Asked Questions</h3>
+						<p>
+							<b>Q</b>: My code doesn't work, here it is, can you help me fix it?<br>
+							<b>A</b>: As the assignment is a major course assessment, to be fair, you are supposed to
+							work on it
+							by yourself and we should never finish the tasks for you. We are happy to help with
+							explanations and
+							advice, but we are <b>not allowed</b> to directly debug for you.
+						</p>
+					</div>
+					<div class="card-footer text-muted">
+						End of FAQ
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Sidebar Widgets Column -->
+			<div class="col-md-3">
+				<div class="sticky-top">
+					<!-- Menu Widget -->
+					<div class="card my-12">
+						<h5 class="card-header">Menu</h5>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<ul class="mb-0" style="padding-left:20px" type="circle">
+										<li>
+											<a href="#honor">Honor Code</a>
+										</li>
+										<li>
+											<a href="#objective">Objectives & ILOs</a>
+										</li>
+										<li>
+											<a href="#introduction">Introduction</a>
+										</li>
+										<li>
+											<a href="#description">Description</a>
+										</li>
+										<li>
+											<a href="#part1">Part 1 Database</a>
+										</li>
+										<li>
+											<a href="#part2">Part 2 Table</a>
+										</li>
+										<li>
+											<a href="#download">Resources &amp; Sample I/O</a>
+										</li>
+										<li>
+											<a href="#submission">Submission &amp; Grading</a>
+										</li>
+										<li>
+											<a href="#change">Change Log</a>
+										</li>
+										<li>
+											<a href="#faq">FAQ</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Maintenance widget -->
+					<div class="card my-4">
+						<h5 class="card-header">Page maintained by</h5>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<ul class="list-unstyled mb-0">
+										<li>
+											Designed by Hong Wing PANG
+										</li>
+										<li>
+											Reviewed by SONG Sizhe
+										</li>
+										<li>
+											Email: <a
+												href="mailto:sizhe.song@connect.ust.hk">sizhe.song@connect.ust.hk</a>
+										</li>
+										<li>Last Modified:
+											<script
+												type="text/javascript">document.write(document.lastModified);</script>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- Homepage widget -->
+					<div class="card my-4">
+						<h5 class="card-header">Homepage</h5>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<ul class="list-unstyled mb-0">
+										<li>
+											<a href="http://course.cse.ust.hk/comp2012h">Course Homepage</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.row -->
+	</div>
+
+	</div>
+	<!-- /.container -->
+
+	<!-- Footer -->
+	<footer class="py-5 bg-dark">
+		<div class="container">
+			<p class="m-0 text-center text-white">Maintained by COMP 2012H Teaching Team © 2022 HKUST Computer Science
+				and Engineering</p>
+		</div>
+		<!-- /.container -->
+	</footer>
+
+	<!-- Bootstrap core JavaScript -->
+	<script src="misc/jquery.js"></script>
+	<script src="misc/bootstrap.js"></script>
+
+
+
+
+</body>
+<grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
+
+</html>
