@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- ### Change assignment number ### -->
+	<title>COMP 2012H Assignment 4: Integer Factorization</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="misc/bootstrap.css" rel="stylesheet">
+
+	<!-- Custom styles for this template -->
+	<link href="misc/blog-home.css" rel="stylesheet">
+
+	<!-- Prism syntax highlighter -->
+	<link href="misc/prism.css" rel="stylesheet">
+
+	<style>
+		pre {
+			background: #f4f4f4 !important;
+			border: 1px solid #ddd !important;
+			border-left: 3px solid #f36d33 !important;
+			color: #666 !important;
+			page-break-inside: avoid !important;
+			font-family: monospace !important;
+			font-size: 14px !important;
+			line-height: 1.6 !important;
+			margin-bottom: 1.6em !important;
+			max-width: 100% !important;
+			overflow: auto !important;
+			padding: 1em 1.5em !important;
+			display: block !important;
+			word-wrap: break-word !important;
+		}
+
+		table,
+		th,
+		td {
+			border: 1px solid black;
+		}
+
+		th,
+		td {
+			padding: 5px;
+		}
+
+		th {
+			text-align: left;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="misc/prettify.css">
+	<script src="misc/prompt.js"></script>
+</head>
+
+<body data-new-gr-c-s-check-loaded="8.880.0" data-gr-ext-installed="">
+	<script src="misc/prism.js"></script>
+
+	<!-- Page Content -->
+	<div class="container">
+
+		<div class="row">
+
+			<!-- Entries Column -->
+			<div class="col-md-9">
+
+				<h2 class="my-4">
+					<span style="color:darkblue">COMP 2012H</span>
+					<small>Honors Object-Oriented Programming and Data Structures</small>
+				</h2>
+
+				<!-- ### Change assignment number and title ### -->
+				<h3 class="my-4">
+					Assignment 4
+					<span style="color:#660066">Integer Factorization</span>
+				</h3>
+
+				<!-- Honor Code section -->
+				<div class="card mb-4">
+					<div class="card-body" id="honor" style="background-color:#f4f4f4">
+						<h3 class="card-title">Honor Code</h3>
+						<p class="card-text">
+							We value academic integrity very highly. Please read the <a
+								href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a> section on our
+							course webpage to make sure you understand what is considered as plagiarism and what the
+							penalties are.
+							The following are some of the highlights:
+						</p>
+						<ul>
+							<li>
+								Do NOT try your "luck" - we use sophisticated plagiarism detection software to find
+								cheaters.
+								We also review codes for potential cases manually.
+							</li>
+							<li>
+								The penalty (for <b>BOTH</b> the copier and the copiee) is not just getting a zero in
+								your assignment.
+								Please read the <a href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a>
+								thoroughly.
+							</li>
+							<li>
+								Serious offenders will fail the course immediately, and there will be additional
+								disciplinary actions
+								from the department and university, upto and including expulsion.
+							</li>
+						</ul>
+						<p></p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Honor Code
+					</div>
+				</div>
+
+				<!-- <div class="card mb-4">
+					<div class="card-body" id="objective" style="background-color:#f4f4f4">
+						<h3 class="card-title">Objectives & Intended Learning Outcomes</h3>
+						<p class="card-text">
+							The objective of this assignment is to familiarise you with functions, arrays, and parameter
+							passing.
+							After this assignment you should be able to:
+						</p>
+						<ol>
+							<li>
+								Learn how to use functions to divide your program into small components
+							</li>
+							<li>
+								Utilise pass by reference to improve the runtime
+							</li>
+							<li>
+								Use <code>char</code> arrays to store and manipulate a string of characters
+							</li>
+							<li>
+								Use const references to ensure that variables are not modified in functions
+							</li>
+						</ol>
+						<p></p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Objectives & Intended Learning Outcomes
+					</div>
+				</div> -->
+
+				<!-- Introduction section -->
+				<!-- ### Complete introduction section for the assignment ### -->
+				<div class="card mb-4">
+					<!-- ### Add an image representing the assignment content here ### -->
+					<img class="card-img-top" src="misc/cover.jpg" alt="Card image cap">
+					<div class="card-body language-text" id="introduction">
+						<!-- <p class="card-text">
+							<small>
+								<em>
+									An example of a text processor: Microsoft Word<br>
+								</em>
+							</small>
+						</p> -->
+						<h3 class="card-title">Introduction</h3>
+
+						<p class="card-text">
+							In this programming assignment, you will have a taste of speed programming.
+							You are going to solve a classic problem - <a
+								href="https://en.wikipedia.org/wiki/Integer_factorization">integer factorization</a> -
+							which is a key in important applications such as <a
+								href="https://en.wikipedia.org/wiki/RSA_(cryptosystem)">RSA public-key encryption</a> in
+							a speedy manner.
+						</p>
+
+						<p class="card-text">
+							Please read the <a href="#faq">FAQ</a> section regularly, and do check it
+							one day before the deadline to make sure you don't miss any clarification,
+							even if you have already submitted your work by then. You can also raise questions
+							on Piazza and remember to use the "pa4" tag.
+						</p>
+					</div>
+
+					<div class="card-footer text-muted">
+						End of Introduction
+					</div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-body language-text" id="description">
+						<h3 class="card-title">Description</h3>
+
+						<!-- <h4>Code structure</h4>
+						<p class="card-text">
+							The skeleton code structure is as follows:
+						</p>
+						<pre>PA2&#10;└── main.cpp&#10;</pre>
+						<p class="card-text">
+							Your task for this PA is to implement 10 functions in <code>main.cpp</code>.
+						</p> -->
+
+						<p class="card-text">
+							Basically, we want to perform factorization for all integers in a given range and print the
+							results.
+						</p>
+						<p class="card-text">
+							The input arguments will be from the command line. You may read <a
+								href="https://www.geeksforgeeks.org/command-line-arguments-in-c-cpp/">this article</a>
+							to learn about how you might retrieve them in C++. To provide command line arguments to your
+							program you will have to compile and run your program in a terminal. Please feel free to do
+							that in any terminal you are familiar with.
+							<!-- You can also access one in the VS Code according to the instruction in <a
+								href="https://course.cse.ust.hk/comp2011/labs/vscode/#terminal">this section</a> on our
+							VS Code tutorial page. -->
+							However, if you want to time your program, you may want to use our
+							lab 2 Linux machines. Instructions can be found in the next section: <a
+								href="#timing">Timing your program</a>.
+						</p>
+						<p class="card-text">
+							Assuming the name of your program is <code>factorize</code>, we may use the following
+							command in the terminal:
+						</p>
+						<pre><code>factorize [range_start] [range_end]</code></pre>
+
+						<p class="card-text">The <b>[range_start]</b> and <b>[range_end]</b> are the integers that
+							specify the range. For
+							example, <code>factorize 12 23</code> will print out the factorization results for all
+							integers in the range [12, 23] in ascending order like so:</p>
+						<pre><code>12=2*2*3
+13=13
+14=2*7
+15=3*5
+16=2*2*2*2
+17=17
+18=2*3*3
+19=19
+20=2*2*5
+21=3*7
+22=2*11
+23=23
+</code></pre>
+						<p class="card-text">The output is pretty straightforward as you can see: each line consists of
+							the integer being
+							factorized at the beginning, then the equal sign, and finally the factorization result with
+							a single <code>endl</code> character added at the end. The prime factors, which are
+							separated by asterisks, in the factorization result must also be listed in ascending order.
+						</p>
+
+						<p class="card-text">Your program should output nothing else and require no user interaction.
+							(i.e. don't need to
+							take in any standard console input with <code>cin</code>)</p>
+
+						<p class="card-text">For simplicity, you can assume the provided input arguments
+							<b>[range_start]</b> and
+							<b>[range_end]</b> are positive integers between 2 and 2<sup>63</sup> - 1 inclusively (i.e.
+							it can be
+							stored in a <code>long long</code> variable), and that <b>[range_start]</b> is no larger
+							than <b>[range_end]</b>.
+						</p>
+
+						<!-- <br>
+
+						<h4>Important Requirements</h4>
+						<p class="card-text">
+							There are a few things you CANNOT do. Failure to observe these rules would potentially
+							result in ZERO mark for your assignment. Please carefully check your code before you submit
+							it.
+						<ul>
+							<li>
+								This assignment is all about string operation exercises, so you are NOT allowed to
+								include any additional libraries for example <code>cstring</code> and
+								<code>string.h</code>.
+							</li>
+							<li>
+								You are NOT allowed to modify any of the given function prototypes including the return
+								types, function names, and parameter lists.
+							</li>
+							<li>
+								You are NOT allowed to define any additional global variable. You can only use those
+								provided in the skeleton codes.
+							</li>
+						</ul>
+						</p> -->
+
+					</div>
+					<div class="card-footer text-muted">
+						End of Description
+					</div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-body language-text" id="timing">
+						<h3 class="card-title">Timing your program</h3>
+
+						<p class="card-text">
+							We will be using the <code>time</code> Linux utility to measure the runtime performance of
+							your
+							program. You may use this utility on any of our CS Lab 2 (Linux Lab) machines either locally
+							in
+							the lab or remotely via SSH. The following shows you how using the SSH client in the Virtual
+							Barn. <u>You may adjust the steps accordingly if you are familiar with installing and using
+								a
+								SSH client on your own computer</u>.
+						</p>
+
+						<ol>
+							<li>
+								Remote control a Windows machine in <a
+									href="https://itsc.ust.hk/services/academic-teaching-support/facilities/virtual-barn/overview">HKUST
+									virtual barn</a>. After following the installation guide and user guide there to
+								install the remote control client and connect to the HKUST network, choose the
+								Programming Software server when you are offered a selection of different servers.
+							</li>
+							<li>
+								Copy your files to Virtual Barn. If you have no idea how, you can email yourself the
+								files and then download them there.
+							</li>
+							<li>
+								Open <code>PuTTY</code>. There is a shortcut on your Desktop.
+								Enter <code>csl2wk13.cse.ust.hk</code> as the Host Name. Note: If
+								that one server doesn't work, you may try other servers such as
+								<code>csl2wk14.cse.ust.hk</code> and <code>csl2wk15.cse.ust.hk</code>. The server number
+								goes up to at
+								least 40.
+								<br><img src="misc/putty1.png">
+							</li>
+							<li>
+								Click Open. If a warning about the security key shows up, click Yes to dismiss it.
+								<br><img src="misc/putty2.png">
+							</li>
+							<li>
+								Enter your CSD login and password. (Register one if you haven't done so in lab 1 by
+								following
+								the lab 1 instructions.) It may not show what you type when you are typing in the
+								password. Don't worry, just type your password and hit the Enter key. You should login
+								to your <em>home</em> directory. Enter the command <code>pwd</code> (Print Working
+								Directory) to verify this. It
+								should show <code>/homes/your_login</code>
+								<br><img src="misc/putty3.png">
+							</li>
+							<li>
+								Open <code>FileZilla</code> from Start Menu. Click "File" -&gt;
+								"Site Manager" -&gt; "New Site". Choose <b>SFTP</b> for protocol according to the
+								screenshot below. Enter <code>csl2wk13.cse.ust.hk</code> (or
+								whatever server you used in a previous step) as Host. Choose "Ask for password" for the
+								Logon Type.
+								<br><img src="misc/filezilla.png">
+							</li>
+							<li>
+								Click Connect and then enter your CSD login and password.
+							</li>
+							<li>
+								If the connection succeeds, the right side should show your home directory at Linux Lab.
+								Copy your factorize.cpp file by dragging it to the right side. That would upload the
+								file to <code>/homes/your_login</code>. You can close <code>FileZilla</code> after doing
+								so.
+							</li>
+							<li>
+								Go back to <code>PuTTY</code>, and compile your program using the
+								following command:
+								<pre><code>g++ -Wall -Wextra -pedantic -std=c++11 -o factorize factorize.cpp</code></pre>
+							</li>
+							<li>
+								If no compilation errors occur, you should be able to time and run your program by
+								adding <code>/usr/bin/time -v</code> before the command to be timed. For example:
+								<pre><code>/usr/bin/time -v factorize 9234567890 9234567899</code></pre>
+								<p class="card-text">Output like the following will be printed:</p>
+								<pre>csl2wk13:yourusername:69> /usr/bin/time -v factorize 9234567890 9234567899
+9234567890=2*5*53*73*238681
+9234567891=3*3*3*3*3*19*127*15749
+9234567892=2*2*11*17*37*333667
+9234567893=191*317*152519
+9234567894=2*3*907*937*1811
+9234567895=5*7*263844797
+9234567896=2*2*2*23*47*229*4663
+9234567897=3*31*103*353*2731
+9234567898=2*4617283949
+9234567899=43*61*3520613
+		Command being timed: "factorize 9234567890 9234567899"
+		User time (seconds): 10.64
+		System time (seconds): 0.00
+		Percent of CPU this job got: 99%
+		Elapsed (wall clock) time (h:mm:ss or m:ss): 0:10.65
+		Average shared text size (kbytes): 0
+		Average unshared data size (kbytes): 0
+		Average stack size (kbytes): 0
+		Average total size (kbytes): 0
+		Maximum resident set size (kbytes): 3244
+		Average resident set size (kbytes): 0
+		Major (requiring I/O) page faults: 0
+		Minor (reclaiming a frame) page faults: 123
+		Voluntary context switches: 2
+		Involuntary context switches: 5
+		Swaps: 0
+		File system inputs: 0
+		File system outputs: 0
+		Socket messages sent: 0
+		Socket messages received: 0
+		Signals delivered: 0
+		Page size (bytes): 4096
+		Exit status: 0
+						  </pre>
+								<p class="card-text">For timing purpose, we will be using the <b><u>"User time
+											(seconds)"</u></b>. In
+									this example, it
+									took our unoptimized program 10.64 seconds to factorize ten integers between
+									9234567890 and 9234567899.
+								</p>
+							</li>
+
+						</ol>
+
+					</div>
+					<div class="card-footer text-muted">
+						End of Timing your program
+					</div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-body" id="program">
+						<h3 class="card-title">Sample program</h3>
+						<p>On a lab 2 Linux machine (you can access it according to the instructions in <a
+								href="#timing">Timing your program</a>), you can download our unoptimized sample program
+							with this command:</p>
+						<pre><code>wget https://course.cse.ust.hk/comp2012h/assignments/PA4/Resources/factorize</code></pre>
+						<p>Note: the downloaded file may be renamed to something else if you already have a file named
+							"factorize" in the current directory - see the output of the wget command to find out what
+							the sample program has been renamed to.</p>
+						<p>Then you can add the executable permission to it:</p>
+						<pre><code>chmod u+x factorize</code></pre>
+						<p>Finally you may run it as usual:</p>
+						<pre><code>factorize 12 20</code></pre>
+						<p><a href="../Resources/factorize_win.exe">Windows demo program</a> is provided, but please keep in mind that we grade your codes in Linux lab, so
+							it is recommended that you check your codes in Linux at least once before the deadline.</p>
+					</div>
+					<div class="card-footer text-muted">
+						Sample program
+					</div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-body" id="sample">
+						<h3 class="card-title">Sample output</h3>
+						<p> Your finished program should produce the same output as <a
+								href="../Resources/sample.zip">our sample
+								output</a>. The file names indicate the input arguments used. Please note that sample
+							output, naturally, does not show all possible cases. It is part of the assessment for you to
+							design your own test cases to test your program. You may use our <a href="#program">sample
+								program</a> to generate more test cases for yourself. <b>Be reminded to remove any
+								debugging message</b> that you might have added before submitting your final submission.
+						</p>
+					</div>
+					<div class="card-footer text-muted">
+						Sample output
+					</div>
+				</div>
+
+				<!-- Submission and grading section -->
+				<!-- ### Complete submission and grading section for the assignment ### -->
+				<div class="card mb-4">
+					<div class="card-body" id="submission">
+						<h3 class="card-title">Submission &amp; Grading</h3>
+						<p class="card-text">
+							<strong>Deadline: 8 October 2022 Saturday HKT 23:59.</strong><br>
+							Submit a single source file <code>factorize.cpp</code> to <a
+								href="https://zinc.cse.ust.hk/">ZINC</a>.
+						</p>
+
+						<h3 class="card-title">Cite External Materials</h3>
+						<p>If you have referred to any external materials, please cite them in your ZINC submission. Add a comment 
+							at the beginning (line 1) of the source file. If you have already submitted, please kindly add the references 
+							(if any) and submit again. It is fine to learn ideas and algorithms from external materials, 
+							but you have to write the codes yourself.</p>
+
+						<h3 class="card-title">Grading scheme</h3>
+						<ul>
+							<li>Your program should generate the exact same output as our sample program's.</li>
+							<li>Your program should run no significantly slower than our unoptimized sample program.
+								That means its running time cannot be more than double of that of ours. For example, if
+								our sample program can generate the results in 5 seconds, your program should not take
+								more than 10 seconds to do the same.</li>
+						</ul>
+						<p>You need to fulfill both requirements to be considered as correct for a test case. We will
+							test your program on multiple hard test cases (very large number) for multiple times and the
+							result (average time for one test case) will be released. This will happen outside ZINC as
+							it doesn't support timing. In ZINC, we only provide a simple test case that factorizes 2 to
+							100 to help you debug.
+						</p>
+						<h3 class="card-title">Speed programming competition (Bonus)</h3>
+						<p>For this assignment, we will also reward the students that have mastered the art of speed
+							programming up to 10 bonus points.
+
+						<ul>
+							<li>Your last submission on ZINC will be used for the ranking. No separate submission will
+								be accepted.</li>
+							<li>Late submission will be excluded from ranking.</li>
+							<li>We only rank those programs with correct outputs. If your program does wrong in any test
+								cases, it will be excluded from ranking.</li>
+							<li>Programs running not that fast will be excluded from ranking. If your running time &gt;
+								1.1 &times; running time of the demo program, it will not be ranked.
+							</li>
+						</ul>
+
+						<h3 class="card-title">Hardwares for grading</h3>
+						<p>Currently, the plan is to grade the submissions on CS Linux Lab machines, so:
+						<ul>
+							<li>Please make sure your program can be compiled with this
+								command on the above mentioned
+								machines<br><code>g++ -Wall -Wextra -pedantic -std=c++11 -O3 factorize.cpp -o factorize</code>
+							</li>
+							<li>The above mentioned machines each has 8GB memories in total, and definitely we can never
+								occupy all of them, so make sure your program's memory use is reasonable. Maybe you can
+								test it yourself before the final submission.
+							</li>
+							<li>
+								Your program will not be able to access the network.
+							</li>
+						</ul>
+						</p>
+					</div>
+
+					<div class="card-footer text-muted">
+						End of Submission &amp; Grading
+					</div>
+				</div>
+
+				<!-- FAQ section -->
+				<!-- ### Complete FAQ section for the assignment ### -->
+				<div class="card mb-4">
+					<div class="card-body" id="faq">
+						<h3 class="card-title">Frequently Asked Questions</h3>
+						<p>
+							<b>Q</b>: My code doesn't work, here it is, can you help me fix it?<br>
+							<b>A</b>: As the assignment is a major course assessment, to be fair, you are supposed to
+							work on it
+							by yourself and we should never finish the tasks for you. We are happy to help with
+							explanations and
+							advice, but we are <b>not allowed</b> to directly debug for you.
+						</p>
+						<p>
+							<b>Q</b>: Can I refer to external materials?<br>
+							<b>A</b>: It is fine to learn ideas and algorithms from external materials, but you have to write the codes yourself. 
+									Also, please cite the materials you referred to in your submission. Add a comment at the beginning (line 1) of the source file.
+						</p>
+					</div>
+					<div class="card-footer text-muted">
+						End of FAQ
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Sidebar Widgets Column -->
+			<div class="col-md-3">
+				<div class="sticky-top">
+					<!-- Menu Widget -->
+					<div class="card my-12">
+						<h5 class="card-header">Menu</h5>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<ul class="mb-0" style="padding-left:20px" type="circle">
+										<li>
+											<a href="#honor">Honor Code</a>
+										</li>
+										<li>
+											<a href="#introduction">Introduction</a>
+										</li>
+										<li>
+											<a href="#description">Description</a>
+										</li>
+										<li>
+											<a href="#timing">Timing your program</a>
+										</li>
+										<li>
+											<a href="#program">Sample program</a>
+										</li>
+										<li>
+											<a href="#sample">Sample output</a>
+										</li>
+										<li>
+											<a href="#submission">Submission &amp; Grading</a>
+										</li>
+										<li>
+											<a href="#faq">FAQ</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Maintenance widget -->
+					<div class="card my-4">
+						<h5 class="card-header">Page maintained by</h5>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<ul class="list-unstyled mb-0">
+										<li>
+											SONG Sizhe
+										</li>
+										<li>
+											<a href="mailto:sizhe.song@connect.ust.hk">sizhe.song@connect.ust.hk</a>
+										</li>
+										<li>Last Modified:
+											<script
+												type="text/javascript">document.write(document.lastModified);</script>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- Homepage widget -->
+					<div class="card my-4">
+						<h5 class="card-header">Homepage</h5>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<ul class="list-unstyled mb-0">
+										<li>
+											<a href="http://course.cse.ust.hk/comp2012h">Course Homepage</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.row -->
+	</div>
+
+	</div>
+	<!-- /.container -->
+
+	<!-- Footer -->
+	<footer class="py-5 bg-dark">
+		<div class="container">
+			<p class="m-0 text-center text-white">Maintained by COMP 2012H Teaching Team © 2022 HKUST Computer Science
+				and Engineering</p>
+		</div>
+		<!-- /.container -->
+	</footer>
+
+	<!-- Bootstrap core JavaScript -->
+	<script src="misc/jquery.js"></script>
+	<script src="misc/bootstrap.js"></script>
+
+
+
+
+</body>
+<grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
+
+</html>
