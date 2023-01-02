@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- ### Change assignment number ### -->
+	<title>COMP 2012H Assignment 2: A Simple Text Processor</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="misc/bootstrap.css" rel="stylesheet">
+
+	<!-- Custom styles for this template -->
+	<link href="misc/blog-home.css" rel="stylesheet">
+
+	<!-- Prism syntax highlighter -->
+	<link href="misc/prism.css" rel="stylesheet">
+
+	<style>
+		pre {
+			background: #f4f4f4 !important;
+			border: 1px solid #ddd !important;
+			border-left: 3px solid #f36d33 !important;
+			color: #666 !important;
+			page-break-inside: avoid !important;
+			font-family: monospace !important;
+			font-size: 14px !important;
+			line-height: 1.6 !important;
+			margin-bottom: 1.6em !important;
+			max-width: 100% !important;
+			overflow: auto !important;
+			padding: 1em 1.5em !important;
+			display: block !important;
+			word-wrap: break-word !important;
+		}
+
+		table,
+		th,
+		td {
+			border: 1px solid black;
+		}
+
+		th,
+		td {
+			padding: 5px;
+		}
+
+		th {
+			text-align: left;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="misc/prettify.css">
+	<script src="misc/prompt.js"></script>
+</head>
+
+<body data-new-gr-c-s-check-loaded="8.880.0" data-gr-ext-installed="">
+	<script src="misc/prism.js"></script>
+
+	<!-- Page Content -->
+	<div class="container">
+
+		<div class="row">
+
+			<!-- Entries Column -->
+			<div class="col-md-9">
+
+				<h2 class="my-4">
+					<span style="color:darkblue">COMP 2012H</span>
+					<small>Honors Object-Oriented Programming and Data Structures</small>
+				</h2>
+
+				<!-- ### Change assignment number and title ### -->
+				<h3 class="my-4">
+					Assignment 2
+					<span style="color:#660066">A Simple Text Processor</span>
+				</h3>
+
+				<!-- Honor Code section -->
+				<div class="card mb-4">
+					<div class="card-body" id="honor" style="background-color:#f4f4f4">
+						<h3 class="card-title">Honor Code</h3>
+						<p class="card-text">
+							We value academic integrity very highly. Please read the <a
+								href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a> section on our
+							course webpage to make sure you understand what is considered as plagiarism and what the
+							penalties are.
+							The following are some of the highlights:
+						</p>
+						<ul>
+							<li>
+								Do NOT try your "luck" - we use sophisticated plagiarism detection software to find
+								cheaters.
+								We also review codes for potential cases manually.
+							</li>
+							<li>
+								The penalty (for <b>BOTH</b> the copier and the copiee) is not just getting a zero in
+								your assignment.
+								Please read the <a href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a>
+								thoroughly.
+							</li>
+							<li>
+								Serious offenders will fail the course immediately, and there will be additional
+								disciplinary actions
+								from the department and university, upto and including expulsion.
+							</li>
+						</ul>
+						<p></p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Honor Code
+					</div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-body" id="objective" style="background-color:#f4f4f4">
+						<h3 class="card-title">Objectives & Intended Learning Outcomes</h3>
+						<p class="card-text">
+							The objective of this assignment is to familiarise you with functions, arrays, and parameter
+							passing.
+							After this assignment you should be able to:
+						</p>
+						<ol>
+							<li>
+								Learn how to use functions to divide your program into small components
+							</li>
+							<li>
+								Utilise pass by reference to improve the runtime
+							</li>
+							<li>
+								Use <code>char</code> arrays to store and manipulate a string of characters
+							</li>
+							<li>
+								Use const references to ensure that variables are not modified in functions
+							</li>
+						</ol>
+						<p></p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Objectives & Intended Learning Outcomes
+					</div>
+				</div>
+
+				<!-- Introduction section -->
+				<!-- ### Complete introduction section for the assignment ### -->
+				<div class="card mb-4">
+					<!-- ### Add an image representing the assignment content here ### -->
+					<img class="card-img-top" src="misc/pic.png" alt="Card image cap">
+					<div class="card-body language-text" id="introduction">
+						<p class="card-text">
+							<small>
+								<em>
+									An example of a text processor: Microsoft Word<br>
+								</em>
+							</small>
+						</p>
+						<h3 class="card-title">Introduction</h3>
+
+						<p class="card-text">
+							The objective of this assignment is to implement a few functionalities of a text processor.
+							A text processor allows users to manipulate a string of characters.
+							These manipulations provide innumerable options with which to personalise a document.
+							For instance one can:
+						<ul>
+							<li>Change the alignment of the text so as to right align, left align, or justify (right and
+								left align) it.</li>
+							<li>Perform global replacement of a certain string in the text with another string.</li>
+							<li>Keep track of the number of words and characters in the text.</li>
+							<li>Change the case (upper or lower) of a certain piece of text.</li>
+							<li>Print the text in various formats.</li>
+							<li>Count the number of appearances of a certain string in a text.</li>
+						</ul>
+						In this assignment, you will be required to:
+						<ul>
+							<li>
+								Implement tailored versions of the mechanisms outlined above.
+							</li>
+							<li>
+								Implement a simple <a href="#caeser">Caeser Cipher</a>
+							</li>
+							<li>
+								Print a character array in an argot called <a href="#pig-latin">Pig Latin</a>
+							</li>
+						</ul>
+						</p>
+					</div>
+
+					<div class="card-footer text-muted">
+						End of Introduction
+					</div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-body language-text" id="description">
+						<h3 class="card-title">Description</h3>
+						<p class="card-text">
+							Please read the <a href="#faq">FAQ</a> section regularly, and do check it
+							one day before the deadline to make sure you don't miss any clarification,
+							even if you have already submitted your work by then. You can also raise questions
+							on Piazza and remember to use the "pa2" tag.
+						</p>
+
+						<h4>Code structure</h4>
+						<p class="card-text">
+							The skeleton code structure is as follows:
+						</p>
+						<pre>PA2&#10;└── main.cpp&#10;</pre>
+						<p class="card-text">
+							Your task for this PA is to implement 10 functions in <code>main.cpp</code>.
+						</p>
+
+						<h4 id="caeser">Caeser Cipher</h4>
+						<p class="card-text">
+							The <a href="https://en.wikipedia.org/wiki/Caesar_cipher">Caeser Cipher</a> is a simple
+							shift cipher that modifies alphabetical words
+							in order to produce a text whose meaning has been obfuscated. Ciphers are used to encrypt
+							text to make it unreadable.
+							A Shift Cipher achieves this by taking a number <code>shift</code> and shifting every
+							alphabetical character of the text by the alphabet that is <code>shift</code> modulo 26
+							positions
+							down the alphabet. For instance, with a right shift of 5, 'A' would become 'F', 'G' would
+							become 'L', and 'X' would become 'C'. Note that uppercases and lowercases are maintained.
+						<p></p>
+						<img class="card-img-top" src="misc/pic2.png" alt="Card image cap">
+						<p class="card-text">
+							<small>
+								<em>
+									A simple Shift Cipher that rotates left by 3 (or, alternatively, right by -3).<br>
+								</em>
+								<em>
+									Source: <a
+										href="https://en.wikipedia.org/wiki/Caesar_cipher#/media/File:Caesar_cipher_left_shift_of_3.svg">Link</a>
+								</em>
+							</small>
+						</p>
+						<ul>
+							<li>
+								If <code>shift</code> is 5:
+								<ul>
+									<li>"Object-Oriented Programming" would be "Tgojhy-Twnjsyji Uwtlwfrrnsl"</li>
+									<li>"The quick brown fox jumps over the lazy dog" would be "Ymj vznhp gwtbs ktc
+										ozrux tajw ymj qfed itl"</li>
+								</ul>
+							</li>
+						</ul>
+						</p>
+						<br>
+
+
+						<h4 id="pig-latin">Pig Latin</h4>
+						<p class="card-text">
+							<a href="https://en.wikipedia.org/wiki/Pig_Latin" target="_blank">Pig Latin</a> is a
+							Language Game that modifies English words
+							to produce a "cryptic" rendition that makes it hard to follow and understand. This is often
+							used by children who want to converse with
+							each other without letting adults understand what they are saying.
+							Every word is individually converted from English to Pig Latin using the following
+							conversion rules:
+						<ul>
+							<li>
+								If the first letter is a vowel (<code>'a'</code>, <code>'e'</code>, <code>'i'</code>,
+								<code>'o'</code>, <code>'u'</code>) then simply append "yay" to it. For example:
+								<ul>
+									<li>"ointment" -> "ointmentyay"</li>
+								</ul>
+							</li>
+							<li>
+								If the first letter is not a vowel then shift it to the end until the first letter is a
+								vowel and then append "ay" to it. For example:
+								<ul>
+									<li>"consume" -> "onsumec" -> "onsumecay"</li>
+									<li>"cheap" -> "heapc" -> "eapch" -> "eapchay"</li>
+									<li>"warm-up" -> "arm-upw" -> "arm-upway"</li>
+								</ul>
+							</li>
+						</ul>
+						</p>
+
+						<h4>Input Assumptions</h4>
+						<p class="card-text">
+							For the string (<code>char</code> array) that you are operating on, you can assume that:
+						<ul>
+							<li>
+								It is correctly terminated with a <code>'\0'</code> character.
+							</li>
+							<li>
+								The string will not be longer than <code>MAX_STRLEN</code>. All the chracters including
+								<code>'\0'</code> can be stored inside an array <code>char str[MAX_STRLEN]</code>.
+								This one will still hold even after any operations (functions) you need to implement.
+							</li>
+							<li>
+								The string will only contain these characters before the <code>'\0'</code> character:
+								<ul>
+									<li>
+										<code>'a'</code> - <code>'z'</code> (lowercase letters)
+									</li>
+									<li>
+										<code>'A'</code> - <code>'Z'</code> (uppercase letters)
+									</li>
+									<li>
+										<code>'-'</code> (hyphen)
+									</li>
+									<li>
+										<code>','</code> (comma)
+									</li>
+									<li>
+										<code>'.'</code> (fullstop)
+									</li>
+									<li>
+										<code>' '</code> (whitespace)
+									</li>
+								</ul>
+							</li>
+						</ul>
+						</p>
+
+						<h4>Important Requirements</h4>
+						<p class="card-text">
+							There are a few things you CANNOT do. Failure to observe these rules would potentially
+							result in ZERO mark for your assignment. Please carefully check your code before you submit
+							it.
+						<ul>
+							<li>
+								This assignment is all about string operation exercises, so you are NOT allowed to
+								include any additional libraries for example <code>cstring</code> and
+								<code>string.h</code>.
+							</li>
+							<li>
+								You are NOT allowed to modify any of the given function prototypes including the return
+								types, function names, and parameter lists.
+							</li>
+							<li>
+								You are NOT allowed to define any additional global variable. You can only use those
+								provided in the skeleton codes.
+							</li>
+						</ul>
+						</p>
+
+					</div>
+					<div class="card-footer text-muted">
+						End of Description
+					</div>
+				</div>
+
+				<div class="card mb-4 language-text">
+					<div class="card-body" id="tasks">
+						<h2 class="card-title">Tasks</h2>
+						<p class="card-text">
+							This section describes the 10 functions that you will need to implement.
+						</p>
+					</div>
+
+					<ul class="list-group list-group-flush language-cpp">
+
+						<li class="list-group-item">
+
+							<pre><code class="language-cpp">int countCharacters(const char str[]);</code></pre>
+							<strong>Description - </strong>Returns the number of characters in <code>str</code>.
+							<br>
+							For example, if:
+							<ul>
+								<li>
+									<code>str</code> is <code>"Hello world."</code>,
+								</li>
+							</ul>
+							Then the function would be return 12. (10 letters + 1 whitespace + 1 fullstop)
+							<br>
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>str</code> - string of text.
+								</li>
+							</ul>
+							<br>
+							<strong>Return value - </strong>Number of characters in <code>str</code> until the
+							null-terminator (<code>\0</code> itself excluded).
+						</li>
+
+						<li class="list-group-item">
+							<pre><code class="language-cpp">int countWords(const char str[]);</code></pre>
+
+							<strong>Description - </strong>Returns the number of words in <code>str</code>. Read the
+							notes below for the definition of words.
+							<br>
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>str</code> - string of text.
+								</li>
+							</ul>
+							<br>
+							<strong>Return value - </strong>Number of words in <code>str</code> until the
+							null-terminator <code>\0</code>.
+							<br>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									Words will only contain letters and hyphens.
+								</li>
+								<li>
+									All consecutive letters or hyphen together forms a word. That means between each two
+									words there are <b>at least</b> one non-word character.
+								</li>
+								<li>
+									For example:
+									<br>
+									<br>
+									<img class="card-img-top" src="misc/wordCount.png" alt="Word Count Example">
+									<br>
+									<br>
+									The string <code>"Here is the well-designed program."</code> contains 5 words.
+								</li>
+								<li>
+									There will be some "strange" words under this definition, e.g. "-", "-abc", "abc-",
+									it's fine. We still count them.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void swapString(char str[], const char target[], const char to[]);</code></pre>
+
+							<strong>Description - </strong>Replaces every instance of the characters in
+							<code>target</code> in <code>str</code> with the characters in <code>to</code>.
+							<br>
+							For example, if:
+							<ul>
+								<li>
+									<code>str</code> is <code>"I have a course in the morning"</code>.
+								</li>
+								<li>
+									<code>target</code> is <code>"course"</code>.
+								</li>
+								<li>
+									<code>to</code> is <code>"zoom meeting"</code>.
+								</li>
+							</ul>
+							Then <code>str</code> would be updated to be
+							<code>"I have a zoom meeting in the morning"</code>.
+							<br>
+							If:
+							<ul>
+								<li>
+									<code>str</code> is <code>"I would like an ice cream"</code>.
+								</li>
+								<li>
+									<code>target</code> is <code>"ice "</code>.
+								</li>
+								<li>
+									<code>to</code> is <code>"ice-"</code>.
+								</li>
+							</ul>
+							Then <code>str</code> would be updated to be <code>"I would like an ice-cream."</code>.
+							<br>
+							Note that each characrer can only be matched at most once, so if:
+							<ul>
+								<li>
+									<code>str</code> is <code>"ssss"</code>.
+								</li>
+								<li>
+									<code>target</code> is <code>"sss"</code>.
+								</li>
+								<li>
+									<code>to</code> is <code>"a"</code>.
+								</li>
+							</ul>
+							Then <code>str</code> would be updated to be <code>"as"</code> but not <code>"aa"</code>.
+							<br>
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>str</code> - string of text.
+								</li>
+								<li>
+									<code>target</code> - the target substring to be replaced.
+								</li>
+								<li>
+									<code>to</code> - the new substring to replace <code>target</code>.
+								</li>
+							</ul>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									The replacement could change the total length of <code>str</code>, make sure that
+									the null-terminator is placed correctly after the replacement.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void encryptText(char str[], int shift);</code></pre>
+							<strong>Description - </strong>Encrypts the text in <code>str</code> using a Shift Cipher by
+							shift amount <code>shift</code> to the right.
+							Note that <code>shift</code> can be negative to introduce a left shit. You may want to read
+							the intro on <a href="#caeser">Caeser Cipher</a> first.
+							<br>
+							For example, if:
+							<ul>
+								<li>
+									<code>str</code> is <code>"She sells seashells on the seashore."</code>, and
+								</li>
+								<li>
+									<code>shift</code> is <code>15</code>
+								</li>
+							</ul>
+							Then <code>str</code> would be updated to be
+							<code>"Hwt htaah htphwtaah dc iwt htphwdgt."</code>.
+							<br>
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>str</code> - string of text.
+								</li>
+								<li>
+									<code>shift</code> - the amount to <strong>right</strong> shift the alphabet
+									characters by.
+								</li>
+							</ul>
+							<br>
+							<strong>Note</strong>
+							<ul>
+								<li>
+									Your codes should be able to handle inputs like <code>shift == 53</code> which is
+									simply equivalent to <code>shift == 1</code>.
+								</li>
+								<li>
+									Your codes should be able to handle negative inputs like <code>shift == -77</code>
+									which is simply equivalent to <code>shift == 1</code>.
+								</li>
+								<li>
+									<code>'a' <= c && c <= 'z'</code> will tell you whether character <code>c</code> is
+									a lowercase letter.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>int countNumOccurences(const char str[], const char target[]);</code></pre>
+
+							<strong>Description - </strong>Counts the number of occurences of <code>target</code> in
+							<code>str</code>.
+							<br>
+							For example, if:
+							<ul>
+								<li>
+									<code>str</code> is <code>"Why have a ballroom with no balls."</code>.
+								</li>
+								<li>
+									if <code>target</code> is <code>"balls"</code>, then the function would return 1.
+								</li>
+								<li>
+									if <code>target</code> is <code>"ball"</code>, then the function would return 2.
+								</li>
+								<li>
+									if <code>target</code> is <code>" ball"</code>, then the function would return 2.
+								</li>
+								<li>
+									if <code>target</code> is <code>"ball "</code>, then the function would return 0.
+								</li>
+							</ul>
+							Note that each character can be matched at most once, so if:
+							<ul>
+								<li>
+									<code>str</code> is <code>"ssss"</code>.
+								</li>
+								<li>
+									<code>target</code> is <code>"ss"</code>
+								</li>
+							</ul>
+							Then the result should be 2 but not 3.
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>str</code> - string of text.
+								</li>
+								<li>
+									<code>target</code> - the substring to be counted.
+								</li>
+							</ul>
+							<br>
+							<strong>Return value - </strong>the number of occurences of <code>target</code> in
+							<code>str</code>.
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void convertIntoLines(const char str[], char lines[MAX_LINES][NUM_CHARS_PER_LINE]);</code></pre>
+
+							<strong>Description - </strong>Converts <code>str</code> into lines which contain at most
+							<code>NUM_CHARS_PER_LINE</code>
+							characters (including the null-terminator, that means you actually can only have
+							<code>NUM_CHARS_PER_LINE - 1</code> meaningful characters per line) and save the lines with
+							<code>lines</code>.
+							<br>
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>str</code> - string of text.
+								</li>
+								<li>
+									<code>lines</code> - a 2D <code>char</code> array, the container of the results.
+								</li>
+							</ul>
+							<br>
+							<strong>Rules for Conversion</strong>
+							<ul>
+								<li>
+									Insert as many characters to a line as possible, but remember to leave one position
+									for <code>'\0'</code>.
+								</li>
+								<li>
+									If there is not enough space for the last word in current line, then terminate the
+									line and start a new line. The word will be put to the new line.
+								</li>
+								<li>
+									If a line is full, then terminate the line and start a new line.
+								</li>
+								<li>
+									We will not insert any whitespaces to the beginning of a line. They will be skipped.	
+								</li>
+								<li>
+									Discard all the tailing whitespaces after lines are split. That
+									means, in each line of the final results, the second last character is not 
+									<code>' '</code> (the last character is <code>'\0'</code>).
+								</li>
+								<li>
+									If there are unused lines in the end, make sure to put a <code>'\0'</code> to the
+									first position of them.
+								</li>
+								<li>
+									For example, suppose <code>NUM_CHARS_PER_LINE = 10</code>. Then if:
+									<ul>
+										<li>
+											<code>str</code> is
+											<code>"Mary had a little lamb, little lamb, little lamb"</code>.
+										</li>
+									</ul>
+									Then the corresponding lines would be:
+									<ul>
+										<li><code>lines[0] = "Mary had\0"</code></li>
+										<li><code>lines[1] = "a little\0"</code></li>
+										<li><code>lines[2] = "lamb,\0"</code></li>
+										<li><code>lines[3] = "little\0"</code></li>
+										<li><code>lines[4] = "lamb,\0"</code></li>
+										<li><code>lines[5] = "little\0"</code></li>
+										<li><code>lines[6] = "lamb\0"</code></li>
+									</ul>
+								</li>
+								<li>
+									In this function, you may assume that the results will not exceed
+									<code>MAX_LINES</code>
+									lines. Also there won't be words longer than <code>NUM_CHARS_PER_LINE - 1</code>
+									characters, otherwise it's impossible to solve.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void printLeftJustified(const char str[]);</code></pre>
+
+							<strong>Description - </strong>Prints <code>str</code> in a left-aligned format. This can be
+							done simply by calling the <code>convertIntoLines</code> function you just implemented and
+							then print the lines one by one.
+							<br><br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>str</code> - string of text.
+								</li>
+							</ul>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									Only print those used lines, do not print those unused lines.
+								</li>
+								<li>
+									Use the example in last task again, suppose <code>NUM_CHARS_PER_LINE = 10</code>:
+									<ul>
+										<li>
+											if <code>code</code> is
+											<code>"Mary had a little lamb, little lamb, little lamb"</code>.
+										</li>
+										<li>
+											Then the function will output:
+											<pre>
+Mary had
+a little
+lamb,
+little
+lamb,
+little
+lamb
+</pre>
+										</li>
+									</ul>
+								</li>
+							</ul>
+
+						<li class="list-group-item">
+							<pre><code>void printRightJustified(const char str[]);</code></pre>
+							<strong>Description - </strong>Prints <code>str</code> in right-aligned format. It means
+							that you will insert blank spaces to the beginning of each line so that the total character
+							count of each line is exactly <code>NUM_CHARS_PER_LINE - 1</code> (<code>'\0'</code>
+							excluded as it will not be part of the output).
+							<br><br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>str</code> - string of text.
+								</li>
+							</ul>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									Again, make use of your implemented <code>convertIntoLines()</code> function.
+								</li>
+								<li>
+									Only print those used lines, do not print those unused lines.
+								</li>
+								<li>
+									The example again, suppose <code>NUM_CHARS_PER_LINE = 10</code>:
+									<ul>
+										<li>
+											if <code>code</code> is
+											<code>"Mary had a little lamb, little lamb, little lamb"</code>.
+										</li>
+										<li>
+											Then the function will output:
+											<pre>
+ Mary had
+ a little
+    lamb,
+   little
+    lamb,
+   little
+     lamb
+</pre>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void printJustified(const char str[]);</code></pre>
+
+							<strong>Description - </strong>Prints <code>str</code> in right-left-aligned format. It
+							means that you will insert blank spaces to the
+							middle of each line (except the last line) so that the total character count of each line
+							(except the last line) is exactly <code>NUM_CHARS_PER_LINE - 1</code> (<code>'\0'</code>
+							excluded as it will not be part of the output).
+							<br><br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>str</code> - string of text.
+								</li>
+							</ul>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									Again, make use of your implemented <code>convertIntoLines()</code> function.
+								</li>
+								<li>
+									You first compute how many white spaces you need to insert into a line.
+								</li>
+								<li>
+									Then, find all pieces of consecutive white spaces in the original line.
+								</li>
+								<li>
+									Starting from the first piece of consecutive white spaces, add one more white space
+									to it, and then add to the next piece. If after adding to the last piece, you still
+									have extra white spaces to be added, then start from the first piece again.
+								</li>
+								<li>
+									Consider such a line, we use black color to represent non-space characters, and
+									white color to represent space characters, the number represents number of
+									characters.<br><br>
+									<img class="card-img-top" src="misc/justified.png" alt="Justified">
+									<br><br>
+									The above line contains 20 characters, let's say <code>NUM_CHARS_PER_LINE</code> is
+									25, then we need to insert 4 extra spaces to this line. There are 3 pieces of
+									consecutive white spaces in this line, so we will add one more space to each of
+									them. Then there is still one more space to add, we start from the first piece again
+									and add that final white space to it. The final printed line will look like this:
+									<br><br>
+									<img class="card-img-top" src="misc/justified2.png" alt="Justified">
+									<br><br>
+								</li>
+								<li>
+									You may assume that there is at least one white space in each line (except the last
+									line).
+								</li>
+								<li>
+									The last line will still be printed in left-aligned format.
+								</li>
+								<li>
+									Please try the demo program to see how it works.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void convertStrToPigLatin(char str[]);</code></pre>
+
+							<strong>Description - </strong>Converts the words in <code>str</code> to Pig Latin. You may
+							want to read the intro on <a href="#pig-latin">Pig Latin</a> first.
+							<br>
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>str</code> - string of text.
+								</li>
+							</ul>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									You don't need to worry about letter cases in this task. We will eventually convert
+									all letters in your results to lower cases in the skeleton codes.
+								</li>
+								<li>
+									You can assume that all words will have at least one vowel letter for this task.
+								</li>
+								<li>
+									An example:
+									<ul>
+										<li>if <code>str</code> is <code>"I would like to have an ice-cream."</code>
+										</li>
+										<li>then str would be updated to
+											<code>"iyay ouldway ikelay otay avehay anyay ice-creamyay."</code>
+										</li>
+										<li>Again, the letter case doesn't matter, skeleton codes will take care of it.
+										</li>
+									</ul>
+								</li>
+								<li>
+									This operation could change the total length of <code>str</code>, make sure that
+									the null-terminator is placed correctly after the replacement.
+								</li>
+							</ul>
+						</li>
+					</ul>
+
+					<div class="card-footer text-muted">
+						End of Tasks
+					</div>
+				</div>
+
+				<!-- Download section -->
+				<!-- ### Complete download section for the assignment ### -->
+				<div class="card mb-4">
+					<div class="card-body" id="download">
+						<h3 class="card-title">Resources &amp; Sample I/O</h3>
+						<ul>
+							<li>
+								Skeleton code: <a href="../Resources/PA2_Skeleton.zip">PA2_Skeleton.zip</a>
+							</li>
+							<li>
+								Demo programs (last update on <b>9/9 18:38</b>):<br>
+								<a href="../Resources/pa2_win.exe">Windows</a> /
+								<a href="../Resources/pa2_linux">Linux</a> /
+								<a href="../Resources/pa2_mac_x86">macOS x86</a> /
+								<a href="../Resources/pa2_mac_arm">macOS arm</a><br>
+								(If you find the demo program doesn't behave as you expect, please first download and try the lastest version, if the problem is still there you can let me know. Thanks!)
+							</li>
+							<li>
+								Sample program outputs:
+								<a href="../Resources/sample-outputs.txt">Sample Outputs</a>
+							</li>
+						</ul>
+						<p class="card-text">
+							If you encounter problems running the MacOS demo programs, you can try look for a Windows PC
+							on campus or use
+							the <a
+								href="https://itsc.hkust.edu.hk/services/academic-teaching-support/facilities/virtual-barn"
+								, target="_blank">Virtual Barn</a>
+							from anywhere to run the Windows demo program.
+						</p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Resources &amp; Sample I/O
+					</div>
+				</div>
+
+				<!-- Submission and grading section -->
+				<!-- ### Complete submission and grading section for the assignment ### -->
+				<div class="card mb-4">
+					<div class="card-body" id="submission">
+						<h3 class="card-title">Submission &amp; Grading</h3>
+						<p class="card-text">
+							<strong>Deadline: 24 September 2022 Saturday HKT 23:59.</strong><br>
+							Submit a single <code>main.cpp</code> to <a href="https://zinc.cse.ust.hk/">ZINC</a>.
+						</p>
+
+						<h4>Grading Scheme</h4>
+						<p class="card-text">
+							There are 12 pre-deadline test cases in ZINC for you to debug your program, after the deadline, some more test cases will be added and 							
+							your score for this PA will be the sum of all test cases in ZINC. The table below
+							roughly shows the weight of each task.
+						</p>
+						<br>
+						<table style="width:95%">
+							<tbody>
+								<tr>
+									<th style="width:90%">Task Function</th>
+									<th>Weight</th>
+								</tr>
+								<tr>
+									<td>Task 1 - <code>countCharacters()</code></td>
+									<td>5%</td>
+								</tr>
+								<tr>
+									<td>Task 2 - <code>countWords()</code></td>
+									<td>10%</td>
+								</tr>
+								<tr>
+									<td>Task 3 - <code>swapString()</code></td>
+									<td>15%</td>
+								</tr>
+								<tr>
+									<td>Task 4 - <code>encryptText()</code></td>
+									<td>10%</td>
+								</tr>
+								<tr>
+									<td>Task 5 - <code>countNumOccurences()</code></td>
+									<td>10%</td>
+								</tr>
+								<tr>
+									<td>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;<code>convertIntoLines()</code><br>
+										Task 6 -
+										<code>printLeftJustified()</code><br>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;<code>printRightJustified()</code>
+									</td>
+									<td>15%</td>
+								</tr>
+								<tr>
+									<td>Task 7 - <code>printJustified()</code></td>
+									<td>15%</td>
+								</tr>
+								<tr>
+									<td>Task 8 - <code>convertStrToPigLatin()</code></td>
+									<td>20%</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="card-footer text-muted">
+						End of Submission &amp; Grading
+					</div>
+				</div>
+
+				<!-- FAQ section -->
+				<!-- ### Complete FAQ section for the assignment ### -->
+				<div class="card mb-4">
+					<div class="card-body" id="faq">
+						<h3 class="card-title">Frequently Asked Questions</h3>
+						<p>
+							<b>Q</b>: My code doesn't work, here it is, can you help me fix it?<br>
+							<b>A</b>: As the assignment is a major course assessment, to be fair, you are supposed to
+							work on it
+							by yourself and we should never finish the tasks for you. We are happy to help with
+							explanations and
+							advice, but we are <b>not allowed</b> to directly debug for you.
+						</p>
+						<p>
+							<b>Q</b>: It seems that <code>convertIntoLines()</code> can possibly place commas and full stops
+									to the beginning of a line. Is that acceptable?<br>
+							<b>A</b>: It is guaranteed that this situation will not appear in any test cases. You can implement
+									the function according to the description, and we will make sure that in the correct
+									output of all test cases, none of the lines will begin with a comma or a full stop. 
+						</p>
+					</div>
+					<div class="card-footer text-muted">
+						End of FAQ
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Sidebar Widgets Column -->
+			<div class="col-md-3">
+				<div class="sticky-top">
+					<!-- Menu Widget -->
+					<div class="card my-12">
+						<h5 class="card-header">Menu</h5>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<ul class="mb-0" style="padding-left:20px" type="circle">
+										<li>
+											<a href="#honor">Honor Code</a>
+										</li>
+										<li>
+											<a href="#objective">Objectives & ILOs</a>
+										</li>
+										<li>
+											<a href="#introduction">Introduction</a>
+										</li>
+										<li>
+											<a href="#description">Description</a>
+										</li>
+										<li>
+											<a href="#tasks">Tasks</a>
+										</li>
+										<li>
+											<a href="#download">Resources &amp; Sample I/O</a>
+										</li>
+										<li>
+											<a href="#submission">Submission &amp; Grading</a>
+										</li>
+										<li>
+											<a href="#faq">FAQ</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Maintenance widget -->
+					<div class="card my-4">
+						<h5 class="card-header">Page maintained by</h5>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<ul class="list-unstyled mb-0">
+										<li>
+											SONG Sizhe
+										</li>
+										<li>
+											<a href="mailto:sizhe.song@connect.ust.hk">sizhe.song@connect.ust.hk</a>
+										</li>
+										<li>Last Modified:
+											<script
+												type="text/javascript">document.write(document.lastModified);</script>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- Homepage widget -->
+					<div class="card my-4">
+						<h5 class="card-header">Homepage</h5>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<ul class="list-unstyled mb-0">
+										<li>
+											<a href="http://course.cse.ust.hk/comp2012h">Course Homepage</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.row -->
+	</div>
+
+	</div>
+	<!-- /.container -->
+
+	<!-- Footer -->
+	<footer class="py-5 bg-dark">
+		<div class="container">
+			<p class="m-0 text-center text-white">Maintained by COMP 2012H Teaching Team © 2021 HKUST Computer Science
+				and Engineering</p>
+		</div>
+		<!-- /.container -->
+	</footer>
+
+	<!-- Bootstrap core JavaScript -->
+	<script src="misc/jquery.js"></script>
+	<script src="misc/bootstrap.js"></script>
+
+
+
+
+</body>
+<grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
+
+</html>
