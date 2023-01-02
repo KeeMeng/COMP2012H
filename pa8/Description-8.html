@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- ### Change assignment number ### -->
+  <title>COMP 2012H Assignment 8: The Lord of the Rings</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="comp2012h_pa3_files/bootstrap.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="comp2012h_pa3_files/blog-home.css" rel="stylesheet">
+
+  <!-- Prism syntax highlighter -->
+  <link href="comp2012h_pa3_files/prism.css" rel="stylesheet">
+
+  <style>
+    pre {
+      background: #f4f4f4 !important;
+      border: 1px solid #ddd !important;
+      border-left: 3px solid #f36d33 !important;
+      color: #666 !important;
+      page-break-inside: avoid !important;
+      font-family: monospace !important;
+      font-size: 14px !important;
+      line-height: 1.6 !important;
+      margin-bottom: 1.6em !important;
+      max-width: 100% !important;
+      overflow: auto !important;
+      padding: 1em 1.5em !important;
+      display: block !important;
+      word-wrap: break-word !important;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid black;
+    }
+
+    th,
+    td {
+      padding: 5px;
+    }
+
+    th {
+      text-align: left;
+    }
+  </style>
+  <link rel="stylesheet" type="text/css" href="comp2012h_pa3_files/prettify.css">
+  <script src="comp2012h_pa3_files/prompt.js"></script>
+</head>
+
+<body data-new-gr-c-s-check-loaded="8.880.0" data-gr-ext-installed="">
+  <script src="comp2012h_pa3_files/prism.js"></script>
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <div class="row">
+
+      <!-- Entries Column -->
+      <div class="col-md-9">
+
+        <h2 class="my-4">
+          <span style="color:darkblue">COMP 2012H</span>
+          <small>Honors Object-Oriented Programming and Data Structures</small>
+        </h2>
+
+        <!-- ### Change assignment number and title ### -->
+        <h3 class="my-4">
+          Assignment 8
+          <span style="color:#660066">The Lord of the Rings</span>
+        </h3>
+
+        <!-- Honor Code section -->
+        <div class="card mb-4">
+          <div class="card-body" id="honor" style="background-color:#f4f4f4">
+            <h3 class="card-title">Honor Code</h3>
+            <p class="card-text">
+              We value academic integrity very highly. Please read the <a
+                href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a> section on our
+              course webpage to make sure you understand what is considered as plagiarism and what the
+              penalties are.
+              The following are some of the highlights:
+            </p>
+            <ul>
+              <li>
+                Do NOT try your "luck" - we use sophisticated plagiarism detection software to find
+                cheaters.
+                We also review codes for potential cases manually.
+              </li>
+              <li>
+                The penalty (for <b>BOTH</b> the copier and the copiee) is not just getting a zero in
+                your assignment.
+                Please read the <a href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a>
+                thoroughly.
+              </li>
+              <li>
+                Serious offenders will fail the course immediately, and there will be additional
+                disciplinary actions
+                from the department and university, upto and including expulsion.
+              </li>
+            </ul>
+            <p></p>
+          </div>
+          <div class="card-footer text-muted">
+            End of Honor Code
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-body" id="objective" style="background-color:#f4f4f4">
+            <h3 class="card-title">Objectives & Intended Learning Outcomes</h3>
+            <p class="card-text">
+              The objective of this assignment is to provide you with practice on arrays, functions, and
+              recursion.
+              Upon completion of this assignment, you should be able to:
+            </p>
+            <ol>
+              <li>Manage dynamic memory effectively with the use of class constructors and destructors.
+              </li>
+              <li>Use inheritance to allow for significant code reuse between base classes and derived
+                classes.</li>
+              <li>Use function overriding in derived classes to provide different function implementations
+                for the same member function prototype.</li>
+              <li>Understand how base class pointers/references can point/refer to derived class objects,
+                yet polymorphically call derived class functions that are declared <code
+                  class="language-cpp">virtual</code>.</li>
+              <li>Code a program following the OOP paradigm.</li>
+            </ol>
+            <p></p>
+          </div>
+          <div class="card-footer text-muted">
+            End of Objectives & Intended Learning Outcomes
+          </div>
+        </div>
+
+        <!-- Introduction section -->
+        <!-- ### Complete introduction section for the assignment ### -->
+        <div class="card mb-4">
+          <!-- ### Add an image representing the assignment content here ### -->
+          <img class="card-img-top" src="comp2012h_pa3_files/banner.svg" alt="Card image cap" style="width: 100%;">
+          <div class="card-body" id="introduction">
+            <p class="card-text">
+              <small>
+                <em>Source:
+                  <a href="https://en.wikipedia.org/wiki/The_Lord_of_the_Rings_(film_series)" target="_blank">
+                    https://en.wikipedia.org/wiki/The_Lord_of_the_Rings_(film_series)</a>
+                </em>
+              </small>
+            </p>
+            <h3 class="card-title">Introduction</h3>
+            <p class="card-text">
+              The goal of this assignment is to implement a command-line-based role-playing adventure
+              game. The plot of the game is based on the epic high-fantasy novel by English author and
+              scholar J. R. R. Tolkien.
+            </p>
+            <p class="card-text">
+              In this game, the future of civilization rests in the fate of the One Ring, which has
+              been lost for centuries. Powerful forces are unrelenting in their search for it. But
+              fate has placed it in the hands of the player. A daunting task lies ahead for the player
+              to become the Ringbearer and destroy the One Ring in the fires of Mount Doom where it
+              was forged.
+            </p>
+            <p class="card-text">
+              Player of this game will start at the bottom-left of a square gridded game map, carrying the One Ring
+              forged by the Dark Lord Sauron. The player are supposed to move to the Mount Doom located at the top-right
+              of the map to destroy the One Ring. Along the road the player will pass through Terrains of Wall, Grass,
+              and EmptyLand, collect Items of Gem, Book, and Medicine, and defeat Monsters of Zombie, Warlock, and
+              DarkPriest. Players can choose to play the Roles of Warrior, Archer, and Mage, each having different
+              characteristics and skill to defeat Monsters.
+            </p>
+            <p class="card-text">
+              In this assignment, you will implement the above mentioned terrains, items, and monsters, different player
+              roles, as well as part of the game logistics by making full use of the polymorphism and inheritance in
+              OOP.
+            </p>
+          </div>
+          <div class="card-footer text-muted">
+            End of Introduction
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-body" id="concepts">
+            <h3 class="card-title">Basic Game Concepts</h3>
+            <p class="card-text">
+            <h4 style="text-align: left">Game UI</h4>
+            The UI of this game is shown below. It is already implemented and provided with the skeleton code. You don't
+            need to implement it by yourself in this assignment, however, this UI gets information of the game status by
+            calling the functions you are supposed to implement in other classes. So, you are supposed to correctly
+            implement the task classes and functions to make the game display correctly. Area out of the game map will
+            display as "XXX" by the game UI.
+            <img class="card-img-top" src="comp2012h_pa3_files/game1.png" alt="Card image cap" style="width: 100%;">
+            </p>
+            <p class="card-text">
+            <h4 style="text-align: left">Game Map</h4>
+            The map in the game is actually a 2D matrix of map units. The X-axis and Y-axis are defined as the
+            horizontal and vertical axises of the game map, respectively. The x and y coordinates both start from 0. The
+            distance on the map is defined as the <a href="https://en.wikipedia.org/wiki/Taxicab_geometry">Manhattan
+              distance</a>, where the distance between two points (x1, y1) and (x2, y2) is |x1-x2|+|y1-y2|.
+            </p>
+            <p class="card-text">
+            <h4 style="text-align: left">Map Unit</h4>
+            The MapUnit is the basic abstraction of all elements on the game map. There are totally 9 types of map
+            units,
+            which are summarized into three categories. Different map units have different behaviors in the game. The
+            hierarchy of the map unit is shown below:<br>
+            <img class="card-img-top" src="comp2012h_pa3_files/map_units.png" alt="Card image cap" style="width: 100%;">
+            All MapUnits have the following basic properties:
+            <ul>
+              <li>
+                x, y: integers that record the coordinates of that map unit.
+              </li>
+              <li>
+                valid: boolean value that specifies whether that map unit is still valid in the game. Terrain units are
+                always valid. Item units become invalid if they are triggered or attacked by the player. Monster units
+                become invalid if they are defeated.
+              </li>
+              <li>
+                discovered: boolean value that specifies whether that map unit is discovered by the player.
+              </li>
+            </ul>
+            All map units have the following basic behaviors in the game:
+            <ul>
+              <li>
+                Block: Monster units and the player can only move to map units that is not blocked.
+              </li>
+              <li>
+                Be triggered: when the player moves onto a map unit, it will be triggered.
+              </li>
+              <li>
+                Be discovered: All map units are initialized as undiscovered in this game. When the player moves around
+                a map unit, it will be discovered by the player.
+              </li>
+              <li>
+                Be attacked: A map unit may be attacked by the player.
+              </li>
+            </ul>
+            These basic behaviors may differs across different map unit types.
+            </p>
+            <p class="card-text">
+            <h5 style="text-align: left">Terrain</h5>
+            The Terrain category includes EmptyLand, Grass, and Wall. They display differently on the game map
+            (EmptyLand: blank, Grass: "~~~", and Wall: "###"). The EmptyLand and Grass units are never blocked and
+            the Wall units are always blocked.
+            </p>
+            <p class="card-text">
+            <h5 style="text-align: left">Item</h5>
+            The Item category includes Gem, Book, and Medicine. They are never blocked. Undiscovered Item units all
+            display as "???" on the game map.
+            <ul>
+              <li>
+                Gem: there are three type of Gems, i.e. Ruby, Emerald, and Sapphire. They can be used to charge the mana
+                points (MPs) of the player.
+                <ul>
+                  <li>
+                    Ruby: display as "RBY" after being discovered. When triggered, it can add 1 MP to the player if the
+                    player role is Warrior, otherwise it has no effect.
+                  </li>
+                  <li>
+                    Emerald: display as "EMR" after being discovered. When triggered, it can add 1 MP to the player if
+                    the player role is Archer, otherwise it has no effect.
+                  </li>
+                  <li>
+                    Sapphire: display as "SPR" after being discovered. When triggered, it can add 1 MP to the player if
+                    the player role is Mage, otherwise it has no effect.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Book: display as " BK" after being discovered. When triggered, it can add 3 experience points (EXPs) to
+                the player.
+              </li>
+              <li>
+                Medicine: display as "+++" after being discovered. When triggered, it can add 3 health points (HPs) to
+                the player.
+              </li>
+            </ul>
+            </p>
+            <p class="card-text">
+            <h5 style="text-align: left">Monster</h5>
+            The Monster is a special type of map unit. Monster units
+            have the following additional properties:
+            <ul>
+              <li>
+                active: a monster can be either active or inactive in this game.
+              </li>
+              <li>
+                current/max HP: the current HP of a monster unit cannot be larger than the max HP. When
+                the current HP is less than 0, that monster is defeated.
+              </li>
+              <li>
+                attack (ATK)/defence (DEF)
+              </li>
+            </ul>
+            Monster units have the following additional behaviors in the game:
+            <ul>
+              <li>
+                Follow: active monsters will follow the player in the Monster Move phase.
+              </li>
+              <li>
+                Action: active monsters will action against the player in the Monster Action phase.
+              </li>
+            </ul>
+            Undiscovered Monster units all display as "!!!" on the game map. Different type of Monster units have
+            different
+            max HP, ATK, DEF figures. And they also have type specific actions, and display differently on the game map
+            after being discovered.
+            <ul>
+              <li>
+                Zombie: the action of a Zombie unit against the player is to attack the player. A discovered Zombie unit
+                displays as "Zxx" on the game map, where "xx" is its current HP (e.g. a Zombie unit with 15 current HP
+                displays as "Z15").
+              </li>
+              <li>
+                Warlock: the action of a Warlock unit against the player is to attack the player, and then summon
+                Zombies onto its surrounding non-blocked map units. A discovered Warlock unit displays as "Wxx" on the
+                game map, where "xx" is its
+                current HP.
+              </li>
+              <li>
+                ShadowPriest: the action of a ShadowPriest unit against the player is to attack the player, and then
+                recover HP for Monster units near to it. A discovered ShadowPriest unit displays as "Sxx" on the game
+                map,
+                where "xx" is its current HP.
+              </li>
+            </ul>
+            Monsters in this game can only attack to player if the distance between them is 1.
+            </p>
+            <p class="card-text">
+            <h4 style="text-align: left">Player</h4>
+            The Player has the following basic properties in this game:
+            <ul>
+              <li>
+                name: user defined nickname.
+              </li>
+              <li>
+                current direction: direction of the last move (up/down/left/right)
+              </li>
+              <li>
+                x, y: coordinates of the player on the map
+              </li>
+              <li>
+                attack/defence
+              </li>
+              <li>
+                current/max HP
+              </li>
+              <li>
+                current/max mana points (MP): player can gain MP by triggering Gems corresponding to the role of the
+                player. MPs are needed to use role-specific skills.
+              </li>
+              <li>
+                current/max experience points (EXP): player can gain EXP by triggering Books or defeating Monsters. If
+                current EXP goes beyond the max, the player can get leveled up.
+              </li>
+              <li>
+                level: player can get leveled up to improve on attack/defence/HP/MP.
+              </li>
+            </ul>
+            The player is displayed as "Pxx" on the game map, where "xx" is the current direction ("P^^", "Pvv",
+            "P&lt;&lt;", "P&gt;&gt;").<br>
+            <img class="card-img-top" src="comp2012h_pa3_files/player_roles.png" alt="Card image cap"
+              style="width: 40%;"><br>
+            The player can choose to play the role of the Warrior, the Archer, or the Mage. Different roles also
+            correspond to different behaviors in the game:
+            <ul>
+              <li>
+                Warrior: When the warrior is going to be defeated because of a monster's attack, and the current MP is
+                larger than 0, the warrior will consume 1 MP to get rid of that attack, and recover half of the max HP.
+              </li>
+              <li>
+                Archer: The archer can choose to consume 1 MP to use the skill that directly defeat the monsters in the
+                current direction within a certain range.
+              </li>
+              <li>
+                Mage: The mage can choose to consume 1 MP to use the skill that attack the monsters with double attack
+                points and recover HP at the same time.
+              </li>
+            </ul>
+            The player's attack or skill can only affect map units within a certain range in the player's facing
+            direction. The range is role specific as shown below (assume the player is facing towards right):<br>
+            <img class="card-img-top" src="comp2012h_pa3_files/range.png" alt="Card image cap" style="width: 100%;"><br>
+            </p>
+            <p class="card-text">
+            <h4 style="text-align: left">Game Logistics</h4>
+            At the beginning of the game, the player will be asked to enter a nickname and choose a role among the
+            Warrior, the Archer, and the Mage. Then the adventure starts and the player will be born at the
+            bottom-left of the game map.
+            </p>
+            <p class="card-text">
+              The game will be turn-based. Each turn has the following four phases in order:
+            <ol>
+              <li><b>Player Action:</b><br>
+                In each turn, the player can choose one of the following three options:
+                <ul>
+                  <li>
+                    Press <code>w/a/s/d</code> to move one step towards the direction of "UP/LEFT/DOWN/RIGHT". If the
+                    player is moving to a blocked map unit, the player will stay put while only change the current
+                    direction. If the player moves onto a <code>valid</code> item, the item will take effect on the
+                    player. If the player has defeated all monsters in the map and arrives at the top-right of the map,
+                    the game is won.
+                  </li>
+                  <li>
+                    Press <code>h</code> to attack towards the heading direction within a certain range. The range is
+                    decided by the role of the player.
+                  </li>
+                  <li>
+                    If the player plays the role of Archer or Mage, press <code>j</code> to proactively use the
+                    role-specific
+                    skills.
+                  </li>
+                  The monsters attacked or affected will become active, and will follow and act against the
+                  player in the following phases.
+                </ul>
+              </li>
+              <li><b>Map Discovery</b><br>
+                After each player action, the player will discover in the surroundings the undiscovered items and
+                monsters. Then the alive (valid) monsters close to the player will also be activated.
+              </li>
+              <li><b>Monsters Movement</b><br>
+                In each turn, the active monsters will track the player by trying to move one step towards the
+                player.
+              </li>
+              <li><b>Monsters Action</b><br>
+                The active monsters then try to act against the player, and how the monsters act depends on
+                the type of the monsters.
+              </li>
+            </ol>
+            </p>
+          </div>
+          <div class="card-footer text-muted">
+            End of Basic Game Concepts
+          </div>
+        </div>
+        <div class="card mb-4">
+          <div class="card-body" id="structure">
+            <h3 class="card-title">Code Structure</h3>
+            The structure of the game program is as shown below. Basically, the game engine takes the user
+            commands and manipulate the interaction between the player role and map units in the game. It also controls
+            the game ui to refresh and display the game status to the screen.
+            <p class="card-text">
+              <img class="card-img-top" src="comp2012h_pa3_files/code_structure.png" alt="Card image cap"
+                style="width: 30%;">
+            </p>
+            <p class="card-text">
+            <ul>
+              <li><b>main.cpp:</b> entrance of the game program.</li>
+              <li><b>GameUI.h, GameUI.cpp:</b> code for the <code>class GameUI</code> that controls the display of the
+                game. It is
+                already implemented. <b>You shouldn't modify these codes in this assignment.</b>
+              </li>
+              <li><b>MapUnit.h, MapUnit.cpp:</b> code for the <code>class MapUnit</code>. The <code>class MapUnit</code>
+                is a abstract basic class that defines the above mentioned common behaviors of all map units. It is
+                already implemented. <b>You shouldn't modify these codes in this assignment.</b>
+                <ul>
+                  <li>
+                    <b>MapUnit.h</b> also defines some constants for you to be used in the task functions, including the
+                    display string of different map units, and size of the game map <code>MAP_SIZE</code>. Please read
+                    the code and comments and use these constants accordingly!
+                  </li>
+                </ul>
+              </li>
+              <li><b>GameEngine.h, GameEngine.cpp:</b> code for the <code>class GameEngine</code> that controls the game
+                logistics.
+                <ul>
+                  <li>
+                    <code>MapUnit *map[MAP_SIZE][MAP_SIZE]</code>: The GameEngine maintains the game map as a 2D array
+                    of <code>MapUnit</code> pointers, where <code>map[x][y]</code> point to the unit at (x, y) on the
+                    game map. The <code>class GameEngine</code> constructor creates a 20*20 game map shown as follows.
+                    And the player will be born at (0, 0)<br>
+                    <img class="card-img-top" src="comp2012h_pa3_files/map.png" alt="Card image cap"
+                      style="width: 80%;">
+                  </li>
+                  <li>
+                    <code>MonsterNode *head</code>: The GameEngine maintains the active monsters in the game as a linked
+                    list. Each node contains a <code>Monster *data</code> that points to a Monster unit, and a
+                    <code>MonsterNode *next</code> that points to the next node. The GameEngine always hold the
+                    <code>head</code> pointer to the first node of the linked list, when the list is empty, the
+                    <code>head</code> is a <code>nullptr</code>.
+                  </li>
+                </ul>
+              </li>
+              <li><b>Items/</b>
+                <ul>
+                  <li>
+                    <b>Item.h, Item.cpp</b> Abstract basic class <code>class Item</code> inherits from
+                    <code>class MapUnit</code>, and defines common behaviors of all Item instances.
+                  </li>
+                  <li>
+                    <b>Book.h, Book.cpp, Gem.h, Gem.cpp, Medicine.h, Medicine.cpp</b> define corresponding special
+                    behaviors of the
+                    <code>class Book</code>, <code>class Gem</code>, and <code>class Medicine</code> instances.
+                  </li>
+                </ul>
+              </li>
+              <li><b>Terrains/</b>
+                <ul>
+                  <li>
+                    <b>Terrain.h, Terrain.cpp</b> Abstract basic class <code>class Terrain</code> inherits from
+                    <code>class MapUnit</code>, and defines common behaviors of all Terrain instances.
+                  </li>
+                  <li>
+                    <b>EmptyLand.h, EmptyLand.cpp, Grass.h, Grass.cpp, Wall.h, Wall.cpp</b> define corresponding special
+                    behaviors
+                    of the
+                    <code>class EmptyLand</code>, <code>class Grass</code>, and <code>class Wall</code> instances.
+                  </li>
+                </ul>
+              </li>
+              <li><b>Monsters/</b>
+                <ul>
+                  <li>
+                    <b>Monster.h, Monster.cpp</b> Abstract basic class <code>class Monster</code> inherits from
+                    <code>class MapUnit</code>, and defines common behaviors of all Monster instances.
+                  </li>
+                  <li>
+                    <b>Zombie.h, Zombie.cpp, Warlock.h, Warlock.cpp, ShadowPriest.h, ShadowPriest.cpp</b> define
+                    corresponding special behaviors of the
+                    <code>class Zombie</code>, <code>class Warlock</code>, and <code>class ShadowPriest</code>
+                    instances.
+                  </li>
+                </ul>
+              </li>
+              <li><b>Player/</b>
+                <ul>
+                  <li>
+                    <b>Player.h, Player.cpp</b> Abstract basic class <code>class Player</code> defines common behaviors
+                    of all Player instances. It is
+                    already implemented. <b>You shouldn't modify these codes in this assignment.</b>
+                  </li>
+                  <li>
+                    <b>Warrior.h, Warrior.cpp, Archer.h, Archer.cpp, Mage.h, Mage.cpp</b> defines specific behaviors of
+                    the
+                    <code>class Warrior</code>, <code>class Archer</code>, and <code>class Mage</code> instances.
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            </p>
+          </div>
+          <div class="card-footer text-muted">
+            End of Code Structure
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-body" id="tasks">
+            <h3 class="card-title">Tasks</h3>
+            <p class="card-text">
+              In this assignment, you will implement the missing part in <code>class Terrain</code>,
+              <code>class Item</code>, <code>class Monster</code>, <code>class Player</code>,
+              <code>class GameEngine</code> and all their derived classes if exist.
+              You will be provided with corresponding header file (e.g. <code>Wall.h</code>) with class declarations,
+              and you are supposed to implement in the corresponding ".cpp" files (e.g. <code>Wall.cpp</code>) as they
+              are described
+              below.
+            </p>
+            <p class="card-text">
+              Please read the following description and the given code carefully to understand code structure before you
+              start with
+              the following tasks.
+            </p>
+            <br>
+            <h3 style="text-align: left" id="tasks-part1">Part I: Player (15%)</h3>
+            <ol>
+              <li>
+                <h4 style="text-align: left" id="tasks-1.2"><code>class Warrior : public Player</code></h4>
+                <ol>
+                  <li>
+                    <b>Warrior(int x_, int y_, const string &name_)</b><br>
+                    Initialize a Player of Warrior at <code>(x_, y_)</code> with name as <code>name_</code>. Initialize
+                    the <code>atk = 6, def = 3, cur_hp = max_hp = 15</code>.
+                  </li>
+                  <li>
+                    <b>~Warrior()</b><br>
+                    You should implement the destructor properly.
+                  </li>
+                  <li>
+                    <b>Role get_role() const override</b><br>
+                    Return <code>Role::WARRIOR</code>.
+                  </li>
+                  <li>
+                    <b>int get_range() const override</b><br>
+                    The attack range of the Warrior is 1.
+                  </li>
+                  <li>
+                    <b>int skill(int &atk_, int &range) override</b><br>
+                    The Warrior's skill is passively triggered, so return 1 directly.
+                  </li>
+                  <li>
+                    <b>void attacked_by(int atk_) override</b><br>
+                    Compute the damage as <code>damage = atk_ - def</code>, where <code>atk_</code> is is the incoming
+                    attack point and <code>def</code> is the defence of the player. Then:
+                    <ul>
+                      <li>
+                        If the damage is larger than or equal to current HP of the Warrior player, and current MP is
+                        larger than 0,
+                        consume 1 MP, such that the damage won't take effect, and
+                        recover HP of <code>max_hp/2</code>. Return.
+                      </li>
+                      <li>
+                        Else if the damage is larger than 0, <code>cur_hp = cur_hp - damage</code>.
+                      </li>
+                      <li>
+                        Return.
+                      </li>
+                    </ul>
+                  </li>
+                </ol>
+              </li>
+              <li>
+                <h4 style="text-align: left" id="tasks-1.2"><code>class Archer : public Player</code></h4>
+                <ol>
+                  <li>
+                    <b>Archer(int x_, int y_, const string &name_)</b><br>
+                    Initialize a Player of Archer at <code>(x_, y_)</code> with name as <code>name_</code>. Initialize
+                    the <code>atk = 4, def = 3, cur_hp = max_hp = 12</code>.
+                  </li>
+                  <li>
+                    <b>~Archer()</b><br>
+                    You should implement the destructor properly.
+                  </li>
+                  <li>
+                    <b>Role get_role() const override</b><br>
+                    Return <code>Role::ARCHER</code>.
+                  </li>
+                  <li>
+                    <b>int get_range() const override</b><br>
+                    The attack range of the Archer is 3.
+                  </li>
+                  <li>
+                    <b>int skill(int &atk_, int &range) override</b><br>
+                    <ul>
+                      <li>
+                        If current MP is larger than 0, consume 1 MP and assign <code>MAX_ATK</code> to
+                        <code>atk_</code>,
+                        assign 3 to <code>range</code> and return 0.
+                      </li>
+                      <li>
+                        Else, return 1.
+                      </li>
+                    </ul>
+                  </li>
+                </ol>
+              </li>
+              <li>
+                <h4 style="text-align: left" id="tasks-1.2"><code>class Mage : public Player</code></h4>
+                <ol>
+                  <li>
+                    <b>Mage(int x_, int y_, const string &name_)</b><br>
+                    Initialize a Player of Mage at <code>(x_, y_)</code> with name as <code>name_</code>. Initialize the
+                    <code>atk = 4, def = 2, cur_hp = max_hp = 15</code>.
+                  </li>
+                  <li>
+                    <b>~Mage()</b><br>
+                    You should implement the destructor properly.
+                  </li>
+                  <li>
+                    <b>Role get_role() const override</b><br>
+                    Return Role::MAGE.
+                  </li>
+                  <li>
+                    <b>int get_range() const override</b><br>
+                    The attack range of the Mage is 2.
+                  </li>
+                  <li>
+                    <b>int skill(int &atk_, int &range) override</b><br>
+                    <ul>
+                      <li>If current MP is larger than 0, consume 1 MP and assign <code>atk * 2</code> to
+                        <code>atk_</code>,
+                        assign 2 to <code>range</code>, recover HP of <code>atk</code> points and return 0.
+                      </li>
+                      <li>
+                        Else, return 1.
+                      </li>
+                    </ul>
+                  </li>
+                </ol>
+              </li>
+            </ol>
+            <br>
+            <h3 style="text-align: left" id="tasks-part2">Part II: Terrains (15%)</h3>
+            <ol>
+              <li>
+                <h4 style="text-align: left" id="tasks-1.1"><code>class Terrain : public MapUnit</code></h4>
+                <ol>
+                  <li>
+
+                    <b>Terrain(int x, int y)</b><br>
+                    The constructor of the <code>class Terrain</code>. Input argument <code>x</code> and
+                    <code>y</code> specifies the
+                    coordinate where the target Terrain unit locates. The coordinate should be assigned to the
+                    <code>protected</code> member variable <code>x</code> and <code>y</code> defined in the
+                    <code>class MapUnit</code>.
+
+                  </li>
+                  <li>
+
+                    <b>~Terrain()</b><br>
+                    You should also implement the destructor properly.
+
+                  </li>
+                  <li>
+
+                    <b>UnitType get_unit_type() const override</b><br>
+                    Override the pure virtual function <code>virtual UnitType get_unit_type() const = 0</code>
+                    declared in the <code>class MapUnit</code>. This function should always return the enum value
+                    <code>UnitType::TERRAIN</code> defined in <b>MapUnit.h</b>.
+
+                  </li>
+                </ol>
+              </li>
+              <li>
+                <h4 style="text-align: left" id="tasks-1.2"><code>class EmptyLand : public Terrain</code></h4>
+                <ol>
+                  <li>
+
+                    <b>EmptyLand(int x, int y)</b><br>
+                    The constructor of the <code>class EmptyLand</code>. Input argument <code>x</code> and
+                    <code>y</code> specifies the
+                    coordinate where the target EmptyLand unit locates. The coordinate should be assigned to the
+                    <code>protected</code> member variable <code>x</code> and <code>y</code> defined in the
+                    <code>class MapUnit</code>.
+
+                  </li>
+                  <li>
+
+                    <b>~EmptyLand()</b><br>
+                    You should also implement the destructor properly.
+
+                  </li>
+                  <li>
+
+                    <b>bool is_blocked() const override</b><br>
+                    Override the pure virtual function <code>virtual bool is_blocked() const = 0</code>
+                    declared in the <code>class MapUnit</code>. This function should always return <code>false</code>
+                    since the EmptyLand unit is not blocked.
+
+                  </li>
+                  <li>
+
+                    <b>string get_display_str() const override</b><br>
+                    Override the pure virtual function <code>virtual string get_display_str() const = 0</code>
+                    declared in the <code>class MapUnit</code>. This function should always return the constant
+                    <code>SYM_EMPTY</code> defined in <b>MapUnit.h</b>.
+
+                  </li>
+                </ol>
+              </li>
+              <li>
+                <h4 style="text-align: left" id="tasks-1.3"><code>class Grass : public Terrain</code></h4>
+                <ol>
+                  <li>
+
+                    <b>Grass(int x, int y)</b><br>
+                    The constructor of the <code>class Grass</code>. Input argument <code>x</code> and <code>y</code>
+                    specifies the
+                    coordinate where the target Grass unit locates. The coordinate should be assigned to the
+                    <code>protected</code> member variable <code>x</code> and <code>y</code> defined in the
+                    <code>class MapUnit</code>.
+
+                  </li>
+                  <li>
+
+                    <b>~Grass()</b><br>
+                    You should also implement the destructor properly.
+
+                  </li>
+                  <li>
+
+                    <b>bool is_blocked() const override</b><br>
+                    Override the pure virtual function <code>virtual bool is_blocked() const = 0</code>
+                    declared in the <code>class MapUnit</code>. This function should always return <code>false</code>
+                    since the Grass unit is not blocked.
+
+                  </li>
+                  <li>
+
+                    <b>string get_display_str() const override</b><br>
+                    Override the pure virtual function <code>virtual string get_display_str() const = 0</code>
+                    declared in the <code>class MapUnit</code>. This function should always return the constant
+                    <code>SYM_GRASS</code> defined in <b>MapUnit.h</b>.
+
+                  </li>
+                </ol>
+              </li>
+              <li>
+                <h4 style="text-align: left" id="tasks-1.4"><code>class Wall : public Terrain</code></h4>
+                <ol>
+                  <li>
+
+                    <b>Wall(int x, int y)</b><br>
+                    The constructor of the <code>class Wall</code>. Input argument <code>x</code> and <code>y</code>
+                    specifies the coordinate where the target Wall unit locates. The coordinate should be assigned to
+                    the
+                    <code>protected</code> member variable <code>x</code> and <code>y</code> defined in the
+                    <code>class MapUnit</code>.
+
+                  </li>
+                  <li>
+
+                    <b>~Wall()</b><br>
+                    You should also implement the destructor properly.
+
+                  </li>
+                  <li>
+
+                    <b>bool is_blocked() const override</b><br>
+                    Override the pure virtual function <code>virtual bool is_blocked() const = 0</code>
+                    declared in the <code>class MapUnit</code>. This function should always return <code>true</code>
+                    since the Wall unit is always blocked.
+
+                  </li>
+                  <li>
+
+                    <b>string get_display_str() const override</b><br>
+                    Override the pure virtual function <code>virtual string get_display_str() const = 0</code>
+                    declared in the <code>class MapUnit</code>. This function should always return the constant
+                    <code>SYM_WALL</code> defined in <b>MapUnit.h</b>.
+
+                  </li>
+                </ol>
+              </li>
+            </ol>
+            <br>
+            <h3 style="text-align: left" id="tasks-part3">Part III: Items (15%)</h3>
+            <ol>
+              <li>
+                <h4 style="text-align: left" id="tasks-1.1"><code>class Item : public MapUnit</code></h4>
+                <ol>
+                  <li>
+
+                    <b>Item(int x, int y)</b><br>
+                    The constructor of the <code>class Item</code>. Input argument <code>x</code> and
+                    <code>y</code> specifies the
+                    coordinate where the target Item unit locates. The coordinate should be assigned to the
+                    <code>protected</code> member variable <code>x</code> and <code>y</code> defined in the
+                    <code>class MapUnit</code>.
+
+                  </li>
+                  <li>
+
+                    <b>~Item()</b><br>
+                    You should also implement the destructor properly.
+
+                  </li>
+                  <li>
+
+                    <b>UnitType get_unit_type() const override</b><br>
+                    Override the pure virtual function <code>virtual UnitType get_unit_type() const = 0</code>
+                    declared in the <code>class MapUnit</code>. This function should always return the enum value
+                    <code>UnitType::ITEM</code> defined in <b>MapUnit.h</b>.
+
+                  </li>
+                  <li>
+
+                    <b>bool is_blocked() const override</b><br>
+                    Override the pure virtual function <code>virtual bool is_blocked() const = 0</code>
+                    declared in the <code>class MapUnit</code>. This function should always return <code>false</code>
+                    since Item unit is not blocked.
+
+                  </li>
+                  <li>
+
+                    <b>int attacked_by(int atk) override</b><br>
+                    An Item unit will become invalid when attacked by the player. You should call the function
+                    <code>void invalidate()</code> defined in the <code>class MapUnit</code> to mark the item as
+                    invalid, and return 0.
+
+                  </li>
+                  <li>
+
+                    <b>string get_display_str() const override</b><br>
+                    Called by the game UI to get the display string of the unit on the game map.
+                    <ul>
+                      <li>
+                        If the Item unit is invalid, it should return <code>SYM_EMPTY</code> defined in
+                        <b>MapUnit.h</b>.
+                      </li>
+                      <li>
+                        If the item unit is valid, then:
+                        <ul>
+                          <li>
+                            If it is not discovered, it should return <code>SYM_ITEM</code> defined in <b>MapUnit.h</b>
+                          </li>
+                          <li>
+                            If it is already discovered, it should return by calling the virtual function
+                            <code>virtual string get_item_str() const = 0</code> to get the special display string from
+                            its derived classes.
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ol>
+              </li>
+              <li>
+                <h4 style="text-align: left" id="tasks-1.2"><code>class Gem</code></h4>
+                <ol>
+                  <li>
+                    <b>Gem(int x, int y, GemType gem_type)</b><br>
+                    The constructor of the <code>class Gem</code>. Input argument <code>x</code> and
+                    <code>y</code> specifies the
+                    coordinate where the target Gem unit locates. The coordinate should be assigned to the
+                    <code>protected</code> member variable <code>x</code> and <code>y</code> defined in the
+                    <code>class MapUnit</code>. <code>gem_type</code> is a enum variable of GemType that specifies the
+                    type of that Gem unit. It should be assigned to the member variable <code>gtype</code>.
+                  </li>
+                  <li>
+                    <b>~Gem()</b><br>
+                    You should also implement the destructor properly.
+                  </li>
+                  <li>
+                    <b>void triggered_by(Player &p) override</b><br>
+                    If the Gem unit is invalid (call <code>is_valid()</code> defined in <code>class MapUnit</code> to
+                    check), do nothing.<br>
+                    If the Gem unit is valid:
+                    <ul>
+                      <li>
+                        Ruby Gem unit charge MP for player of <code>Role::WARRIOR</code>, and do nothing otherwise.
+                      </li>
+                      <li>
+                        Emerald Gem unit charge MP for player of <code>Role::ARCHER</code>, and do nothing otherwise.
+                      </li>
+                      <li>
+                        Sapphire Gem unit charge MP for player of <code>Role::MAGE</code>, and do nothing otherwise.
+                      </li>
+                    </ul>
+                    Then mark the Gem unit as invalid.
+                    You can call <code>Player::get_role()</code> to get the role of the player, and call
+                    <code>Player::charge_mp()</code> to charge MP for the player.
+                  </li>
+                  <li>
+                    <b>string get_item_str() const override</b><br>
+                    <ul>
+                      <li>
+                        Ruby Gem unit: return <code>SYM_RUBY</code>.
+                      </li>
+                      <li>
+                        Emerald Gem unit: return <code>SYM_EMERALD</code>.
+                      </li>
+                      <li>
+                        Sapphire Gem unit: return <code>SYM_SAPPHIRE</code>.
+                      </li>
+                    </ul>
+                  </li>
+                </ol>
+              </li>
+              <li>
+                <h4 style="text-align: left" id="tasks-1.3"><code>class Book</code></h4>
+                <ol>
+                  <li>
+
+                    <b>Book(int x, int y)</b><br>
+                    The constructor of the <code>class Book</code>. Input argument <code>x</code> and <code>y</code>
+                    specifies the
+                    coordinate where the target Book unit locates. The coordinate should be assigned to the
+                    <code>protected</code> member variable <code>x</code> and <code>y</code> defined in the
+                    <code>class MapUnit</code>.
+
+                  </li>
+                  <li>
+
+                    <b>~Book()</b><br>
+                    You should also implement the destructor properly.
+
+                  </li>
+                  <li>
+
+                    <b>void triggered_by(Player &p) override</b><br>
+                    If the Book unit is invalid, do nothing. Else, call <code>Player::gain_exp()</code> to add 3 EXP
+                    to the player, and mark the Book unit as invalid.
+
+                  </li>
+                  <li>
+
+                    <b>string get_item_str() const override</b><br>
+                    Return <code>SYM_BOOK</code>.
+
+                  </li>
+                </ol>
+              </li>
+              <li>
+                <h4 style="text-align: left" id="tasks-1.3"><code>class Medicine</code></h4>
+                <ol>
+                  <li>
+
+                    <b>Medicine(int x, int y)</b><br>
+                    The constructor of the <code>class Medicine</code>. Input argument <code>x</code> and
+                    <code>y</code>
+                    specifies the
+                    coordinate where the target Medicine unit locates. The coordinate should be assigned to the
+                    <code>protected</code> member variable <code>x</code> and <code>y</code> defined in the
+                    <code>class MapUnit</code>.
+
+                  </li>
+                  <li>
+
+                    <b>~Medicine()</b><br>
+                    You should also implement the destructor properly.
+
+                  </li>
+                  <li>
+
+                    <b>void triggered_by(Player &p) override</b><br>
+                    If the Medicine unit is invalid, do nothing. Else, call <code>Player::recover_hp()</code> to add 3
+                    HP to the player, and mark the Medicine unit as invalid.
+
+                  </li>
+                  <li>
+
+                    <b>string get_item_str() const override</b><br>
+                    Return <code>SYM_MEDICINE</code>.
+
+                  </li>
+                </ol>
+              </li>
+            </ol>
+            <br>
+            <h3 style="text-align: left" id="tasks-part4">Part IV: Monsters (20%)</h3>
+            <ol>
+              <li>
+                <h4 style="text-align: left" id="tasks-1.1"><code>class Monster : public MapUnit</code></h4>
+                <ol>
+                  <li>
+                    <b>Monster(int x, int y)</b><br>
+                    The constructor of the <code>class Monster</code>. Input argument <code>x</code> and
+                    <code>y</code> specifies the
+                    coordinate where the target Monster unit locates. The coordinate should be assigned to the
+                    <code>protected</code> member variable <code>x</code> and <code>y</code> defined in the
+                    <code>class MapUnit</code>.
+                  </li>
+                  <li>
+                    <b>~Monster()</b><br>
+                    You should also implement the destructor properly.
+                  </li>
+                  <li>
+                    <b>bool is_active() const</b><br>
+                    Return the private member variable <code>active</code>.
+                  </li>
+                  <li>
+                    <b>void set_active()</b><br>
+                    If the Monster unit is valid, set <code>active</code> as <code>true</code>. Else, do nothing.
+                  </li>
+                  <li>
+                    <b>void recover_hp(int hp);</b><br>
+                    Add <code>hp</code> to current HP of this monster unit. The current HP cannot exceed the
+                    max HP. The exceeded part should be ignored.
+                  </li>
+                  <li>
+                    <b>UnitType get_unit_type() const override</b><br>
+                    Override the pure virtual function <code>virtual UnitType get_unit_type() const = 0</code>
+                    declared in the <code>class MapUnit</code>. This function should always return the enum value
+                    <code>UnitType::MONSTER</code> defined in <b>MapUnit.h</b>.
+                  </li>
+                  <li>
+                    <b>bool is_blocked() const override</b><br>
+                    Override the pure virtual function <code>virtual bool is_blocked() const = 0</code>
+                    declared in the <code>class MapUnit</code>. If the Monster unit is valid, return
+                    <code>true</code>, else return <code>false</code>.
+                  </li>
+                  <li>
+                    <b>int attacked_by(int atk_) override</b><br>
+                    <code>atk_</code> specifies the incoming ATK points.
+                    <ul>
+                      <li>
+                        If the Monster unit is invalid, return <code>0</code>.
+                      </li>
+                      <li>
+                        Else, compute the damage as <code>damage = atk_ - def</code>.
+                        <ul>
+                          <li>
+                            If the damage is less than 0, return <code>0</code>.
+                          </li>
+                          <li>
+                            Else compute the current HP as <code>cur_hp = cur_hp - damage</code>.
+                            <ul>
+                              <li>
+                                If <code>cur_hp &le; 0</code>, mark the unit as invalid, set
+                                <code>active = false</code>,
+                                return <code>1</code>.
+                              </li>
+                              <li>Else, return <code>0</code>.</li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <b>string get_display_str() const override</b><br>
+                    Called by the game UI to get the display string of the unit on the game map.
+                    <ul>
+                      <li>
+                        If the Monster unit is invalid, it should return <code>SYM_EMPTY</code> defined in
+                        <b>MapUnit.h</b>.
+                      </li>
+                      <li>
+                        If the item unit is valid, then:
+                        <ul>
+                          <li>
+                            If it is not discovered, it should return <code>SYM_DANGER</code> defined in
+                            <b>MapUnit.h</b>
+                          </li>
+                          <li>
+                            If it is already discovered, it should return by calling the virtual function
+                            <code>virtual string get_monster_str() const = 0</code> to get the special display string
+                            from
+                            its derived classes.
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <b>void follow(const Player &p, MapUnit *map[][MAP_SIZE]);</b><br>
+                    <ul>
+                      <li>
+                        If the distance between the Monster unit and the player is 1, no need to move, do nothing and
+                        return.
+                      </li>
+                      <li>
+                        Else if the horizontal distance is larger than 0 and the next map unit in the horizontal
+                        direction is not blocked, move one step horizontally towards the player and return.
+                      </li>
+                      <li>
+                        Else if the vertical distance is larger than 0 and the next map unit in the vertical direction
+                        is not blocked, move one step vertically towards the player and return.
+                      </li>
+                      <li>
+                        Else, return directly.
+                      </li>
+                    </ul>
+                    The move of Monster unit on the game map (<code>MapUnit* map[][]</code>) should be implemented as
+                    shown in the figure below. Assume a Monster unit at (x, y) is moving to a non-blocked map unit at
+                    (x+1, y).
+                    <ul>
+                      <li>
+                        Replace the pointer at map[x+1][y] to pointer of this Monster unit. Change the coordinates of
+                        this Monster unit to (x+1, y) accordingly. The original map unit at (x+1, y) should be deleted.
+                      </li>
+                      <li>
+                        Create a new <code>EmptyLand</code> at the original place (x, y).
+                      </li>
+                    </ul>
+                    <img class="card-img-top" src="comp2012h_pa3_files/monster_move.png" alt="Card image cap"
+                      style="width: 100%;">
+                  </li>
+                </ol>
+              </li>
+              <li>
+                <h4 style="text-align: left" id="tasks-1.2"><code>class Zombie : public Monster</code></h4>
+                <ol>
+                  <li>
+                    <b>~Zombie()</b><br>
+                    You should implement the destructor properly.
+                  </li>
+                  <li>
+                    <b>string get_monster_str() const override</b><br>
+                    Return "Z" + current HP of that Zombie unit. If the current HP is less than 10, 0 should be used for
+                    substitution. For example, "Z15" for a Zombie unit with 15 HP, "Z05" for another with 5 HP.
+                  </li>
+                  <li>
+                    <b>void action(Player &p, MapUnit *map[][MAP_SIZE]) override</b><br>
+                    If the distance between the Zombie unit and the player is no larger than 1, call
+                    <code>Player::attacked_by(atk)</code> to attack the player where <code>atk</code> is the ATK of this
+                    Zombie unit. Else,
+                    do nothing.
+                  </li>
+                </ol>
+              </li>
+              <li>
+                <h4 style="text-align: left" id="tasks-1.2"><code>class Warlock : public Monster</code></h4>
+                <ol>
+                  <li>
+                    <b>~Warlock()</b><br>
+                    You should also implement the destructor properly.
+                  </li>
+                  <li>
+                    <b>string get_monster_str() const override</b><br>
+                    Return "W" + current HP of that Warlock unit. If the current HP is less than 10, 0 should be used
+                    for
+                    substitution. For example, "W15" for a Warlock unit with 15 HP, "W05" for another with 5 HP.
+                  </li>
+                  <li>
+                    <b>void action(Player &p, MapUnit *map[][MAP_SIZE]) override</b><br>
+                    <ul>
+                      <li>
+                        If the distance between the Warlock unit and the player is no larger than 1, call
+                        <code>Player::attacked_by(atk)</code> to attack the player where <code>atk</code> is the ATK of
+                        this Warlock unit.
+                      </li>
+                      <li>
+                        Then the Warlock unit change its surrounding map units into Zombie units if:
+                        <ol>
+                          <li>
+                            the map unit is not blocked, and
+                          </li>
+                          <li>
+                            the player is not on that map unit.
+                          </li>
+                        </ol>
+                        As is shown in the figure below, the surrounding map units of the red map unit is the blue map
+                        units.<br>
+                        <img class="card-img-top" src="comp2012h_pa3_files/surrounding.png" alt="Card image cap"
+                          style="width: 30%;">
+                      </li>
+                    </ul>
+                  </li>
+                </ol>
+              </li>
+              <li>
+                <h4 style="text-align: left" id="tasks-1.2"><code>class ShadowPriest : public Monster</code></h4>
+                <ol>
+                  <li>
+                    <b>~ShadowPriest()</b><br>
+                    You should also implement the destructor properly.
+                  </li>
+                  <li>
+                    <b>string get_monster_str() const override</b><br>
+                    Return "S" + current HP of that ShadowPriest unit. If the current HP is less than 10, 0 should be
+                    used for
+                    substitution. For example, "S15" for a ShadowPriest unit with 15 HP, "S05" for another with 5 HP.
+                  </li>
+                  <li>
+                    <b>void action(Player &p, MapUnit *map[][MAP_SIZE]) override</b><br>
+                    <ul>
+                      <li>
+                        If the distance between the ShadowPriest unit and the player is no larger than 1, call
+                        <code>Player::attacked_by(atk)</code> to attack the player where <code>atk</code> is the ATK of
+                        this ShadowPriest unit.
+                      </li>
+                      <li>
+                        Then the ShadowPriest cure all its surrounding valid Monster units by adding 5 HPs to their
+                        current HP.
+                      </li>
+                    </ul>
+                  </li>
+                </ol>
+              </li>
+            </ol>
+            <br>
+
+            <h3 style="text-align: left" id="tasks-part5">Part V: Game Engine (35%)</h3>
+            <h4 style="text-align: left" id="tasks-5.1"><code>class GameEngine</code></h4>
+            Please note that each GameEngine instance maintains the game map through
+            <code>MapUnit *map[MAP_SIZE][MAP_SIZE]</code>, the active Monsters list through
+            <code>MonsterNode *head</code>, and the player through <code>Player *player</code>.
+            <ol>
+              <li>
+                <b>~GameEngine()</b><br>
+                You should implement the destructor properly.
+              </li>
+              <li>
+                <b>void create_player(int x, int y, const string &name, Role role)</b><br>
+                Create a Player with at (x, y) with the given <code>name</code> and <code>role</code>, and assign the
+                pointer to <code>GameEngine::player</code>.
+              </li>
+              <li>
+                <b>void activate_monster(Monster *monster);</b><br>
+                If the given monster to activate is valid and inactive.
+                <ol>
+                  <li>
+                    Set the monster unit as active, and
+                  </li>
+                  <li>
+                    add the monster unit to the <b>front</b> of the linked list of active monsters.<br>
+                    <img class="card-img-top" src="comp2012h_pa3_files/monster_list.png" alt="Card image cap"
+                      style="width: 100%;">
+                  </li>
+                </ol>
+              </li>
+              <li>
+                <b>void activate_monsters()</b><br>
+                Activate the Monster units in the surrounding (-1 &le; x &le; 1, -1 &le; y &le; 1, where the player is
+                at (x, y)) of the player.
+              </li>
+              <li>
+                <b>void deactivate_monster(Monster const *const monster)</b><br>
+                If the given monster is in the active monsters list, Remove the given monster from the list. You can
+                assume the input pointer is always valid (points to a Monster unit correctly).
+              </li>
+              <li>
+                <b>void player_move(Direction d)</b><br>
+                <ul>
+                  <li>
+                    <ul>
+                      <li>
+                        If the destination is in the map and not blocked, move the player one step towards the given
+                        direction by calling
+                        <code>Player::move(direction, 1)</code>
+                      </li>
+                      <li>
+                        If the destination is outside the map or blocked, only change the direction by calling
+                        <code>Player::move(direction, 0)</code>.
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    Trigger the map unit at the destination (by using <code>MapUnit::triggered_by()</code>)
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <b>void player_discover()</b><br>
+                Set map units within 5x5 region around the player (shown in blue as follows) as discovered.<br>
+                <img class="card-img-top" src="comp2012h_pa3_files/discover.png" alt="Card image cap"
+                  style="width: 30%;">
+              </li>
+              <li>
+                <b>void player_attack()</b><br>
+                The player attack map units within the attack range (by using <code>MapUnit::attacked_by()</code>). If
+                multiple map units are within the attack range, the closer map units will be attacked earlier.<br>
+                If an attacked map unit is monster unit:
+                <ul>
+                  <li>
+                    If the monster is defeated by this attack (<code>MapUnit::attacked_by()</code> return value > 0),
+                    deactivate that monster (by calling <code>deactivate_monster()</code>), and the player will gain 1
+                    EXP (by calling <code>Player::gain_exp()</code>)
+                  </li>
+                  <li>
+                    If the monster is not defeated by this attack (still valid, <code>MapUnit::attacked_by()</code>
+                    return value = 0), and the monster is not active, mark that monster as active and add it to the
+                    active monsters list.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <b>void player_skill()</b><br>
+                <ul>
+                  <li>
+                    If the skill is not successfully used (<code>Player::skill()</code> returns 1), do nothing and
+                    return directly.
+                  </li>
+                  <li>
+                    Else attack the map units using the atk and range specified by the <code>Player::skill()</code>
+                    function, similar to the <code>player_attack()</code> function.
+                    If an attacked map unit is monster unit:
+                    <ul>
+                      <li>
+                        If the monster is defeated by this attack (<code>MapUnit::attacked_by()</code> return value >
+                        0),
+                        deactivate that monster (by calling <code>deactivate_monster()</code>), and the player will gain
+                        1
+                        EXP (by calling <code>Player::gain_exp()</code>)
+                      </li>
+                      <li>
+                        If the monster is not defeated by this attack (still valid, <code>MapUnit::attacked_by()</code>
+                        return value = 0), and the monster is not active, mark that monster as active and add it to the
+                        active monsters list.
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <b>void monster_follow()</b><br>
+                The monster in the active monster list follow the player (by calling <code>Monster::follow()</code>) in
+                the list order.
+              </li>
+              <li>
+                <b>void monster_act()</b><br>
+                The monster in the active monster list act against the player (by calling
+                <code>Monster::action()</code>) in the list order.
+              </li>
+            </ol>
+            <br>
+          </div>
+          <div class="card-footer text-muted">
+            End of Tasks
+          </div>
+        </div>
+
+        <!-- Download section -->
+        <!-- ### Complete download section for the assignment ### -->
+        <div class="card mb-4">
+          <div class="card-body" id="download">
+            <h3 class="card-title">Resources &amp; Sample Excutables</h3>
+            <ul>
+              <li>
+                Skeleton code: <a href="../Resources/skeleton.zip">download here</a><br>
+                You are suggested to compile the program using our provided <code>makefile</code>.
+              </li>
+              <li>
+                Sample submission zip file: <a href="../Resources/pa8_sample_submission.zip">download here</a>
+              </li>
+              <li>
+                Demo programs:
+                <a href="../Resources/pa8_win.exe">Windows</a> /
+                <a href="../Resources/pa8_mac_intel">MacOS Intel</a> /
+                <a href="../Resources/pa8_mac_silicon">MacOS Apple Silicon</a> /
+                <a href="../Resources/pa8_linux">Linux</a>
+              </li>
+          </div>
+          <div class="card-footer text-muted">
+            End of Resources &amp; Sample Excutables
+          </div>
+        </div>
+
+        <!-- Submission and grading section -->
+        <!-- ### Complete submission and grading section for the assignment ### -->
+        <div class="card mb-4">
+          <div class="card-body" id="submission">
+            <h3 class="card-title">Submission &amp; Grading</h3>
+            <p class="card-text">
+              <strong>Deadline: <span style="color: red;">Sat, 5/11/22</span> HKT 23:59.</strong><br>
+              You are supposed to compress .cpp files as <code>pa8.zip</code> and submit it
+              for submission to the <a href="https://zinc.cse.ust.hk/">ZINC Autograding System</a>. The provided
+              <code>makefile</code> can automatically generate the <code>pa8.zip</code> for you. Run
+              <code>make pa8.zip</code> in your PA8 directory with the <code>makefile</code>, then <code>pa8.zip</code>
+              will be produced in the same directory.
+            </p>
+            <p class="card-text">
+              Otherwise, you can manually create that <code>pa8.zip</code> file. It should contains the following files
+              in the exactly same
+              file structure:
+            <ul>
+              <li>GameEngine.cpp</li>
+              <li>Terrains/Terrain.cpp</li>
+              <li>Terrains/Wall.cpp</li>
+              <li>Terrains/Grass.cpp</li>
+              <li>Terrains/EmptyLand.cpp</li>
+              <li>Items/Item.cpp</li>
+              <li>Items/Gem.cpp</li>
+              <li>Items/Book.cpp</li>
+              <li>Items/Medicine.cpp</li>
+              <li>Monsters/Monster.cpp</li>
+              <li>Monsters/Zombie.cpp</li>
+              <li>Monsters/Warlock.cpp</li>
+              <li>Monsters/ShadowPriest.cpp</li>
+              <li>Player/Mage.cpp</li>
+              <li>Player/Warrior.cpp</li>
+              <li>Player/Archer.cpp</li>
+            </ul>
+            </p>
+            <p class="card-text">
+              <strong>Late Policy:</strong><br>
+              Please refer to the <a href="https://course.cse.ust.hk/comp2012h/#assignments">3-day late budget
+                policy</a>.
+            </p>
+            <p class="card-text">
+              You are strictly forbidden to modify the signature of given classes and functions</strong>.
+              However, you can overload the functions. When we grade your program, if we cannot find
+              the exact function whose signature is what we described in
+              <a href="#tasks">Tasks section</a>, you will have <strong>no score</strong> for <b>all related tasks</b>.
+            </p>
+            <p class="card-text">
+              Before deadline, the test cases on ZINC will only contain a few cases. If you passed
+              those tests, it only means your program can successfully run on ZINC and can pass
+              those test cases. The result is by no mean complete and the score are irrelavent to
+              your actual score.
+              In actual grading stage after deadline, we will use a <strong>totally different set of
+                test cases</strong>, which is expected to be more complete and more strict,
+              to test the correctness your program.
+            </p>
+
+            <p class="card-text">
+              Please ensure that you submit to ZINC well before the deadline as <strong>all late
+                submissions will be automatically rejected</strong>.
+            </p>
+            <br>
+            <h4>Grading Scheme</h4>
+            <p class="card-text">
+              In this assignment, we follow the Unit Test manner to grade your assignment on ZINC. Most test cases will
+              test single behavior of a task class. However, some tasks may depend on correct
+              implementation of several other classes and functions, e.g., derived class depends on base class, member
+              function depends on constructor function, <code>class GameEngine</code> depends on all other classes. So,
+              a errorneous implementation can result in a series of failure in the final test cases. The final grade of
+              this assignment will be based on how many test cases you have passed, and no partial points will be given
+              to each test cases. So, please be careful implementing every task class and test your code thoroughly
+              before the ddl.
+            </p>
+            <b>Memory Leak</b><br>
+            <p class="card-text">
+              Before the program terminates, you need to ensure you have deallocated all dynamic memory you have
+              allocated in the entire execution of the program. We will also check memory leak in test cases. If any of
+              your test cases have memory leak, you will receive a 50% penalty in these test cases.
+            </p>
+
+          </div>
+          <div class="card-footer text-muted">
+            End of Submission &amp; Grading
+          </div>
+        </div>
+
+        <!-- FAQ section -->
+        <!-- ### Complete FAQ section for the assignment ### -->
+        <div class="card mb-4">
+          <div class="card-body" id="faq">
+            <h3 class="card-title">Frequently Asked Questions</h3>
+            <p>
+              <b>Q</b>: My code doesn't work, there is an error/bug, here is the code, can you help me fix
+              it?<br>
+              <b>A</b>: As the assignment is a major course assessment, to be fair, you are supposed to
+              work on it
+              on your own and we should not finish the tasks for you. We are happy to help with
+              explanations and
+              advice, but we shall not directly debug the code for you.
+            </p>
+          </div>
+          <div class="card-footer text-muted">
+            End of FAQ
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-body" id="log">
+            <h3 class="card-title">Changelog</h3>
+            <ol>
+              <li>
+                <b>13:30 21/10/2022</b><br>
+                In <a href="#tasks-part3">Part III.1.5</a>:<br>
+                <code>int attacked_by(int atk) override</code> should return 0.
+              </li>
+              <li>
+                <b>14:30 21/10/2022</b><br>
+                In <a href="#tasks-part1">Part I.1.6</a>:<br>
+                If the damage is larger than <span style="color:maroon"><b>or equal to</b></span> current HP of the
+                Warrior
+                player, and current MP is larger than 0, consume 1 MP, such that the damage won't take effect, and
+                recover HP of max_hp/2. Return.
+              </li>
+              <li>
+                <b>17:30 21/10/2022</b><br>
+                In <a href="#tasks-part5">Part V.6</a>:<br>
+                <del>Move the player one step towards the given direction if the destination is in the map and not
+                  blocked, else don't move. (by using <code>Player::move()</code>)</del>
+                <ul>
+                  <li>
+                    If the destination is in the map and not blocked, move the player one step towards the given
+                    direction by calling
+                    <code>Player::move(direction, 1)</code>
+                  </li>
+                  <li>
+                    If the destination is outside the map or blocked, only change the direction by calling
+                    <code>Player::move(direction, 0)</code>.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Updated the <code>makefile</code> in the skeleton code, please use the new one (especially windows users).
+              </li>
+            </ol>
+          </div>
+          <div class="card-footer text-muted">
+            End of Changelog
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Widgets Column -->
+      <div class="col-md-3">
+        <div class="sticky-top">
+          <!-- Menu Widget -->
+          <div class="card my-12">
+            <h5 class="card-header">Menu</h5>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-12">
+                  <ul class="mb-0" style="padding-left:20px" type="circle">
+                    <li>
+                      <a href="#honor">Honor Code</a>
+                    </li>
+                    <li>
+                      <a href="#objective">Objectives & ILOs</a>
+                    </li>
+                    <li>
+                      <a href="#introduction">Introduction</a>
+                    </li>
+                    <li>
+                      <a href="#concepts">Basic Game Concepts</a>
+                    </li>
+                    <li>
+                      <a href="#structure">Code Structure</a>
+                    </li>
+                    <li>
+                      <a href="#tasks">Tasks</a>
+                      <ul style="margin-left: -25px">
+                        <li>
+                          <a href="#tasks-part1">Part I</a>
+                        </li>
+                        <li>
+                          <a href="#tasks-part2">Part II</a>
+                        </li>
+                        <li>
+                          <a href="#tasks-part3">Part III</a>
+                        </li>
+                        <li>
+                          <a href="#tasks-part4">Part IV</a>
+                        </li>
+                        <li>
+                          <a href="#tasks-part5">Part V</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="#download">Resources &amp; Sample Excutables</a>
+                    </li>
+                    <li>
+                      <a href="#submission">Submission &amp; Grading</a>
+                    </li>
+                    <li>
+                      <a href="#faq">FAQ</a>
+                    </li>
+                    <li>
+                      <a href="#log">Changelog</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Maintenance widget -->
+          <div class="card my-4">
+            <h5 class="card-header">Page maintained by</h5>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-12">
+                  <ul class="list-unstyled mb-0">
+                    <li>
+                      ZHONG, Shuhan
+                    </li>
+                    <li>
+                      Email: <a href="mailto:szhongaj@connect.ust.hk">szhongaj@connect.ust.hk</a>
+                    </li>
+                    <li>Last Modified:
+                      <script type="text/javascript">document.write(document.lastModified);</script>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Homepage widget -->
+          <div class="card my-4">
+            <h5 class="card-header">Homepage</h5>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-12">
+                  <ul class="list-unstyled mb-0">
+                    <li>
+                      <a href="http://course.cse.ust.hk/comp2012h">Course Homepage</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Maintained by COMP 2012H Teaching Team © 2022 HKUST Computer Science
+        and Engineering</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="comp2012h_pa3_files/jquery.js"></script>
+  <script src="comp2012h_pa3_files/bootstrap.js"></script>
+
+
+
+
+</body>
+<grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
+
+</html>
