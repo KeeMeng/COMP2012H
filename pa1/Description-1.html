@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- ### Change assignment number ### -->
+    <title>COMP 2012H Assignment 1: Calendar</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="comp2012h_pa1_files/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="comp2012h_pa1_files/blog-home.css" rel="stylesheet">
+	
+    <!-- Prism syntax highlighter -->
+    <link href="comp2012h_pa1_files/prism.css" rel="stylesheet">
+
+	<style>
+		pre {
+			background: #f4f4f4 !important;
+			border: 1px solid #ddd !important;
+			border-left: 3px solid #f36d33 !important;
+			color: #666 !important;
+			page-break-inside: avoid !important;
+			font-family: monospace !important;
+			font-size: 14px !important;
+			line-height: 1.6 !important;
+			margin-bottom: 1.6em !important;
+			max-width: 100% !important;
+			overflow: auto !important;
+			padding: 1em 1.5em !important;
+			display: block !important;
+			word-wrap: break-word !important;
+		}
+
+		table, th, td {
+			border: 1px solid black;
+		}
+		th, td {
+			padding: 5px;
+		}
+		th {
+			text-align: left;
+		}
+    </style>
+    <link rel="stylesheet" type="text/css" href="comp2012h_pa1_files/prettify.css">
+  	<script src="comp2012h_pa1_files/prompt.js"></script>
+	</head>
+
+  <body data-new-gr-c-s-check-loaded="8.880.0" data-gr-ext-installed="">
+    <script src="comp2012h_pa1_files/prism.js"></script>
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <div class="row">
+
+        <!-- Entries Column -->
+        <div class="col-md-9">
+
+          <h2 class="my-4">
+            <span style="color:darkblue">COMP 2012H</span>
+            <small>Honors Object-Oriented Programming and Data Structures</small>
+          </h2>
+
+          <!-- ### Change assignment number and title ### -->
+          <h3 class="my-4">
+            Assignment 1 
+            <span style="color:#660066">Calendar</span>
+          </h3>
+		  
+					<!-- Honor Code section -->
+					<div class="card mb-4">
+					<div class="card-body" id="honor" style="background-color:#f4f4f4">
+						<h3 class="card-title">Honor Code</h3>
+						<p class="card-text">
+						We value academic integrity very highly. Please read the <a href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a> section on our course webpage to make sure you understand what is considered as plagiarism and what the penalties are.
+						The following are some of the highlights:
+						</p><ul>
+							<li>
+							Do NOT try your "luck" - we use sophisticated plagiarism detection software to find cheaters.
+							We also review codes for potential cases manually.
+							</li>
+							<li>
+							The penalty (for <b>BOTH</b> the copier and the copiee) is not just getting a zero in your assignment.
+							Please read the <a href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a> thoroughly.
+							</li>
+							<li>
+								Serious offenders will fail the course immediately, and there will be additional disciplinary actions
+								from the department and university, upto and including expulsion.
+							</li>
+						</ul>
+						<p></p>
+					</div>
+					<div class="card-footer text-muted">
+									End of Honor Code
+								</div>
+					</div>
+
+					<div class="card mb-4">
+						<div class="card-body" id="objective" style="background-color:#f4f4f4">
+							<h3 class="card-title">Objectives & Intended Learning Outcomes</h3>
+							<p class="card-text">
+								The objective of this assignment is to provide you with practice on C++ basic variables and control flows.
+								Upon completion of this assignment, you should be able to:
+							</p>
+							<ol>
+								<li>
+									Use basic variables in C++, like int, char, bool, etc.
+								</li>
+								<li>
+									Use if, if-else, switch statements to control program flow
+								</li>
+								<li>
+									Use relational operators and logical operators to control program flow.
+								</li>
+								<li>
+									Use for, while, and do-while to write loops, as well as use break and continue to
+									exit loops.
+								</li>
+							</ol>
+							<p></p>
+						</div>
+						<div class="card-footer text-muted">
+							End of Objectives & Intended Learning Outcomes
+						</div>
+					</div>
+
+					<!-- Introduction section -->
+					<!-- ### Complete introduction section for the assignment ### -->
+					<div class="card mb-4">
+						<!-- ### Add an image representing the assignment content here ### -->
+						<img class="card-img-top" src="comp2012h_pa1_files/calendar-banner.jpeg" alt="Card image cap">
+						<div class="card-body" id="introduction">
+							<p class="card-text">
+								<small>
+									<em>
+										Source:
+										<a href="https://siliconvalleyyouthbridge.org/calendar/" target="_blank">
+											https://siliconvalleyyouthbridge.org/calendar/</a>
+									</em>
+								</small>
+							</p>
+							<h3 class="card-title">Introduction</h3>
+							<p class="card-text">
+								The <a href="https://en.wikipedia.org/wiki/Gregorian_calendar"  target="_blank">Gregorian calendar</a>
+								is the de facto international standard and is used almost everywhere in the world for civil purposes.
+								The widely used solar aspect is a cycle of leap days in a 400-year cycle designed to
+								keep the duration of the year aligned with the solar year.
+							</p>
+
+							<p class="card-text">
+								The Gregorian calendar has also been implemented in Linux/Unix command: <code>cal</code>
+								and <code>ncal</code>. If you are using Mac or Linux computers, you may try these
+								commands in your terminal:
+							</p>
+
+							<pre><code class="language-bash">> cal -m 9 2022
+   September 2022
+Su Mo Tu We Th Fr Sa
+			 1  2  3
+ 4  5  6  7  8  9 10
+11 12 13 14 15 16 17
+18 19 20 21 22 23 24
+25 26 27 28 29 30
+
+> ncal -m 9 2022
+    September 2022
+Mo     5 12 19 26
+Tu     6 13 20 27
+We     7 14 21 28
+Th  1  8 15 22 29
+Fr  2  9 16 23 30
+Sa  3 10 17 24
+Su  4 11 18 25
+
+> cal 2023
+                            2023
+      January               February               March
+Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa
+ 1  2  3  4  5  6  7            1  2  3  4            1  2  3  4
+ 8  9 10 11 12 13 14   5  6  7  8  9 10 11   5  6  7  8  9 10 11
+15 16 17 18 19 20 21  12 13 14 15 16 17 18  12 13 14 15 16 17 18
+22 23 24 25 26 27 28  19 20 21 22 23 24 25  19 20 21 22 23 24 25
+29 30 31              26 27 28              26 27 28 29 30 31
+
+
+       April                  May                   June
+Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa
+                   1      1  2  3  4  5  6               1  2  3
+ 2  3  4  5  6  7  8   7  8  9 10 11 12 13   4  5  6  7  8  9 10
+ 9 10 11 12 13 14 15  14 15 16 17 18 19 20  11 12 13 14 15 16 17
+16 17 18 19 20 21 22  21 22 23 24 25 26 27  18 19 20 21 22 23 24
+23 24 25 26 27 28 29  28 29 30 31           25 26 27 28 29 30
+30
+
+        July                 August              September
+Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa
+                   1         1  2  3  4  5                  1  2
+ 2  3  4  5  6  7  8   6  7  8  9 10 11 12   3  4  5  6  7  8  9
+ 9 10 11 12 13 14 15  13 14 15 16 17 18 19  10 11 12 13 14 15 16
+16 17 18 19 20 21 22  20 21 22 23 24 25 26  17 18 19 20 21 22 23
+23 24 25 26 27 28 29  27 28 29 30 31        24 25 26 27 28 29 30
+30 31
+
+      October               November              December
+Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa
+ 1  2  3  4  5  6  7            1  2  3  4                  1  2
+ 8  9 10 11 12 13 14   5  6  7  8  9 10 11   3  4  5  6  7  8  9
+15 16 17 18 19 20 21  12 13 14 15 16 17 18  10 11 12 13 14 15 16
+22 23 24 25 26 27 28  19 20 21 22 23 24 25  17 18 19 20 21 22 23
+29 30 31              26 27 28 29 30        24 25 26 27 28 29 30
+                                            31
+							</code></pre>
+
+							<p class="card-text">
+								In this assignment, you are going to implement such a tool on your own to
+								display and format calendars of different styles!
+								More details can be found below.
+							</p>
+
+						</div>
+						<div class="card-footer text-muted">
+							End of Introduction
+						</div>
+					</div>
+
+					<div class="card mb-4">
+						<div class="card-body" id="description">
+							<h3 class="card-title">Description</h3>
+							<p class="card-text">
+								Please read the <a href="#faq">FAQ</a> section for some common clarifications. You should check that
+								a day before the deadline to make sure you don't miss any clarification, even if you have already
+								submitted your work by then.
+							</p>
+							<br>
+
+							<h4 id="gregorian-cal">Gregorian calendar</h4>
+							<p class="card-text">
+								In this assignment, we focus on <a href="https://en.wikipedia.org/wiki/Gregorian_calendar"  target="_blank">Gregorian calendar</a>
+								only, you may need to read the Wikipedia page
+								<a href="https://en.wikipedia.org/wiki/Gregorian_calendar"  target="_blank">
+									https://en.wikipedia.org/wiki/Gregorian_calendar
+								</a>
+								on what it is, and most importantly, <strong>how many days are there in each month,
+								especially February.</strong> The way of calculating leap year <strong>might be different
+								</strong> from what you have learnt before.
+							</p>
+
+							<br>
+
+							<h4 id="program-overview">Program Overview</h4>
+							<p class="card-text">
+								After the program is started, it will ask user to input a <strong>year</strong>
+								(in range 1800-9999), and then input a <strong>month</strong> (in range 1-12).
+								If the user input
+								is not valid, the program will continue asking the user to input until a valid
+								one is received.
+							</p>
+							<p class="card-text">
+								Next, the program will ask the user whether he/she would like to use
+								Monday or Sunday as the first day of a week. If user chooses Monday,
+								then the calendar displayed later will start each week on Monday, and
+								vice versa.
+								If the user input
+								is not valid, the program will continue asking the user to input until a valid
+								one is received.
+							</p>
+							<p class="card-text">
+								Then, the program will ask the user if they want the calendar to
+								print horizontally or vertically. If user chooses horizontally,
+								then the calendar will look like the one using <code>cal</code> command
+								on Linux, otherwise it will look like the one using <code>ncal</code> command.
+								Again, if the user input
+								is not valid, the program will continue asking the user to input until a valid
+								one is received.
+							</p>
+							<p class="card-text">
+								Note that in <a href="#bonus-tasks">bonus tasks</a>, the user
+							may input <code>-1</code> or <code>-3</code> for month. In this situation,
+							the next two options (start week on Monday/Sunday, and print horizontally/vertically)
+							will be disabled. The program will directly print calendar after user enters
+							the month.
+							</p>
+
+							<br>
+
+							<h4>How to calculate which day it is for a certain date?</h4>
+							<p class="card-text">
+								The only thing you have is that <strong>the January 1st of year 1800 is a Wednesday</strong>.
+								All other you need is in the Wikipedia link given in
+								<a href="#gregorian-cal">Gregorian calendar</a>
+								part above.
+								<strong>Actually you only need to figure out how many days are there in each month.</strong>
+							</p>
+
+							<p class="card-text">
+								You are expected to <strong>calculate</strong> which day it is for a certain date when you
+								display the calendar later.
+							</p>
+
+							<p class="card-text">
+								The calendar rules used before 1800 are different to the rules we use today, due to
+								some historic reasons. So in this PA, you only need to work on calendars
+								<strong>after year 1800</strong>.
+
+							</p>
+
+							<br>
+
+							<h4>Additional Remarks</h4>
+							<p class="card-text">
+								In this assignment, you can feel free to use anything you know, and there is no
+								need to restrict yourself to only use what we have taught so far. For example,
+								if you think using a function will make your codes tidy, feel free to do it.
+								However, <strong> you can only use header file <code>#include &lt;iostream&gt;</code>
+								</strong>.
+							</p>
+							<p class="card-text">
+								If you would like to try the bonus tasks, it is very likely that you
+								will find functions useful. Otherwise, your codes might look quite messy.
+							</p>
+						</div>
+						<div class="card-footer text-muted">
+							End of Description
+						</div>
+					</div>
+
+          <div class="card mb-4">      
+            <div class="card-body" id="tasks">
+              <h3 class="card-title">Tasks</h3>
+				<p class="card-text">
+					This section describes all you will need to implement.
+					You may need to check <a href="#program-overview">Program Overview</a>
+					section to have an overview
+					of this program before reading this part.
+				</p>
+				<br>
+
+				<h4>Task 1 - Receive and validate user input</h4>
+				<p class="card-text">
+					As described in <a href="#program-overview">Program Overview</a>, ask the user to
+					input (1) year, (2) month, (3) start each week on Monday or Sunday, and
+					(4) print horizontally or vertically.
+				</p>
+
+				<p class="card-text">
+					If the user input is not valid, the program will keep asking the user to input until a valid one is received.
+					You don't need to consider the cases when user input incorrect data types. For example,
+					if we want an integer, you can assume the user will always input an integer, not
+					a character, etc.
+				</p>
+
+				<p class="card-text">
+					<strong>For students who do bonus part: </strong> You should skip (3) and (4)
+					if user input month -1 or -3, as described in
+					<a href="#bonus-tasks">Bonus Tasks</a>.
+				</p>
+
+				<p class="card-text">
+					Example: (user input is displayed in <span style="color: red">red</span>)
+				</p>
+
+				<pre>Enter year (in range 1800-9999): <span style="color: red">123</span>
+Enter year (in range 1800-9999): <span style="color: red">12345</span>
+Enter year (in range 1800-9999): <span style="color: red">1800</span>
+Enter month (in range 1-12): <span style="color: red">-100</span>
+Enter month (in range 1-12): <span style="color: red">100</span>
+Enter month (in range 1-12): <span style="color: red">1 </span>
+Enter the first day of week ('s' for Sunday, 'm' for Monday): <span style="color: red">k</span>
+Enter the first day of week ('s' for Sunday, 'm' for Monday): <span style="color: red">o</span>
+Enter the first day of week ('s' for Sunday, 'm' for Monday): <span style="color: red">s</span>
+Print horizontally (h) or vertically (v): <span style="color: red">c</span>
+Print horizontally (h) or vertically (v): <span style="color: red">o</span>
+Print horizontally (h) or vertically (v): <span style="color: red">m</span>
+Print horizontally (h) or vertically (v): <span style="color: red">p</span>
+Print horizontally (h) or vertically (v): <span style="color: red">h</span>
+[Start printing the calendar, remaining parts are ignored. See examples in other tasks]</pre>
+
+				<p class="card-text">
+					Here are some code snippets that you can copy and paste to your program,
+					if you find it convenient.
+				</p>
+				<pre><code class="language-cpp">cout << "Enter year (in range 1800-9999): ";
+cout << "Enter month (in range 1-12): ";
+cout << "Enter the first day of week ('s' for Sunday, 'm' for Monday): ";
+cout << "Print horizontally (h) or vertically (v): "; </code></pre>
+
+				<br>
+				<h4>Task 2 - Horizontal calendars with week starts on Sunday</h4>
+				<p class="card-text">
+					When user chooses to start each week on Sunday and print the calendar horizontally,
+					display the calendar in such style.
+				</p>
+
+				<ul>
+					<li>
+						First a title should be displayed, with format "[Month Name] [Year]", for example,
+						"January 1800". To make it easier, please make the title left-aligned.
+					</li>
+					<li>
+						Then, display the names of weekdays, from "Su" to "Sa", words should be
+						separated by one space.
+					</li>
+					<li>
+						Finally, format the calendar like the example below. Dates should be
+						separated by one space, and for dates with only one digit, the digit
+						should be right-aligned.
+					</li>
+					<li>After printing the calendar, the program finishes.</li>
+					<li>
+						It's ok to have extra spaces <strong>at the end of</strong> each line.
+						See details in <a href="#grading">Grading section</a>
+					</li>
+				</ul>
+
+				<p class="card-text">
+					<strong>Note: </strong> This should be the same as Linux command
+					<code>cal -m [month] [year]</code>, except that you don't need to
+					align the title or ouput additional blank line at the end.
+				</p>
+
+				<p class="card-text">
+					Example: (user input is displayed in <span style="color: red">red</span>)
+				</p>
+
+				<pre>Enter year (in range 1800-9999): <span style="color: red">1800</span>
+Enter month (in range 1-12): <span style="color: red">1</span>
+Enter the first day of week ('s' for Sunday, 'm' for Monday): <span style="color: red">s</span>
+Print horizontally (h) or vertically (v): <span style="color: red">h</span>
+January 1800
+Su Mo Tu We Th Fr Sa
+          1  2  3  4
+ 5  6  7  8  9 10 11
+12 13 14 15 16 17 18
+19 20 21 22 23 24 25
+26 27 28 29 30 31 </pre>
+
+				<br>
+				<h4>Task 3 - Horizontal calendars with week starts on Monday</h4>
+				<p class="card-text">
+					When user chooses to start each week on Monday and print the calendar horizontally,
+					display the calendar in such style.
+				</p>
+
+				<ul>
+					<li>
+						First a title should be displayed, with format "[Month Name] [Year]", for example,
+						"January 1800". To make it easier, please make the title left-aligned.
+					</li>
+					<li>
+						Then, display the names of weekdays, from "Mo" to "Su", words should be
+						separated by one space.
+					</li>
+					<li>
+						Finally, format the calendar like the example below. Dates should be
+						separated by one space, and for dates with only one digit, the digit
+						should be right-aligned.
+					</li>
+					<li>After printing the calendar, the program finishes.</li>
+					<li>
+						It's ok to have extra spaces <strong>at the end of</strong> each line.
+						See details in <a href="#grading">Grading section</a>
+					</li>
+				</ul>
+
+				<p class="card-text">
+					Example: (user input is displayed in <span style="color: red">red</span>)
+				</p>
+
+				<pre>Enter year (in range 1800-9999): <span style="color: red">1800</span>
+Enter month (in range 1-12): <span style="color: red">1</span>
+Enter the first day of week ('s' for Sunday, 'm' for Monday): <span style="color: red">m</span>
+Print horizontally (h) or vertically (v): <span style="color: red">h</span>
+January 1800
+Mo Tu We Th Fr Sa Su
+       1  2  3  4  5
+ 6  7  8  9 10 11 12
+13 14 15 16 17 18 19
+20 21 22 23 24 25 26
+27 28 29 30 31 </pre>
+
+				<br>
+				<h4>Task 4 - Vertical calendars with week starts on Sunday</h4>
+				<p class="card-text">
+					When user chooses to start each week on Sunday and print the calendar vertically,
+					display the calendar in such style.
+				</p>
+
+				<ul>
+					<li>
+						First a title should be displayed, with format "[Month Name] [Year]", for example,
+						"January 1800". To make it easier, please make the title left-aligned.
+					</li>
+					<li>
+						Then, display the names of weekdays, from "Su" to "Sa",
+						<strong>as the first column on the left.</strong> Those names
+						and dates you will print later (remaining columns) should be
+						separated by one space.
+					</li>
+					<li>
+						Finally, format the calendar <strong>vertically,</strong> like the example below.
+						Dates should be
+						separated by one space, and for dates with only one digit, the digit
+						should be right-aligned.
+					</li>
+					<li>After printing the calendar, the program finishes.</li>
+					<li>
+						It's ok to have extra spaces <strong>at the end of</strong> each line.
+						See details in <a href="#grading">Grading section</a>
+					</li>
+				</ul>
+
+				<p class="card-text">
+					Example: (user input is displayed in <span style="color: red">red</span>)
+				</p>
+
+				<pre>Enter year (in range 1800-9999): <span style="color: red">1800</span>
+Enter month (in range 1-12): <span style="color: red">1</span>
+Enter the first day of week ('s' for Sunday, 'm' for Monday): <span style="color: red">s</span>
+Print horizontally (h) or vertically (v): <span style="color: red">v</span>
+January 1800
+Su     5 12 19 26
+Mo     6 13 20 27
+Tu     7 14 21 28
+We  1  8 15 22 29
+Th  2  9 16 23 30
+Fr  3 10 17 24 31
+Sa  4 11 18 25 </pre>
+
+				<br>
+				<h4>Task 5 - Vertical calendars with week starts on Monday</h4>
+				<p class="card-text">
+					When user chooses to start each week on Monday and print the calendar vertically,
+					display the calendar in such style.
+				</p>
+
+				<ul>
+					<li>
+						First a title should be displayed, with format "[Month Name] [Year]", for example,
+						"January 1800". To make it easier, please make the title left-aligned.
+					</li>
+					<li>
+						Then, display the names of weekdays, from "Mo" to "Su",
+						<strong>as the first column on the left.</strong> Those names
+						and dates you will print later (remaining columns) should be
+						separated by one space.
+					</li>
+					<li>
+						Finally, format the calendar <strong>vertically,</strong> like the example below.
+						Dates should be
+						separated by one space, and for dates with only one digit, the digit
+						should be right-aligned.
+					</li>
+					<li>After printing the calendar, the program finishes.</li>
+					<li>
+						It's ok to have extra spaces <strong>at the end of</strong> each line.
+						See details in <a href="#grading">Grading section</a>
+					</li>
+				</ul>
+
+				<p class="card-text">
+					<strong>Note: </strong> This should be the same as Linux command
+					<code>ncal -M [month] [year]</code>, except that you don't need to
+					align the title or ouput additional blank line at the end.
+				</p>
+
+				<p class="card-text">
+					Example: (user input is displayed in <span style="color: red">red</span>)
+				</p>
+
+				<pre>Enter year (in range 1800-9999): <span style="color: red">1800</span>
+Enter month (in range 1-12): <span style="color: red">1</span>
+Enter the first day of week ('s' for Sunday, 'm' for Monday): <span style="color: red">m</span>
+Print horizontally (h) or vertically (v): <span style="color: red">v</span>
+January 1800
+Mo     6 13 20 27
+Tu     7 14 21 28
+We  1  8 15 22 29
+Th  2  9 16 23 30
+Fr  3 10 17 24 31
+Sa  4 11 18 25
+Su  5 12 19 26 </pre>
+
+				<br>
+				<h4 id="bonus-tasks">Bonus Task 1 - Print calendar of a whole year</h4>
+
+				<p class="card-text">
+					This is a bonus task, please see grading details in
+					<a href="#grading">Grading section</a>
+				</p>
+
+				<p class="card-text">
+					When user chooses to print the calendar of a whole year, indicating by
+					entering -1 as month,
+					we will start each week on Sunday and print the calendar horizontally.
+				</p>
+
+				<ul>
+					<li>
+						First a title should be displayed, with format "Year [Year no.]", for example,
+						"Year 1800". To make it easier, please make the title left-aligned.
+					</li>
+					<li>
+						Next, <strong>for each month:</strong>
+						<ul>
+							<li>
+								A sub-title should be displayed, with format "[Month Name]", for example,
+								"January". To make it easier, please make it left-aligned.
+							</li>
+							<li>
+								Display the names of weekdays, from "Su" to "Sa", words should be
+								separated by one space.
+							</li>
+							<li>
+								Finally, format the calendar like the example below. Dates should be
+								separated by one space, and for dates with only one digit, the digit
+								should be right-aligned.
+							</li>
+						</ul>
+					</li>
+					<li>
+						You should print three months horizontally. Two adjacent months
+						in the same row should be separated by two spaces.
+					</li>
+					<li>
+						If any of the horizontal three months has 6 rows enumerating the date, 
+						the remaining horizontal months should also have 6 rows for alignment.
+					</li>
+					<li>
+						There is one blank line between two set of horizontal three months.
+					</li>
+					<li>After printing the calendar, the program finishes.</li>
+					<li>
+						It's ok to have extra spaces <strong>at the end of</strong> each line.
+						See details in <a href="#grading">Grading section</a>
+					</li>
+				</ul>
+
+				<p class="card-text">
+					<strong>Note: </strong> This should be the same as Linux command
+					<code>cal [year]</code>, except that you don't need to
+					align the title and sub-titles or ouput additional blank line at the end.
+				</p>
+
+				<p class="card-text">
+					Example: (user input is displayed in <span style="color: red">red</span>)
+				</p>
+
+				<pre>Enter year (in range 1800-9999): <span style="color: red">1800</span>
+Enter month (in range 1-12): <span style="color: red">-1</span>
+Year 1800
+January               February              March
+Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa
+          1  2  3  4                     1                     1
+ 5  6  7  8  9 10 11   2  3  4  5  6  7  8   2  3  4  5  6  7  8
+12 13 14 15 16 17 18   9 10 11 12 13 14 15   9 10 11 12 13 14 15
+19 20 21 22 23 24 25  16 17 18 19 20 21 22  16 17 18 19 20 21 22
+26 27 28 29 30 31     23 24 25 26 27 28     23 24 25 26 27 28 29
+                                            30 31
+
+April                 May                   June
+Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa
+       1  2  3  4  5               1  2  3   1  2  3  4  5  6  7
+ 6  7  8  9 10 11 12   4  5  6  7  8  9 10   8  9 10 11 12 13 14
+13 14 15 16 17 18 19  11 12 13 14 15 16 17  15 16 17 18 19 20 21
+20 21 22 23 24 25 26  18 19 20 21 22 23 24  22 23 24 25 26 27 28
+27 28 29 30           25 26 27 28 29 30 31  29 30
+
+July                  August                September
+Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa
+       1  2  3  4  5                  1  2      1  2  3  4  5  6
+ 6  7  8  9 10 11 12   3  4  5  6  7  8  9   7  8  9 10 11 12 13
+13 14 15 16 17 18 19  10 11 12 13 14 15 16  14 15 16 17 18 19 20
+20 21 22 23 24 25 26  17 18 19 20 21 22 23  21 22 23 24 25 26 27
+27 28 29 30 31        24 25 26 27 28 29 30  28 29 30
+                      31
+
+October               November              December
+Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa
+          1  2  3  4                     1      1  2  3  4  5  6
+ 5  6  7  8  9 10 11   2  3  4  5  6  7  8   7  8  9 10 11 12 13
+12 13 14 15 16 17 18   9 10 11 12 13 14 15  14 15 16 17 18 19 20
+19 20 21 22 23 24 25  16 17 18 19 20 21 22  21 22 23 24 25 26 27
+26 27 28 29 30 31     23 24 25 26 27 28 29  28 29 30 31
+                      30</pre>
+
+				<br>
+				<h4>Bonus Task 2 - Print calendar of adjacent 3 months</h4>
+				<p class="card-text">
+					This is a bonus task, please see grading details in
+					<a href="#grading">Grading section</a>
+				</p>
+
+				<p class="card-text">
+					When user chooses to print the calendar of adjacent 3 months
+					(last month, current month, and next month), indicating by
+					first enter a valid year, and then enter -3 as month.
+					Then, the program will ask which month do the user want to print as current month
+					(note that we only have this prompt in this task).
+					After that, we will start each week on Sunday and print the calendar horizontally.
+				</p>
+
+				<p class="card-text">
+					<strong>Note: </strong> Since we only process year 1800-9999, so if user want
+					to print adjacent 3 months, with Jan 1800 or Dec 9999 as current month,
+					we will consider the case invalid, and your program should ask user to input again.
+				</p>
+
+				<ul>
+					<li>
+						You should print the three months in the same row. Two adjacent months
+						in the same row should be separated by two spaces. For each month,
+						<ul>
+							<li>
+								A sub-title should be displayed, with format "[Month Name] [Year]", for example,
+								"August 2022". To make it easier, please make it left-aligned.
+							</li>
+							<li>
+								Display the names of weekdays, from "Su" to "Sa", words should be
+								separated by one space.
+							</li>
+							<li>
+								Finally, format the calendar like the example below. Dates should be
+								separated by one space, and for dates with only one digit, the digit
+								should be right-aligned.
+							</li>
+						</ul>
+					</li>
+					<li>After printing the calendar, the program finishes.</li>
+					<li>
+						It's ok to have extra spaces <strong>at the end of</strong> each line.
+						See details in <a href="#grading">Grading section</a>
+					</li>
+				</ul>
+
+				<p class="card-text">
+					<strong>Note: </strong> This should be the same as Linux command
+					<code>cal -3 -m [center month] [year]</code>, except that you don't need to
+					align the sub-titles or ouput additional blank line at the end.
+				</p>
+
+				<p class="card-text">
+					Example: (user input is displayed in <span style="color: red">red</span>)
+				</p>
+
+				<pre>Enter year (in range 1800-9999): <span style="color: red">1800</span>
+Enter month (in range 1-12): <span style="color: red">-3</span>
+Enter the month in the center (in range 1-12): <span style="color: red">2</span>
+January 1800          February 1800         March 1800
+Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa
+          1  2  3  4                     1                     1
+ 5  6  7  8  9 10 11   2  3  4  5  6  7  8   2  3  4  5  6  7  8
+12 13 14 15 16 17 18   9 10 11 12 13 14 15   9 10 11 12 13 14 15
+19 20 21 22 23 24 25  16 17 18 19 20 21 22  16 17 18 19 20 21 22
+26 27 28 29 30 31     23 24 25 26 27 28     23 24 25 26 27 28 29
+                                            30 31               </pre>
+
+            </div>
+            <div class="card-footer text-muted">
+              End of Tasks
+            </div>
+          </div>
+
+          <!-- Download section -->
+		  		<!-- ### Complete download section for the assignment ### -->
+          <div class="card mb-4">            
+            <div class="card-body" id="download">
+              <h3 class="card-title">Resources &amp; Sample I/O</h3>
+				<ul>
+					<li>
+						Skeleton code: <strong>No skeleton for this PA, you are expected to start from scratch.</strong>
+					</li>
+					<li>
+						Demo programs: <!-- <h4 style="color:red"> Don't have MacOS Apple Silicon version.</h4> -->
+						<a href="../Resources/demo/PA1_Calendar_windows_static.exe">Windows</a> /
+						<a href="../Resources/demo/PA1_Calendar_mac_intel">MacOS Intel</a> /
+						<!-- <a href="../Resources/TBA">MacOS Apple Silicon</a> / -->
+						<a href="../Resources/demo/PA1_Calendar_linux">Linux (compiled on CS Lab 2 Machine)</a>
+					</li>
+					<li>
+						Revealed test cases:
+						<a href="../Resources/tests/zinc_tests_before_ddl.zip">Download here</a>.
+
+						They are the same as examples in <a href="#tasks">Tasks section</a>.
+						Please note that test cases on ZINC before deadline are the same as those examples.
+						<br>
+						<strong>Additional note: </strong>You may notice that the format of test cases downloaded
+						is not the same as the format you see in your terminal. This is because when we test your
+						program, we will let your program read input from a file and output to another file.
+						Please refer to <a href="#how_to_test">this section</a>
+						about how you can test your program by yourself.
+						<ul>
+							<li>
+								Sample 1: horizontal, start weeks on Sunday
+							</li>
+							<li>
+								Sample 2: horizontal, start weeks on Monday
+							</li>
+							<li>
+								Sample 3: vertical, start weeks on Sunday
+							</li>
+							<li>
+								Sample 4: vertical, start weeks on Sunday
+							</li>
+							<li>
+								Sample 5: Bonus 1: print whole year
+							</li>
+							<li>
+								Sample 6: Bonus 2: print adjacent 3 months
+							</li>
+						</ul>
+					</li>
+				</ul>
+            </div>            
+			<div class="card-footer text-muted">
+              End of Resources &amp; Sample I/O
+            </div>
+          </div>
+		  
+			<!-- Submission and grading section -->
+			<!-- ### Complete submission and grading section for the assignment ### -->
+          <div class="card mb-4">            
+            <div class="card-body" id="submission">
+              <h3 class="card-title">Submission &amp; Grading</h3> 
+				<p class="card-text">
+					<strong>Deadline: <span style="color: red">Sat, 17/9/22</span> HKT 23:59.</strong><br>
+					Best 10 out of 11 PAs will be counted towards your course grade, each with <span style="color: red">6.5%</span> at most via
+					Automated Grading on the
+						<a href="https://zinc.cse.ust.hk/">ZINC Online Submission System</a>.
+						Compress the single source code file <code>main.cpp</code> by itself as <code>PA1.zip</code>
+						for submission to ZINC.
+				</p>
+				<br>
+				<h4 id="grading">Grading Scheme</h4>
+				<p class="card-text">
+					The grading process will be performed entirely on
+					<a href="https://zinc.cse.ust.hk/">ZINC Online Submission System</a>.
+					We will input some contents to your program, and
+					<strong>simply compare its output with expected output</strong>.
+					To avoid being too demanding, ZINC will consider the results are identical
+					as long as they "look exactly the same". To be more specific,
+					<strong>trailing spaces at the end of each line and a newline character
+					at the end of the file will be ignored.</strong>
+					<!-- <h4 style="color:red;"> To TA: please remember to turn on
+					"ignore trailing spaces" and "ignore blank lines after file" options on ZINC.</h4> -->
+				</p>
+				<p class="card-text">
+					For example, if two lines are
+					<code>"1 2 3 4"</code> and <code>"1 2 3 4 &nbsp;&nbsp;&nbsp;"</code>,
+					they will be considered identical. However,
+					if two lines are <code>"1 2"</code> and <code>"1 &nbsp;&nbsp;&nbsp; 2"</code>,
+					they are not the same, since we only
+					ignore spaces <strong>at the end of each line/the file</strong>.
+				</p>
+				<p class="card-text">
+					Before the deadline, the test cases on ZINC will only contain a few cases. If you passed
+					those tests, it only means your program can successfully run on ZINC and can pass
+					those test cases. The result is by no means complete and the score is irrelavant to
+					your actual score.
+					In the actual grading stage after the deadline, we will use a <strong>totally different set of
+					test cases</strong>, which is expected to be more complete and more strict,
+					to test the correctness of your program.
+				</p>
+				<p class="card-text">
+					Please ensure that you submit to ZINC well before the deadline as <strong>all late submissions will
+					be automatically rejected</strong>.
+				</p>
+				<br>
+				<p class="card-text">
+					<strong>Note:</strong> When testing Task 1-5, we guarantee that there won't be input where month is -1 or -3.
+					So even if you complete Bonus part, your grade in Task 1-5 will not be affected.
+				</p>
+				<br>
+				<h4 id="how_to_test">How to test my program</h4>
+				<p class="card-text">
+					You may compile your code using this command:
+					(the <code>-Wall</code> flag is optional, it will show all warnings to you)
+					<pre><code class="language-bash">g++ -o main main.cpp -std=c++11 -Wall</code></pre>
+					Next, please place <code>main, input.txt, output.txt</code>
+					(i.e., the sample input/output that we provided)
+					in the same folder, and
+					let your program read input from file <code>input.txt</code> and output result
+					to file <code>my_output.txt</code> by using this command:
+					(you can change the filename, e.g. input3.txt and output3.txt, etc.)
+					<pre><code class="language-bash">./main < input.txt > my_output.txt</code></pre>
+					If you are using Windows PowerShell, you may use the following command instead:
+					<pre><code class="language-bash">Get-Content input.txt | ./main > my_output.txt</code></pre>
+					Then you may check if your output in
+					<code>my_output.txt</code> is the same as the expected output <code>output.txt</code>
+					by using <a href="https://www.diffchecker.com/diff">this online diff checker tool</a>
+				</p>
+				<img src="comp2012h_pa1_files/diff-checker.png" width="100%"/>
+				<p class="card-text">
+					By default it will not ignore trailing spaces and blank lines, you need to
+					click "Tools" at the top-right, then "Trim whitespace", as the image shows.
+				</p>
+				<br>
+				<p class="card-text">
+					<strong>Alternative: </strong>
+					If you are using a Linux machine (MacOS is not ok) or using CS Lab 2 machines, you can directly
+					use this command:
+					<pre><code class="language-bash">diff -Z -B output.txt my_output.txt</code></pre>
+					This command will automatically ignore trailing spaces and blank lines.
+					If you see nothing after executing this command, then the contents in these two files
+					is considered the same.
+				</p>
+            </div>
+		  	<div class="card-footer text-muted">
+              End of Submission &amp; Grading
+            </div>
+          </div>
+		  
+		<!-- FAQ section -->
+		<!-- ### Complete FAQ section for the assignment ### -->
+          <div class="card mb-4">            
+            <div class="card-body" id="faq">
+              <h3 class="card-title">Frequently Asked Questions</h3>
+				<p>
+				<b>Q</b>: My code doesn't work, there is an error/bug, here is the code, can you help me fix it?<br>
+					<b>A</b>: As the assignment is a major course assessment, to be fair, you are supposed to work on it
+						on your own and we should not finish the tasks for you. We are happy to help with explanations and
+						advice, but we shall not directly debug the code for you.
+					</p>
+					<p>
+						<b>Q</b>: The demo program enters an infinite loop when given unexpected input (e.g. inputting a
+						character when expecting an integer). Is this a bug? <br>
+						<b>A</b>: This is just the behavior of <code>cin &gt;&gt; variable;</code> when given input that is
+						not type-matched. You don't need to worry about such for PA1, you can assume the user always
+						input the correct data type. For example, if we want an <code>int</code>, the user will always
+						input an <code>int</code>, not other weird things. However, the user input can still be
+						invalid, for example, you want an integer between 1800-9999, and the user may input 1700, or
+						12345, etc.
+					</p>
+					<p>
+						<b>Q</b>: What are the restrictions regarding modifying the header files, writing our own helper
+						functions, including extra header files, etc.? <br>
+						<b>A</b>: The only hard restriction is that you can only submit <code>main.cpp</code> to ZINC, and
+						include only one header file <code>#include &lt;iostream&gt;</code>. Anything else
+						are not strictly prohibited, as long as your code can run on ZINC.
+					</p>
+            </div>
+		    		<div class="card-footer text-muted">
+              End of FAQ
+            </div>          
+          </div>
+        </div>
+				
+        <!-- Sidebar Widgets Column -->
+        <div class="col-md-3">
+		  		<div class="sticky-top">
+            <!-- Menu Widget -->
+            <div class="card my-12">
+              <h5 class="card-header">Menu</h5>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <ul class="mb-0" style="padding-left:20px" type="circle">
+					  <li>
+						<a href="#honor">Honor Code</a>
+					  </li>
+                      <li>
+                        <a href="#objective">Objectives & ILOs</a>
+                      </li>
+							<li>
+								<a href="#introduction">Introduction</a>
+							</li>
+                      <li>
+                        <a href="#description">Description</a>
+                      </li>
+							<li>
+								<a href="#tasks">Tasks</a>
+							</li>
+                      <li>
+                        <a href="#download">Resources &amp; Sample I/O</a>
+                      </li>
+			  		  <li>
+					    <a href="#submission">Submission &amp; Grading</a>
+					  </li>
+					  <li>
+					    <a href="#faq">FAQ</a>
+					  </li>
+                    </ul>
+                  </div>                
+                </div>
+              </div>
+            </div>
+		  
+		    <!-- Maintenance widget -->
+            <div class="card my-4">
+              <h5 class="card-header">Page maintained by</h5>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <ul class="list-unstyled mb-0">
+                      <li>
+                        CHEN, Jierun
+                      </li>
+                      <li>
+                        Email: <a href="mailto:jierunchen@ust.hk">jierunchen@ust.hk</a>
+                      </li>
+					  <li>Last Modified: <script type="text/javascript">document.write(document.lastModified);</script></li>
+                    </ul>
+                  </div>				
+                </div>
+              </div>
+            </div>
+		  
+		  
+		    <!-- Homepage widget -->
+            <div class="card my-4">
+              <h5 class="card-header">Homepage</h5>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <ul class="list-unstyled mb-0">
+                      <li>
+                        <a href="http://course.cse.ust.hk/comp2012h">Course Homepage</a>
+                      </li>
+                    </ul>
+                  </div>				
+                </div>
+              </div>
+            </div>
+		  </div>
+        </div>
+      </div>
+      <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Acknowledgement - The assignment 1 is drafted by LIU Jianmeng.</p>
+		<p class="m-0 text-center text-white">Maintained by COMP 2012H Teaching Team © 2022 HKUST Computer Science
+					and Engineering</p>
+					LIU, Jianmeng
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="comp2012h_pa1_files/jquery.js"></script>
+    <script src="comp2012h_pa1_files/bootstrap.js"></script>	
+  
+
+
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></html>
