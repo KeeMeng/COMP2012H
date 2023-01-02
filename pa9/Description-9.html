@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- ### Change assignment number ### -->
+	<title>COMP 2012H Assignment 9: Multi-type map using Skiplist</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="misc/bootstrap.css" rel="stylesheet">
+
+	<!-- Custom styles for this template -->
+	<link href="misc/blog-home.css" rel="stylesheet">
+
+	<!-- Prism syntax highlighter -->
+	<link href="misc/prism.css" rel="stylesheet">
+
+	<style>
+		pre {
+			background: #f4f4f4 !important;
+			border: 1px solid #ddd !important;
+			border-left: 3px solid #f36d33 !important;
+			color: #666 !important;
+			page-break-inside: avoid !important;
+			font-family: monospace !important;
+			font-size: 14px !important;
+			line-height: 1.6 !important;
+			margin-bottom: 1.6em !important;
+			max-width: 100% !important;
+			overflow: auto !important;
+			padding: 1em 1.5em !important;
+			display: block !important;
+			word-wrap: break-word !important;
+		}
+
+		table,
+		th,
+		td {
+			border: 1px solid black;
+		}
+
+		th,
+		td {
+			padding: 5px;
+		}
+
+		th {
+			text-align: left;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="misc/prettify.css">
+	<script src="misc/prompt.js"></script>
+</head>
+
+<body data-new-gr-c-s-check-loaded="8.880.0" data-gr-ext-installed="">
+	<script src="misc/prism.js"></script>
+
+	<!-- Page Content -->
+	<div class="container">
+
+		<div class="row">
+
+			<!-- Entries Column -->
+			<div class="col-md-9">
+
+				<h2 class="my-4">
+					<span style="color:darkblue">COMP 2012H</span>
+					<small>Honors Object-Oriented Programming and Data Structures</small>
+				</h2>
+
+				<!-- ### Change assignment number and title ### -->
+				<h3 class="my-4">
+					Assignment 9
+					<span style="color:#660066">Multi-type map using Skiplist</span>
+				</h3>
+
+				<!-- Honor Code section -->
+				<div class="card mb-4">
+					<div class="card-body" id="honor" style="background-color:#f4f4f4">
+						<h3 class="card-title">Honor Code</h3>
+						<p class="card-text">
+							We value academic integrity very highly. Please read the <a
+								href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a> section on our
+							course webpage to make sure you understand what is considered as plagiarism and what the
+							penalties are.
+							The following are some of the highlights:
+						</p>
+						<ul>
+							<li>
+								Do NOT try your "luck" - we use sophisticated plagiarism detection software to find
+								cheaters.
+								We also review codes for potential cases manually.
+							</li>
+							<li>
+								The penalty (for <b>BOTH</b> the copier and the copiee) is not just getting a zero in
+								your assignment.
+								Please read the <a href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a>
+								thoroughly.
+							</li>
+							<li>
+								Serious offenders will fail the course immediately, and there will be additional
+								disciplinary actions
+								from the department and university, upto and including expulsion.
+							</li>
+						</ul>
+						<p></p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Honor Code
+					</div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-body" id="objective" style="background-color:#f4f4f4">
+						<h3 class="card-title">Objectives & Intended Learning Outcomes</h3>
+						<p class="card-text">
+							The objective of this assignment is to familiarise you with templates, structs, pointers, operators overloading, and dynamic binding.
+							After this assignment you should be able to:
+						</p>
+						<ol>
+							<li>
+								Use templates to generalize data structures.
+							</li>
+							<li>
+								Understanding the principle of Skiplist and implement it.
+							</li>
+							<li>
+								Use <code>typeinfo</code> library and templates to manipulate with types.
+							</li>
+							<li>
+								Implement a C++ <code>auto</code>-like class.
+							</li>
+						</ol>
+						<p></p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Objectives & Intended Learning Outcomes
+					</div>
+				</div>
+
+				<!-- Introduction section -->
+				<!-- ### Complete introduction section for the assignment ### -->
+				<div class="card mb-4">
+					<!-- ### Add an image representing the assignment content here ### -->
+					<img class="card-img-top" src="misc/pic.png" alt="Card image cap">
+					<div class="card-body" id="introduction">
+						<p class="card-text">
+							<small>
+								<em>
+									An example of a multi-type map: JSON. It can be considered as a map where its values can be <code>int</code>, <code>string</code>, etc...<br>
+                                    Source: <a href="https://www.shapediver.com/blog/json-objects-explained">https://www.shapediver.com/blog/json-objects-explained</a><br>
+								</em>
+							</small>
+						</p>
+						<h3 class="card-title">Introduction</h3>
+
+						<p class="card-text">
+							The goal of this assignment is to implement:
+                            <ul>
+                                <li> (I) A map data structure by using Skiplist, and </li>
+                                <li> (II) A C++ <code>auto</code>-like class, i.e. a wrapper class that could store any type of data, just like the <code>Object</code> class in Java. </li>
+                            </ul>
+                            If you have implemented these 2 parts successfully, combining them together should give you a multi-type map. You may have questions like:  What is a "map"? What is a "Skiplist"? Don't worry! All of the them will be mentioned below.
+						</p>
+                        <br>
+                        <h4 class="card-title">Map</h4>
+                        <p class="card-text">
+							A map (or dictionary) is a data structure that consists of a list of <code>(key, value)</code> pairs. Usually, we may represent a map like this: <code>{"key1": value1, "key2": value2, ...}</code>. For example, the following represents a map of student IDs:
+                            <ul>
+                                <li> {"Sam": 12345678, "Tom": 11223344} </li>
+                                <ul>
+                                    <li> The key <code>"Sam"</code> is having a value <code>12345678</code> </li>
+                                    <li> The key <code>"Tom"</code> is having a value <code>11223344</code> </li>
+                                </ul>
+                            </ul>
+                            Using the example above, if we query the map with the key <code>"Sam"</code>, then the map will return its value <code>12345678</code> to us. For the implementation, one may use linked-list with sentinel node (if you forgot what is a sentinel node, you may go back to the <a href="https://course.cse.ust.hk/comp2012h/assignments/PA5/Description/">PA5 Description Page</a> to have a review) to implement the map. 
+							<p></p>
+							<img class="card-img-top" src="misc/linked-list.png" alt="Linked-list map">
+							<small>
+								<em>
+									A map implemented using linked-list. The "..." in the sentinel node means we don't care about the value of it.<br>
+                                    <br>
+								</em>
+							</small>
+							As can be seen from the above, when using linked-list to implement a map, a <code>Node</code> is having data memebers <code>key</code>, <code>value</code>, and <code>next_ptr</code>. Also, it is ovbious that the insert, delete and query operation in this kind of map is literally the same as the operations in a linked-list.
+						</p>
+						<br>
+						<h4 class="card-title">Skiplist</h4>
+						<p class="card-text ">
+							However, one of the disadvantages of linked-list is that it will need to traverse the whole list if the key being queried is at the end of the list. This leads to slow operations if the given list is large! <br>
+							The main reason that it is slow because there is only 1 linked-list to traverse. Therefore, why not try to make more linked-lists instead of just 1? This is basically the idea of Skiplist!
+							
+							<p></p>
+							<img class="card-img-top" src="misc/skiplist-1.png" alt="Skiplist example">
+							<small>
+								<em>
+									An example of a Skiplist. <br>
+                                    <br>
+								</em>
+							</small>
+
+							Here we will briefly talk about the structure of Skiplist.
+							<p></p>
+							From the perspective of the whole Skiplist:
+								<ul>
+									<li>
+										All the nodes in the Skiplist need to be <b>sorted by the key</b>, this implies the keys in the Skiplist need to be comparable.
+										<ul>
+											<li>
+												Using the Skiplist example above, it implies <code>k1 < k2 < k3 < k4 < k5</code>.
+											</li>
+										</ul>
+									</li>
+									<li>
+										There are <b>multiple levels</b> of linked-lists, where the number of levels in the Skiplist are probabilistic, and it is based during the creation of the nodes.
+										<ul>
+											<li>
+												Details will be given from the perspective of a node.
+											</li>
+										</ul>
+									</li>
+									<li>
+										The Level 0 linked-list must be the oridinary linked-list that links all the nodes in the Skiplist together.
+									</li>
+									<li>
+										While the other levels of linked-lists may skip some of the nodes in the Skiplist.
+										<ul>
+											<li>
+												Thats the word "skip" in Skiplist means.
+											</li>
+											<li>
+												You can think of these extra linked-lists are express lane for searching due to the fact that the nodes are sorted.
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</ul>
+							<p></p>
+							From the perspective of a node:
+								<ul>
+									<li>
+										Instead of having only one <code>Node*</code>, each <code>Node</code> is going to have an <b>array of </b><code>Node*</code> to store the array of <code>next_ptr</code>.
+									</li>
+									<li>
+										The <code>Node*</code> array must have at least length of 1, as each <code>Node</code> must be linked through the Level 0 linked-list.
+									</li>
+									<li>
+										Except the sentinel node, the length of the <code>Node*</code> array will be determined during the insertion of the <code>Node</code> and will not be changed after the <code>Node</code> is being inserted to the Skiplist.
+									</li>
+									<li>
+										Continue from the point above, if the <code>Node</code> is being linked by Level <code>i</code>, it will be linked by Level <code>i+1</code> too with a fixed probability <code>p</code>.
+										<ul>
+											<li>
+												In other words, if a <code>Node</code> is being linked by Level <code>i</code>, then it must also be linked by Level <code>i-1, i-2, ..., 1, 0</code> too.
+											</li>
+										</ul>
+									</li>
+									<li>
+										Therefore, a <code>Node*</code> array with length <code>i</code> means that <cod>Node</cod> is being linked by Level <code>i-1, i-2, ..., 1, 0</code> linked-lists.
+									</li>
+								</ul>
+							</ul>
+							<br>
+							<h4 class="card-title" id="basic-skiplist-ops">Basic Operations of the Skiplist map</h4>
+							The routine of the operations in the Skiplist will be described here. You may also want read this <a href="../Resources/skiplist-examples.pdf">supplementary slides</a> which contain concrete examples.
+							<p></p>
+							<h5 class="card-title">Search (Assuming the key exists)</h5>
+							<ol>
+								<li>
+									Starting from the highest level of the Skiplist.
+								</li>
+								<li>
+									Traverse the current level until
+									<ul style="list-style-type: circle">
+										<li>
+											The required <code>Node</code> with the key is found.
+											<ul>
+												<li>
+													Found! Return the <code>Node</code> value.
+												</li>
+											</ul>
+										</li>
+										<li>
+											The current <code>Node</code> key is larger than the desired key <b>OR</b> the traversal reaches the end.
+											<ul>
+												<li>
+													Go back to the previous <code>Node</code> on the current level.
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+								<li>
+									Go down by 1 level, repeat Step 2 until the desired key is found.
+								</li>
+							</ol>
+							The case where the key does not exist in the map is not mentioned here. This is left as an exercise. ;)
+							<p></p>
+							<h5 class="card-title">Insert</h5>
+							<ul>
+								<li>
+									A new <code>Node</code> will be created and its <code>Node*</code> array length will be decided as follows:
+									<ol>
+										<li>
+											Initiate the length to 1.
+										</li>
+										<li>
+											<code>true</code> with a probability <code>p</code>, <code>false</code> otherwise.
+										</li>
+										<li>
+											Add the length by 1 if the result in Step 2 is <code>true</code>, and repeat Step 2. Otherwise, stop the iteration.
+										</li>
+									</ol>
+									<ul>
+										<li>
+											This algorithm has been implemented to you in the skeleton code already so you don't have to implement it yourself.
+										</li>
+									</ul>
+								</li>
+								<li>
+									Now, just insert the new created <code>Node</code> to the Skiplist like what you normally do with oridinary linked-list.
+								</li>
+							</ul>
+							Note:
+							<ul>
+								<li>
+									You will need to find a siutable position to insert the <code>Node</code> as to be recalled that the keys in the Skiplist needs to be kept sorted.
+								</li>
+								<li>
+									The sentinel node <code>Node*</code> array may need to be expanded if the <code>Node*</code> array of the inserting <code>Node</code> is larger.
+								</li>
+							</ul>
+							<p></p>
+							<h5 class="card-title">Delete</h5>
+							<ul>
+								<li>
+									Very simple and easy, just remove the node on all the linked-list levels like what you normally do on oridinary linked-list.
+								</li>
+							</ul>
+							Note:
+							<ul>
+								<li>
+									You may also need to shrink the sentinel node <code>Node*</code> array if necessary, same idea as inserting.
+								</li>
+							</ul>
+						</p>
+					</div>
+
+					<div class="card-footer text-muted">
+						End of Introduction
+					</div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-body" id="description">
+						<h3 class="card-title">Description</h3>
+						<p class="card-text">
+							Please read the <a href="#faq">FAQ</a> and <a href="#change">Change Log</a> sections regularly, and do check it
+							one day before the deadline to make sure you don't miss any clarification,
+							even if you have already submitted your work by then. You can also raise questions
+							on Piazza and remember to use the "pa9" tag.
+						</p>
+						<br>
+						<h4>Code structure</h4>
+						<p class="card-text">
+							The skeleton code structure is as follows:
+						</p>
+						<pre>PA9&#10;├── skiplist.hpp&#10;├── object.hpp&#10;└── main.cpp&#10;</pre>
+						<p class="card-text">
+							The <code>skiplist.hpp</code> contains the Skiplist class definition and the class function declarations.
+							<p></p>
+							The <code>object.hpp</code> contains the object class (i.e. the C++ <code>auto</code>-like class) definition and the class function declarations.
+							<p></p>
+							The <code>main.cpp</code> contains some test cases for you to test.
+						</p>
+						<br>
+						<h4>Definition of Skiplist map</h4>
+						<p class="card-text">
+							The following is the <code>Node</code> class definition in this assignment, which is defined in <code>skiplist.hpp</code>.
+						</p>
+						<pre class="language-cpp"><code class="language-cpp">template &lt;typename K, typename V&gt;&#10;struct Node {&#10;    K key; //The key of the Node&#10;    V value; //The value of the Node&#10;    Node** nexts; //Storing an array of Node* next_ptr&#10;    int levels; //Length of Node** nexts&#10;};</code></pre>
+						<p class="card-text">
+							Here is an example of a <code>Node</code> with data members shown:
+						</p>
+						<img class="card-img-top" src="misc/skiplist-node-eg1.png"  alt="skiplist-node-example-1">
+						<p></p>
+						<p class="card-text">
+							The following is the <code>Skiplist</code> class definition in this assignment, it is also defined in <code>skiplist.hpp</code>.
+						</p>
+						<pre class="language-cpp"><code class="language-cpp">template &lt;typename K, typename V&gt;&#10;class Skiplist {&#10;    double prob; //the prob `p` to add a new level for a node&#10;    Node&lt;K, V&gt;* head; //Node* that points to the head (sentinel node) of the Skiplist&#10;};</code></pre>
+						<br>					
+						<h4 id="impl-object">Implementation of <code>object</code> class</h4>
+						<p class="card-text">
+							In order to understand how an <code>object</code> class can be implemented, lets consider a simplier example. How can we create a class that could store a value of <code>int</code> or <code>string</code>? Polymorphism and dynamic binding may help us here! For example, one can implement it like this:
+						</p>
+						<pre class="language-cpp"><code class="language-cpp">//Constructors or member functions definition are not shown&#10;class object_pointer { /*...*/ };&#10;class int_pointer : public object_pointer {int value; /*...*/};&#10;class str_pointer : public object_pointer {string value; /*...*/};&#10;&#10;//This pointer may now point to an object that is either containing a int value or a string value!&#10;object_pointer* int_or_str;&#10;&#10;int_or_str = new int_pointer(1); //It now stores an int&#10;int_or_str->type() //"It's a int"&#10;&#10;int_or_str = new string_pointer(string("2012H")); //It now stores a string&#10;int_or_str->type() //"It's a string"&#10;</code></pre>
+						<p class="card-text">
+							The following diagram shows the relationship between classes of the mentioned example:
+						</p>
+						<img class="card-img-top" src="misc/object_int_str.png"  alt="object-int-str" style="width: 40%; display: block; margin-left: auto; margin-right: auto;">
+						<br>
+						<p class="card-text">
+							What should be the next step to create the <code>object_pointer</code> class? It is impossible for us to create a <code>type_pointer</code> class for each type! The answer is obvious though, we can make use of <b>generalization</b>.
+						</p>
+						<p class="card-text">
+							By generalizing <code>int_pointer</code>, <code>str_pointer</code>, etc... into a class named <code>T_pointer</code>, we will be able to implement the <code>object_pointer</code> class successfully.
+						</p>
+						<img class="card-img-top" src="misc/object_generalize.png"  alt="object-implementation-generalization" >
+						<p class="card-text">
+							<small>
+								<em>
+									The idea of how the <code>object_pointer</code> class works by using polymorphism and generalization.
+								</em>
+							</small>
+						</p>
+						<p class="card-text">
+							As a result, we can create the <code>object</code> class which is just a wrapper to store a <code>object_pointer*</code>. The <code>object</code> class definition can be found inside <code>object.hpp</code>:
+						</p>
+						<pre class="language-cpp"><code class="language-cpp">class object {&#10;    object_pointer* obj_ptr;&#10;};</code></pre>
+						<p class="card-text">
+							The definition of <code>object_pointer</code> and <code>T_pointer</code> are also included in <code>object.hpp</code>, but they are incomplete. You will have to complete them as one of the tasks in this assignment.
+						</p>
+						<br>
+						<h4 id="additional-remarks">Additional Remarks</h4>
+						<p class="card-text">
+							<ul>
+								<li>
+									You are required to implement
+									<ul>
+										<li>
+											The <a href="#tasks-part1">Part I</a> tasks in <code>skiplist.tpp</code>,
+										</li>
+										<li>
+											The <a href="#tasks-part2">Part II</a> tasks in <code>object.hpp</code> and <code>object.tpp</code>,
+										</li>
+									</ul>
+									The <code>object.hpp</code> file has already been given to you but you will have to create <code>skiplist.tpp</code> and <code>object.tpp</code> on your own, <b>and submit these three files only to ZINC</b>.
+								</li>
+								<li>
+									You are ONLY allowed to modify the structs <code>object_pointer</code> and <code>T_pointer</code>, and uncommenting function declarations of bonus tasks (if applicable) inside <code>object.hpp</code>. <b>Any modifications beyond inside</b> <code>object.hpp</code><b>, or modifications inside </b> <code>skiplist.hpp</code> <b>are strictly forbidden</b>.
+								</li>
+								<li>
+									You are NOT allowed to include any additional libraries. All the required libraries are already included in the skeleton code.
+								</li>
+								<li>
+									You are NOT allowed to use the <code>auto</code> or <code>decltype</code> keywords.
+								</li>
+								<li>
+									You are NOT allowed to define any static or global variables, or additional classes or structs. There is no need of it in this assignment.
+								</li>
+							</ul>
+						</p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Description
+					</div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-body" id="tasks">
+						<h2 class="card-title">Tasks</h2>
+						<p class="card-text">
+							This section describes the headers or functions that you will need to implement. It is not required to implement Part 1 before Part 2.
+						</p>
+						<br>
+						<h3 style="text-align: center" id="tasks-part1">Part I: Skiplist</h3>
+						<br>
+						<p class="card-text"> Implement the following functions of <code>Node</code> and <code>Skiplist</code> class inside the file <code>skiplist.tpp</code>. You may want to implement the functions in order as the functions you implemented before may help you in the latter functions.</p>
+					</div>
+					
+					<ul class="list-group list-group-flush">
+
+						<li class="list-group-item">
+							<pre><code class="language-cpp">Node&lt;K, V&gt;()</code></pre>
+
+							<strong>Description - </strong>The default constructor of <code>Node</code>. This will be used to create the sentinel node.
+							<ul>
+								<li>
+									As all nodes must have Level 0, you should allocate a dynamic <code>Node*</code> array of size 1 and have <code>nullptr</code> point by it.
+								</li>
+								<li>
+									Don't forget to initialize the member variable <code>levels</code>.
+								</li>
+								<li>
+									There is no need to initialize member variables <code>key</code> or <code>value</code> as we don't care about them in the sentinel node. You may assume <code>K</code> and <code>V</code> is going have default construtor.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code class="language-cpp">Node&lt;K, V&gt;(K key, V value, int levels)</code></pre>
+
+							<strong>Description - </strong>The other constructor of <code>Node</code>. This will be used to create a regular node.
+							<ul>
+								<li>
+									Allocate a dynamic <code>Node*</code> array of size <code>levels</code> and have <code>nullptr</code> point by it.
+								</li>
+								<li>
+									Don't forget to initialize the remaining member variables.
+								</li>
+							</ul>
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>key</code> - the key of the node.
+								</li>
+								<li>
+									<code>value</code> - the value of the node.
+								</li>
+								<li>
+									<code>levels</code> - the number of levels of the node, which should be larger than 0.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>~Node&lt;K, V&gt;()</code></pre>
+
+							<strong>Description - </strong>The destructor of <code>Node</code>. Remember to deallocate any allocated memory.
+						</li>
+
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>Skiplist&lt;K, V&gt;(double prob = 0.25)</code></pre>
+
+							<strong>Description - </strong>The conversion constructor of <code>Skiplist</code>. This creates an empty Skiplist.
+							<ul>
+								<li>
+									An empty Skiplist means having just a sentinel node.
+								</li>
+								<li>
+									Initialize the member variable <code>prob</code> too.
+								</li>
+							</ul>
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>prob</code> - the probability <code>p</code> to add a new level for a node, used in Skiplist inserting, defaults to <code>0.25</code>.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>~Skiplist&lt;K, V&gt;()</code></pre>
+
+							<strong>Description - </strong>The deconstructor of <code>Skiplist</code>. Remember to deallocate any allocated memory.
+						</li>
+						
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>Skiplist&lt;K, V&gt;& operator=(const Skiplist&lt;K, V&gt;& other)</code></pre>
+
+							<strong>Description - </strong>The assignment operator of <code>Skiplist</code>. You should do a deep copy of the whole Skiplist.
+							<br>
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>other</code> - the <code>Skiplist</code> object to be copied.
+								</li>
+							</ul>
+							<br>
+							<strong>Return value - </strong>A reference to the target of assignment.
+						</li>
+
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>Skiplist&lt;K, V&gt;(const Skiplist&lt;K, V&gt;& other)</code></pre>
+
+							<strong>Description - </strong>The deep copy constructor of <code>Skiplist</code>.
+							<br>
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>other</code> - the <code>Skiplist</code> object to be copied.
+								</li>
+							</ul>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									You may make use of the <code>operator=</code> function if you want.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>bool get(const K& get_key, V& rtn_value) const</code></pre>
+
+							<strong>Description - </strong>The search function of <code>Skiplist</code>. Gets the value associated with the key <code>get_key</code>, and the result is returned by reference with <code>rtn_value</code>.
+							<br>
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>get_key</code> - the target key to be found.
+								</li>
+								<li>
+									<code>rtn_value</code> - a reference parameter which is used to return the value associated with <code>get_key</code>. Should not be touched if the target key is not found.
+								</li>
+							</ul>
+							<br>
+							<strong>Return value - </strong><code>true</code> if the target key is found, <code>false</code> otherwise.
+							<br>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									For example, if the Skiplist is having the content <code>{"Ben": 111, "Mary": 123}</code>, then 
+									<ul>
+										<li>
+											<code>get("Mary", my_var)</code> should return <code>true</code>, with <code>my_var</code> being <code>123</code> after the function returns,
+										</li>
+										<li>
+											<code>get("John", my_var)</code> should return <code>false</code>.
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>void update(const K& update_key, const V& update_value)</code></pre>
+
+							<strong>Description - </strong>The update function of <code>Skiplist</code>. Updates the value associated with the key <code>get_key</code> to <code>update_value</code>. In exact, your function should:
+							<ul>
+								<li>
+									If the node with key <code>update_key</code> is found, just replace the associated value of that node to <code>update_value</code>.
+								</li>
+								<li>
+									Otherwise, if the node doesn't exist in the Skiplist, you should create a new node and insert it to the Skiplist.
+								</li>
+							</ul>
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>update_key</code> - the target key to be updated.
+								</li>
+								<li>
+									<code>update_value</code> - the new value to be associated with the key <code>update_key</code>.
+								</li>
+							</ul>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									In the scenario where a node needs to be created, you should determine its node level by calling the <code>getRandomLevels()</code> function once. As mentioned in <a href="#basic-skiplist-ops">Basic Skiplist Operations</a>, this function has already been implemented to you.
+								</li>
+								<li>
+									Be reminded that you shall keep the Skiplist sorted.
+								</li>
+								<li>
+									You should find the node to be updated, or the correct position to insert the new node by a similar approach on how you search for a node in Skiplist.
+								</li>
+								<li>
+									Be reminded that the sentinel node level should also be extended when necessary.
+								</li>
+								<li>
+									For example, if the Skiplist is having the content <code>{"Ben": 111, "Mary": 123}</code>, then 
+									<ul>
+										<li>
+											<code>update("Mary", 999)</code> should update the Skiplist to <code>{"Ben": 111, "Mary": 999}</code>,
+										</li>
+										<li>
+											<code>update("John", 567)</code> should update the Skiplist to <code>{"Ben": 111, "John": 567, "Mary": 123}</code>.
+										</li>
+									</ul>
+								</li>
+							</ul>
+
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>bool remove(const K& remove_key)</code></pre>
+							<strong>Description - </strong>The delete function of <code>Skiplist</code>. This removes the node with key <code>remove_key</code> from the Skiplist. No action is needed if the key doesn't exist in the Skiplist.
+							<br><br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>remove_key</code> - the key to be removed.
+								</li>
+							</ul>
+							<br>
+							<strong>Return value - </strong><code>true</code> if the key <code>remove_key</code> exists in the Skiplist originally, <code>false</code> otherwise.
+							<br>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									Again, you should find the node to be removed, by a similar approach on how you search for a node in Skiplist.
+								</li>
+								<li>
+									Be reminded that the sentinel node level should also be shrinked when necessary.
+								</li>
+								<li>
+									For example, if the Skiplist is having the content <code>{"Ben": 111, "Mary": 123}</code>, then 
+									<ul>
+										<li>
+											<code>remove("Mary")</code> should update the Skiplist to <code>{"Ben": 111}</code>, and return <code>true</code>,
+										</li>
+										<li>
+											<code>remove("John")</code> should remain the Skiplist unchanged, and return <code>false</code>.
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>int size() const</code></pre>
+							<strong>Description - </strong>Returns the size of the Skiplist.
+							<br><br>
+							<strong>Return value - </strong>The number of key-value pairs in the Skiplist.
+							<br>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									For example,
+									<ul>
+										<li>
+											An empty Skiplist returns <code>0</code>,
+										</li>
+										<li>
+											A Skiplist being <code>{"Ben": 111, "Mary": 123}</code> returns <code>2</code>.
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>bool empty() const</code></pre>
+							<strong>Description - </strong>Returns whether the Skiplist is empty.
+							<br><br>
+							<strong>Return value - </strong><code>true</code> if the Skiplist is empty, <code>false</code> otherwise.
+						</li>
+
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>void print() const</code></pre>
+							<strong>Description - </strong>Prints the Skiplist map out in the form of key-value pairs. (i.e. <code>{k1: v1, k2: v2, ...}</code>)
+							<ul>
+								<li>
+									An <code>endl</code> should be printed at the end.
+								</li>
+							</ul>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									For example,
+									<ul>
+										<li>
+											An empty Skiplist prints <code>{}</code>,
+										</li>
+										<li>
+											A Skiplist being <code>{"Ben": 111, "Mary": 123}</code> will print <code>{Ben: 111, Mary: 123}</code>.
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>template &lt;typename T&gt;&#10;Skiplist&lt;K, T&gt; map(T (*f)(V value)) const</code></pre>
+
+							<strong>Description - </strong>This function maps all the value of type <code>V</code> in a Skiplist, to another value of type <code>T</code> using the function <code>f</code>.
+							<br><br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>f</code> - the mapping function that takes a paramater <code>value</code>, which returns a new value based on the original value.
+								</li>
+							</ul>
+							<br>
+							<strong>Return value - </strong>The new mapped Skiplist.
+							<br>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									The parameter <code>f</code> here is called <b>function pointer</b>, it is just C++ supports us to <b>pass function</b> as a parameter to another function. You can just use <code>f</code> like how you use a function normally.
+								</li>
+								<li>
+									Only the key-value pairs of the returned Skiplist will be checked. This means the returned Skiplist is not required to be structurally the same as the original Skiplist.
+								</li>
+								<li>
+									You may want to make use of functions that you have implemented already.
+								</li>
+								<li>
+									For example, if we define the function <pre class="language-cpp"><code>double square(int x) {return x*x;}</code></pre> and if we have a <code>Skiplist&lt;string, int&gt;</code> being <code>{"a": 3, "b": 6}</code>:
+									<ul>
+										<li>
+											<code>map(square)</code> will returns a <code>Skiplist&lt;string, double&gt;</code> being <code>{"a": 9, "b": 36}</code>.
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>Skiplist&lt;K, V&gt; filter(bool (*f)(V value)) const</code></pre>
+
+							<strong>Description - </strong>This function filters all the values in a Skiplist, using the given function <code>f</code>.
+							<br><br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>f</code> - the filter function that takes a paramater <code>value</code>, which will be filtered out from the Skiplist if <code>f</code> returns <code>false</code>.
+								</li>
+							</ul>
+							<br>
+							<strong>Return value - </strong>The new filtered Skiplist.
+							<br>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									Only the key-value pairs of the returned Skiplist will be checked. This means the returned Skiplist is not required to be structurally the same as the original Skiplist.
+								</li>
+								<li>
+									You may want to make use of functions that you have implemented already.
+								</li>
+								<li>
+									For example, if we define the function <pre class="language-cpp"><code>bool positive(double x) {return x > 0;}</code></pre> and if we have a <code>Skiplist&lt;string, double&gt;</code> being <code>{"a": 3.1, "b": -6.0}</code>:
+									<ul>
+										<li>
+											<code>filter(positive)</code> will returns a <code>Skiplist&lt;string, double&gt;</code> being <code>{"a": 3.1}</code>.
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>Skiplist&lt;K, V&gt; operator+(const Skiplist& other) const</code></pre>
+
+							<strong>Description - </strong>The <code>+</code> operator merges two Skiplists together. You can just think this function as "batch" update.
+							<br>
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>other</code> - the other Skiplist to be merged with the current Skiplist.
+								</li>
+							</ul>
+							<br>
+							<strong>Return value - </strong>The merged Skiplist.
+							<br>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									Only the key-value pairs of the returned Skiplist will be checked. This means the returned Skiplist is not required to be structurally the same as the original Skiplist.
+								</li>
+								<li>
+									The order of the key-value pairs in the map should be the same as in the Skiplist.
+								</li>
+								<li>
+									You may want to make use of functions that you have implemented already.
+								</li>
+								<li>
+									For example, if we have a Skiplist <code>a</code> being <code>{"Ben": 111, "Mary": 123}</code>:
+									<ul>
+										<li>
+											Let Skiplist <code>b</code> being <code>{"Alex": 111, "John": 345}</code>, then <code>a + b</code> returns a Skiplist being <code>{"Alex": 111, "Ben": 111, "John": 345, "Mary": 123}</code>
+										</li>
+										<li>
+											Let Skiplist <code>c</code> being <code>{"Alex": 111, "Mary": 345}</code>, then <code>a + c</code> returns a Skiplist being <code>{"Alex": 111, "Ben": 111, "Mary": 345}</code>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+
+					<div class="card-body" id="tasks">
+						<br>
+						<h3 style="text-align: center" id="tasks-part2">Part II: Object</h3>
+						<br>
+						<p class="card-text">
+							<h5><strong>Header of </strong><code>object.hpp</code></h5><p></p>
+							Before you start to implement functions for <code>object</code> class, you will have to complete the header <code>object.hpp</code> first. Here is the skeleton code provided to you for structs <code>object_pointer</code> and <code>T_pointer</code>.
+							<pre class="language-cpp"><code>struct object_pointer {&#10;&#10;};&#10;&#10;struct T_pointer {&#10;	T value;&#10;	T_pointer(T value);&#10;	const std::type_info& type() const;&#10;	object_pointer* copy() const;&#10;};</code></pre>
+							As can be seen, they are incomplete. You task here is to use the ideas mentioned in the <a href="#impl-object">implementation of object class</a>, which are <b>dynamic binding and generalization</b> to complete the two structs.
+							<p></p>
+							<strong>Important Notes</strong>
+							<ul>
+								<li>
+									You are ONLY allowed to modify the struct <code>object_pointer</code> and <code>T_pointer</code>.
+								</li>
+								<li>
+									You are NOT allowed to add/remove/rename any data members to both structs.
+								</li>
+								<li>
+									During the grading, we will use your <code>object.hpp</code> header file to compile the program. Please make sure you have performed this task correctly. It should be fine as long as your <code>object</code> class member functions are working properly, as only the <code>object</code> class member functions will be tested.
+								</li>
+							</ul>
+						</p>
+						<br>
+						<p class="card-text">
+							<h5><strong>Member functions of </strong><code>T_pointer</code></h5><p></p>
+							Implement the member functions of <code>T_pointer</code> inside <code>object.tpp</code>. You should implement these functions first before you move on implementing the functions for <code>object</code> class. If you are implementing correctly, they should all just be in few lines.
+						</p>
+					</div>
+
+					<ul class="list-group list-group-flush">
+
+						<li class="list-group-item">
+							<pre><code class="language-cpp">T_pointer(T value)</code></pre>
+
+							<strong>Description - </strong>Conversion constructor for <code>T_pointer</code>, uses to initialize <code>value</code>.
+							<br><br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>value</code> - the value to be stored in <code>T_pointer</code>
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code class="language-cpp">const std::type_info& type() const</code></pre>
+
+							<strong>Description - </strong>This function returns the <code>type_info</code> of <code>T</code>, using the <code>typeinfo</code> library.
+							<br><br>
+							<strong>Return value - </strong>The <code>typeid</code> of type <code>T</code>.
+						</li>
+
+						<li class="list-group-item">
+							<pre><code class="language-cpp">object_pointer* copy() const</code></pre>
+
+							<strong>Description - </strong>This function returns a deep copy of the current <code>T_pointer</code> object.
+							<br><br>
+							<strong>Return value - </strong>A <code>object_pointer*</code> pointing to a new <code>T_pointer</code> object that is deep copied from the current object.
+						</li>
+					</ul>
+					
+					<div class="card-body">
+						<p class="card-text">
+							<h5><strong>Member functions of </strong><code>object</code></h5><p></p>
+							Implement the member functions of <code>object</code> inside <code>object.tpp</code>. If you are implementing correctly, they should all just be in few lines.
+						</p>
+					</div>
+
+					<ul class="list-group list-group-flush">
+
+						<li class="list-group-item">
+							<pre><code class="language-cpp">template &lt;typename T&gt;&#10;object(const T& value)</code></pre>
+
+							<strong>Description - </strong>Conversion constructor for <code>object</code>.
+							<br><br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>value</code> - the value to be stored to the <code>object</code> object.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code class="language-cpp">~object()</code></pre>
+
+							<strong>Description - </strong>Destructor for <code>object</code>. Remember to deallocate any allocated object.
+						</li>
+
+						<li class="list-group-item">
+							<pre><code class="language-cpp">object& operator=(const object& other)</code></pre>
+
+							<strong>Description - </strong>The assignment operator of <code>object</code>. You should do a deep copy of the <code>object</code> object.
+							<br>
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>other</code> - the <code>object</code> object to be copied.
+								</li>
+							</ul>
+							<br>
+							<strong>Return value - </strong>A reference to the target of assignment.
+						</li>
+
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>object(const object& other)</code></pre>
+
+							<strong>Description - </strong>The deep copy constructor of <code>object</code>.
+							<br>
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>other</code> - the <code>object</code> object to be copied.
+								</li>
+							</ul>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									You may make use of the <code>operator=</code> function if you want.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>const std::type_info& type() const</code></pre>
+
+							<strong>Description - </strong>This function gets the type of the current object.
+							<br>
+							<br>
+							<strong>Return value - </strong>the <code>type_info</code> of the type that the <code>object</code> object is storing.
+							<br>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									For example,
+									<pre><code class="language-cpp">object a = 1;&#10;a.type() //Type info of int&#10;&#10;object b = 1.5;&#10;a.type() //Type info of double</code></pre>
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>template &lt;typename T&gt;&#10;T cast_back() const</code></pre>
+
+							<strong>Description - </strong>This function casts the value that the current object is storing back to type <code>T</code>.
+							<br>
+							<br>
+							<strong>Return value - </strong>the value that the <code>object</code> object is storing in type <code>T</code>.
+							<br>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									You should check whether the type <code>T</code> is the same as the type that the current object is storing first.
+								</li>
+								<li>
+									If it is the same, you should achieve this by using <code>dynamic_cast</code>.
+								</li>
+								<li>
+									Otherwise, you should throw an error, identicating the type is not the same.
+									<ul>
+										<li>
+											Throwing error is a way to stop the execution of the program, when the user does something that should not be done.
+										</li>
+										<li>
+											You can throw the error easily by just writing this line:
+											<pre><code class="language-cpp">throw std::runtime_error("Object casting failed!");</code></pre>
+										</li>
+									</ul>
+								</li>
+								<li>
+									For example,
+									<pre><code class="language-cpp">object a = 1; //Storing int&#10;int b = a.cast_back&lt;int&gt;(); //OK!!&#10;&#10;object b = 1.5; //Storing double&#10;int c = b.cast_back&lt;int&gt;(); //Error thrown, as the type double != int</code></pre>
+								</li>
+							</ul>
+						</li>
+					</ul>
+
+					<div class="card-body">
+						<p class="card-text">
+							<h5><strong>Bonus</strong></code></h5><p></p>
+							This part is the bonus part of this assignment. <b>It is an optional task and you can choose to or not to finish it.</b> For the bonus, implement the following member functions of <code>object</code> inside <code>object.tpp</code>. The respective function declarations has been given to you inside <code>object.hpp</code> but they are commented. <b>You will need to uncomment the respective declaration in the header if you have finished it.</b>
+							<br><br>
+							<strong>Hint</strong>
+							<ul>
+								<li>
+									You may have to modify the struct <code>object_pointer</code> and <code>T_pointer</code> too. Again, be reminded that
+									<ul>
+										<li>
+											You are ONLY allowed to modify the struct <code>object_pointer</code> and <code>T_pointer</code>.
+										</li>
+										<li>
+											You are NOT allowed to add data member to both structs.
+										</li>
+										<li>
+											During the grading, we will use your <code>object.hpp</code> header file to compile the program. Please make sure your program works for other tasks after you have implemented the bonus tasks.
+										</li>
+									</ul>
+								</li>
+								<li>
+									Be reminded you are free to modify your <code>.tpp</code> file too, as long as you don't violate the <a href="#additional-remarks">rules</a> mentioned.
+								</li>
+							</ul>
+						</p>
+					</div>
+
+					<ul class="list-group list-group-flush">
+						
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>object operator+(const object& other) const</code></pre>
+
+							<strong>Description - </strong>This function overloads the <code>+</code> operator to perform addition. Error will be thrown if the two objects are storing different types of values.
+							<br>
+							<br>
+							<strong>Return value - </strong>An <code>object</code> object which is the sum of two objects.
+							<br>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									You may assume all the value types that <code>object</code> stores have <code>operator+</code> defined.
+								</li>
+								<li>
+									You should first check whether the type of this object is storing is the same as the type that the other object is storing.
+								</li>
+								<li>
+									If it is not the same, you should throw an error, identicating the type is not the same.
+									<ul>
+										<li>
+											Throw the error by writing this line:
+											<pre><code class="language-cpp">throw std::runtime_error("Types needed to be the same when performing +");</code></pre>
+										</li>
+									</ul>
+								</li>
+								<li>
+									For example,
+									<pre><code class="language-cpp">object a = 1; //Storing int&#10;object b = 2; //Storing another int&#10;object c = a + b; //OK!! `c` now stores an int of 3&#10;&#10;object d = 1; //Storing int&#10;object e = 1.5; //Storing double&#10;object f = d + e; //Error thrown, as type int != double&#10;</code></pre>
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>bool operator==(const object& other) const</code></pre>
+
+							<strong>Description - </strong>This function overloads the <code>==</code> operator to perform comparison.
+							<br>
+							<br>
+							<strong>Return value - </strong><code>true</code> if the two objects are storing the same type and value, <code>false</code> otherwise.
+							<br>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									You may assume all the value types that <code>object</code> stores have <code>operator==</code> defined.
+								</li>
+								<li>
+									For example,
+									<pre><code class="language-cpp">object a = 1; //Storing int&#10;object b = 1; //Storing another int&#10;bool c = (a == b); //True, as both storing int and 1 == 1&#10;&#10;object d = 2; //Storing int&#10;object e = 2.0; //Storing double&#10;bool f = (d == e); //False, as one is double and one is int&#10;</code></pre>
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre class="language-cpp"><code>friend std::ostream& operator&lt;&lt;(std::ostream &os, const object& obj)</code></pre>
+
+							<strong>Description - </strong>This function overloads the <code>&lt;&lt;</code> operator, this outputs the value that the object is storing to the output stream <code>os</code>.
+							<br>
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>os</code> - the output stream.
+								</li>
+								<li>
+									<code>obj</code> - the <code>object</code> object to be output to <code>os</code>.
+								</li>
+							</ul>
+							<br>
+							<strong>Return value - </strong>A reference to the parameter <code>os</code>.
+							<br>
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									You may assume all the value types that <code>object</code> stores have <code>operator&lt;&lt;</code> defined.
+								</li>
+								<li>
+									For example,
+									<pre><code class="language-cpp">object a = string("123"); &#10;cout &lt;&lt; a; //Outputs 123</code></pre>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					
+
+					<div class="card-footer text-muted">
+						End of Tasks
+					</div>
+				</div>
+
+				<!-- Download section -->
+				<!-- ### Complete download section for the assignment ### -->
+				<div class="card mb-4">
+					<div class="card-body" id="download">
+						<h3 class="card-title">Resources &amp; Sample I/O</h3>
+						<ul>
+							<li>
+								Skeleton code: <a href="../Resources/PA9_Skeleton.zip">PA9_Skeleton.zip</a>
+							</li>
+							<li>
+								Demo program: No demo programs will be provided as the Skiplist and object class are both "Abstract Data Type (ADT)". 19 of known test cases are all already provided in <code>main.cpp</code>. You can just compile your program to try it out.
+							</li>
+							<li>
+								Sample outputs:
+								You can download the sample outputs for the known 19 test cases <a href="../Resources/sample-outputs.txt">here</a>.<br>Any user input is omitted in the output files. Please note
+								that the sample output, naturally, does not show all possible cases. It is part of the assessment for
+								you to design your own test cases to test your program.
+							</li>
+						</ul>
+					</div>
+					<div class="card-footer text-muted">
+						End of Resources &amp; Sample I/O
+					</div>
+				</div>
+
+				<!-- Submission and grading section -->
+				<!-- ### Complete submission and grading section for the assignment ### -->
+				<div class="card mb-4">
+					<div class="card-body" id="submission">
+						<h3 class="card-title">Submission &amp; Grading</h3>
+						<p class="card-text">
+							<strong>Deadline: 12 November 2022 Saturday HKT 23:59.</strong><br>
+							Submit a zip of three files <code>skiplist.tpp</code>, <code>object.hpp</code> and <code>object.tpp</code> to <a href="https://zinc.cse.ust.hk/">ZINC</a>.
+						</p>
+
+						<h4>Grading Scheme</h4>
+						<p class="card-text">
+							There are 19 given test cases which the code can be found in the given main function in <code>main.cpp</code>. These 19 test cases are first run without memory leak checking (numbered #1 - #19 on ZINC). Then, the same 19 test cases will be rerun, in the same order, with memory leak checking (those will be numbered #20 - #38 on ZINC). For example, test case #21 on ZINC is actually the given test case 2 (in the given main function) run with memory leak checking.
+							<br><br>Each test case run without memory leak checking (i.e., #1 - #19 on ZINC) is worth 1 mark. The second run of each test case with memory leak checking (i.e., #20 - #38 on ZINC) is worth 0.5 mark. The maximum score you can get on ZINC before the deadline, will be 19*(1+0.5) = 28.5.
+						</p>
+						<strong>About memory leak and other potential errors</strong>
+						<p class="card-text">
+							Memory leak checking is done via the <code>-fsanitize=address,leak,undefined</code> option (<a href="https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html">related documentation here</a>) of a recent g++ compiler on Linux (it won't work on Windows for the versions we have tested). Check the "Errors" tab (next to the "Your Output" tab in the test case details popup) for errors such as memory leaks. Other errors/bugs such as out-of-bounds, use-after-free bugs, and some undefined-behavior-related bugs may also be detected. You will get a 0 mark for the test case if there is any error. Note that if your program has no errors detected by the sanitizers, then the "Errors" tab may not appear. If you wish to check for memory leaks yourself using the same options, you may follow the <a href="leak-checking">Checking for memory leak yourself</a> guide.
+						</p>
+						
+						<strong>Test cases summary</strong>
+						<p class="card-text">
+							We will have 59+6 additional test cases which won't be revealed to you before the deadline. Together with the 19 given test cases, there will then be 78+6 test cases used to give you the final assignment grade. All 78+6 test cases will be run two times as well: once without memory leak checking and once with memory leak checking. The assignment total will therefore be 78*(1+0.5) = 117, and an additional of 6*(1+0.5) = 9 marks for bonus.<br><br>The following table shows the summary of the test cases.
+						</p>
+						<br>
+						<table style="width:95%">
+							<tbody>
+								<tr>
+									<th style="width:50%" colspan="2">Task Function</th>
+									<th>Number of test cases before deadline (Known test cases)</th><th style="width:25%">Number of test cases after deadline (Known+hidden test cases)</th>
+								</tr>
+								<tr>
+									<td style="width:7%" rowspan="14">Part I</td><td><code>Node()</code></td>
+									<td>1</td><td>1</td>
+								</tr>
+								<tr>
+									<td><code>Node(K, V, int)</code></td>
+									<td>1</td><td>2</td>
+								</tr>
+								<tr>
+									<td><code>Skiplist()</code></td>
+									<td>1</td><td>2</td>
+								</tr>
+								<tr>
+									<td><code>Skiplist(const Skiplist&)</code></td>
+									<td>1</td><td>4</td>
+								</tr>
+								<tr>
+									<td><code>get(const K&, V&)</code></td>
+									<td>1</td><td>9</td>
+								</tr>
+								<tr>
+									<td><code>update(const K&, const V&)</code></td>
+									<td>1</td><td>7</td>
+								</tr>
+								<tr>
+									<td><code>remove(const K&)</code></td>
+									<td>1</td><td>10</td>
+								</tr>
+								<tr>
+									<td><code>size()</code></td>
+									<td>1</td><td>3</td>
+								</tr>
+								<tr>
+									<td><code>empty()</code></td>
+									<td>1</td><td>2</td>
+								</tr>
+								<tr>
+									<td><code>print()</code></td>
+									<td>1</td><td>3</td>
+								</tr>
+								<tr>
+									<td><code>map(T (*f)(V))</code></td>
+									<td>1</td><td>3</td>
+								</tr>
+								<tr>
+									<td><code>filter(bool (*f)(V))</code></td>
+									<td>1</td><td>3</td>
+								</tr>
+								<tr>
+									<td><code>operator=(const Skiplist&)</code></td>
+									<td>1</td><td>4</td>
+								</tr>
+								<tr>
+									<td><code>operator+(const Skiplist&)</code></td>
+									<td>1</td><td>3</td>
+								</tr>
+								<tr>
+									<td style="width:7%" rowspan="5">Part II</td><td><code>object(T value)</code></td>
+									<td>1</td><td>5</td>
+								</tr>
+								<tr>
+									<td><code>object(const object&)</code></td>
+									<td>1</td><td>3</td>
+								</tr>
+								<tr>
+									<td><code>operator=(const object&)</code></td>
+									<td>1</td><td>5</td>
+								</tr>
+								<tr>
+									<td><code>type()</code></td>
+									<td>1</td><td>4</td>
+								</tr>
+								<tr>
+									<td><code>cast_back()</code></td>
+									<td>1</td><td>5</td>
+								</tr>
+								<tr>
+									<td style="width:7%" rowspan="3">Bonus</td><td><code>operator+(const object&)</code></td>
+									<td>0</td><td>2</td>
+								</tr>
+								<tr>
+									<td><code>operator==(const object&)</code></td>
+									<td>0</td><td>2</td>
+								</tr>
+								<tr>
+									<td><code>operator&lt;&lt;(std::ostream&, const object&)</code></td>
+									<td>0</td><td>2</td>
+								</tr>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="card-footer text-muted">
+						End of Submission &amp; Grading
+					</div>
+				</div>
+
+				<!-- FAQ section -->
+				<!-- ### Complete FAQ section for the assignment ### -->
+				<div class="card mb-4">
+					<div class="card-body" id="faq">
+						<h3 class="card-title">Frequently Asked Questions</h3>
+						<p>
+							<b>Q</b>: My code doesn't work, here it is, can you help me fix it?<br>
+							<b>A</b>: As the assignment is a major course assessment, to be fair, you are supposed to
+							work on it
+							by yourself and we should never finish the tasks for you. We are happy to help with
+							explanations and
+							advice, but we are <b>not allowed</b> to directly debug for you.
+						</p>
+						<p>
+							<b>Q</b>: Am I allowed to create helper functions?<br>
+							<b>A</b>: Yes. 
+						</p>
+						<p>
+							<b>Q</b>: When I am testing with my code, <code>object a = "test"</code> gives me a compilation error. Is it normal?<br>
+							<b>A</b>: Yes. Be reminded that the syntax of double quote is just a syntax-sugar for a char array. This happens because the <code>object</code> class we created in this assignment actually doesn't support storing array types. Therefore, you don't have to worry about it as there won't be test cases that construct <code>object</code> from an array.<br>In case you wonder the solution to it, one can use <code>std::decay</code>. For details, you may refer to <a href="https://stackoverflow.com/questions/25732386/what-is-stddecay-and-when-it-should-be-used">this</a> link.
+						</p>
+					</div>
+					<div class="card-footer text-muted">
+						End of FAQ
+					</div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-body" id="change">
+						<h3 class="card-title">Change Log</h3>
+						<ul>
+							<li>
+								<strong>10/31 10:49</strong>
+								<ol>
+									<li>
+										Fixed <code>print_full()</code> inside the skeleton <code>skiplist.hpp</code> so that the program output matches with the sample output. <a href="https://piazza.com/class/l7fy1cnew2r58v/post/345">Piazza@345</a>
+									</li>
+								</ol>
+							</li>
+						</ul>
+					</div>
+					<div class="card-footer text-muted">
+						End of Change Log
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Sidebar Widgets Column -->
+			<div class="col-md-3">
+				<div class="sticky-top">
+					<!-- Menu Widget -->
+					<div class="card my-12">
+						<h5 class="card-header">Menu</h5>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<ul class="mb-0" style="padding-left:20px" type="circle">
+										<li>
+											<a href="#honor">Honor Code</a>
+										</li>
+										<li>
+											<a href="#objective">Objectives & ILOs</a>
+										</li>
+										<li>
+											<a href="#introduction">Introduction</a>
+										</li>
+										<li>
+											<a href="#description">Description</a>
+										</li>
+										<li>
+											<a href="#tasks">Tasks</a>
+											<ul>
+												<li>
+													<a href="#tasks-part1">Part I: Skiplist</a>
+												</li>
+												<li>
+													<a href="#tasks-part2">Part II: Object</a>
+												</li>
+											</ul>
+										</li>
+										<li>
+											<a href="#download">Resources &amp; Sample I/O</a>
+										</li>
+										<li>
+											<a href="#submission">Submission &amp; Grading</a>
+										</li>
+										<li>
+											<a href="#faq">FAQ</a>
+										</li>
+										<li>
+											<a href="#change">Change Log</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Maintenance widget -->
+					<div class="card my-4">
+						<h5 class="card-header">Page maintained by</h5>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<ul class="list-unstyled mb-0">
+										<li>
+											Brian Chung
+										</li>
+										<li>
+											<a href="mailto:sizhe.song@connect.ust.hk">twchungab@connect.ust.hk</a>
+										</li>
+										<li>Last Modified:
+											<script
+												type="text/javascript">document.write(document.lastModified);</script>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- Homepage widget -->
+					<div class="card my-4">
+						<h5 class="card-header">Homepage</h5>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<ul class="list-unstyled mb-0">
+										<li>
+											<a href="http://course.cse.ust.hk/comp2012h">Course Homepage</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.row -->
+	</div>
+
+	</div>
+	<!-- /.container -->
+
+	<!-- Footer -->
+	<footer class="py-5 bg-dark">
+		<div class="container">
+			<p class="m-0 text-center text-white">Maintained by COMP 2012H Teaching Team © 2022 HKUST Computer Science
+				and Engineering</p>
+		</div>
+		<!-- /.container -->
+	</footer>
+
+	<!-- Bootstrap core JavaScript -->
+	<script src="misc/jquery.js"></script>
+	<script src="misc/bootstrap.js"></script>
+
+
+
+
+</body>
+
+</html>
