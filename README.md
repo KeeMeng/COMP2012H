@@ -19,7 +19,7 @@ Each PA include a descript html, which was downloaded from the course page
 
 Some PAs also contain a "cheatsheet" which combines multiple header files for quick access to class members
 
---
+---
 
 I have also included the sublime build files which I used to compile each programming assignment, and you can use it by adding it to your `Sublime Text/Packages/User` folder
 
