@@ -14,7 +14,8 @@ PA9: Multi-type map using skiplist (Generic programming, static data and functio
 PA10: AI digit recognition (Data preprocessing and network testing)
 PA11: A dictionary using trie (rvalue reference, move, data structures and ADT)
 
+Each PA include a descript html, which was downloaded from the course page
 Some PAs also contain a "cheatsheet" which combines multiple header files for quick access to class members
 
-I have also included the sublime build files which I used, and you can use it by adding it to your `Sublime Text/Packages/User` folder
+I have also included the sublime build files which I used to compile each programming assignment, and you can use it by adding it to your `Sublime Text/Packages/User` folder
 For more details, refer to https://www.sublimetext.com/docs/build_systems.html
