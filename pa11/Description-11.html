@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- ### Change assignment number ### -->
+	<title>COMP 2012H Assignment 11: Dictionary using trie</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="misc/bootstrap.css" rel="stylesheet">
+
+	<!-- Custom styles for this template -->
+	<link href="misc/blog-home.css" rel="stylesheet">
+
+	<!-- Prism syntax highlighter -->
+	<link href="misc/prism.css" rel="stylesheet">
+
+	<style>
+		pre {
+			background: #f4f4f4 !important;
+			border: 1px solid #ddd !important;
+			border-left: 3px solid #f36d33 !important;
+			color: #666 !important;
+			page-break-inside: avoid !important;
+			font-family: monospace !important;
+			font-size: 14px !important;
+			line-height: 1.6 !important;
+			margin-bottom: 1.6em !important;
+			max-width: 100% !important;
+			overflow: auto !important;
+			padding: 1em 1.5em !important;
+			display: block !important;
+			word-wrap: break-word !important;
+		}
+
+		table,
+		th,
+		td {
+			border: 1px solid black;
+		}
+
+		th,
+		td {
+			padding: 5px;
+		}
+
+		th {
+			text-align: left;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="misc/prettify.css">
+	<script src="misc/prompt.js"></script>
+</head>
+
+<body data-new-gr-c-s-check-loaded="8.880.0" data-gr-ext-installed="">
+	<script src="misc/prism.js"></script>
+
+	<!-- Page Content -->
+	<div class="container">
+
+		<div class="row">
+
+			<!-- Entries Column -->
+			<div class="col-md-9">
+
+				<h2 class="my-4">
+					<span style="color:darkblue">COMP 2012H</span>
+					<small>Honors Object-Oriented Programming and Data Structures</small>
+				</h2>
+
+				<!-- ### Change assignment number and title ### -->
+				<h3 class="my-4">
+					Assignment 11
+					<span style="color:#660066">Dictionary using trie</span>
+				</h3>
+
+				<!-- Honor Code section -->
+				<div class="card mb-4">
+					<div class="card-body" id="honor" style="background-color:#f4f4f4">
+						<h3 class="card-title">Honor Code</h3>
+						<p class="card-text">
+							We value academic integrity very highly. Please read the <a
+								href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a> section on our
+							course webpage to make sure you understand what is considered as plagiarism and what the
+							penalties are.
+							The following are some of the highlights:
+						</p>
+						<ul>
+							<li>
+								Do NOT try your "luck" - we use sophisticated plagiarism detection software to find
+								cheaters.
+								We also review codes for potential cases manually.
+							</li>
+							<li>
+								The penalty (for <b>BOTH</b> the copier and the copiee) is not just getting a zero in
+								your assignment.
+								Please read the <a href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a>
+								thoroughly.
+							</li>
+							<li>
+								Serious offenders will fail the course immediately, and there will be additional
+								disciplinary actions
+								from the department and university, upto and including expulsion.
+							</li>
+						</ul>
+						<p></p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Honor Code
+					</div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-body" id="objective" style="background-color:#f4f4f4">
+						<h3 class="card-title">Objectives & Intended Learning Outcomes</h3>
+						<p class="card-text">
+							The objective of this assignment is to expose you to manipulating information using the trie data structure.
+							After this assignment you should be able to:
+						</p>
+						<ol>
+							<li>
+								Learn the trie data structure and some basic operations
+							</li>
+							<li>
+								Implement algorithms in C++ to manipulate the structure
+							</li>
+							<li>
+								Make use of move operations to enhance the efficiency of your program
+							</li>
+							<li>
+								Understand lambdas and operator overloading in C++
+							</li>
+						</ol>
+						<p></p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Objectives & Intended Learning Outcomes
+					</div>
+				</div>
+
+				<!-- Introduction section -->
+				<!-- ### Complete introduction section for the assignment ### -->
+				<div class="card mb-4">
+					<!-- ### Add an image representing the assignment content here ### -->
+					<img class="card-img-top" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Trie_example.svg/480px-Trie_example.svg.png" alt="Card image cap">
+					<div class="card-body language-text" id="introduction">
+						<p class="card-text">
+							<small>
+								<em>
+									Image Source: Wikipedia <a href='https://en.wikipedia.org/wiki/Trie'>https://en.wikipedia.org/wiki/Trie</a><br>
+								</em>
+							</small>
+						</p>
+						<h3 class="card-title">Introduction</h3>
+
+						<p class="card-text">
+							The objective of this assignment is to create a console program which has the basic functions of a 'dictionary library'.
+							The program stores multiple dictionaries in a list. The user can create, delete and modify the saved dictionaries. Most
+							importantly, the program contains word lookup and word suggestion functions with reference to the dictionaries.
+						<ul>
+							<li>Store a list of dictionaries, each with a unique name.</li>
+							<li>Modify the contents of the dictionary by adding/removing new words or updating its meaning.</li>
+							<li>Supports the merging of two dictionaries with each other.</li>
+							<li>Supports trimming down a dictionary into a smaller one.</li>
+							<li>Lookup and word suggestion in a dictionary.</li>
+						</ul>
+						In this assignment, you are not required to:
+						<ul>
+							<li>
+								Write the code for user input / output, which is provided in the skeleton code.
+							</li>
+						</ul>
+						In this assignment, you will be required to:
+						<ul>
+							<li>
+								Implement the functions for manipulating the trie structure.
+							</li>
+							<li>
+								Understand move operations in C++
+							</li>
+						</ul>
+						</p>
+					</div>
+
+					<div class="card-footer text-muted">
+						End of Introduction
+					</div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-body language-text" id="description">
+						<h3 class="card-title">Description</h3>
+						<p class="card-text">
+							Please read the <a href="#faq">FAQ</a> section regularly, and do check it
+							one day before the deadline to make sure you don't miss any clarification,
+							even if you have already submitted your work by then. You can also raise questions
+							on Piazza and remember to use the "pa11" tag.
+						</p>
+
+						<h4>Code structure</h4>
+						<p class="card-text">
+							The skeleton code structure is as follows:
+						</p>
+						<pre>PA11&#10;└── main.cpp&#10;└── dictionary.cpp&#10;└── dictionary.h&#10;└── node.cpp&#10;└── tasks.cpp&#10;└── tasks.h&#10;</pre>
+						<p class="card-text">
+							Your task for this PA is to implement functions in <code>dictionary.cpp</code>. ZINC will only accept the modified <code>dictionary.cpp</code> file, modifications to other files will be discarded.
+						</p>
+
+						<h4 id="trie">Tries for dictionary</h4>
+						<p class="card-text">
+							The <a href="https://en.wikipedia.org/wiki/Trie">trie structure</a> is a data
+							structure which stores information in a tree form. In each trie, there is a root node
+							corresponding to the empty string. Each trie node potentially stores 26 addresses, corresponding
+							to each English letter, as potential children. The 'key' of a trie node is the string created by
+							traversing the tree structure from the root to the node. 
+							
+						</p>
+						<h4 id="triedetail">Tries in detail</h4>
+						<img class="card-img-top" src="misc/diagram.png" alt="Example">
+						<p class="card-text" align="justify">
+							The 'string' in the nodes represents the key of the node (except for the root node, which is represented by the empty string). The edges (straight lines) of the diagram
+							indicates the connection from the parent node to the child node. Each node has an array of 26 pointers <code>Node* Node::children[26]</code>, where the <code>i</code>th pointer corresponds to a child node with key equal to that of the
+							parent node plus a character corresponding to <code>i</code>. The index <code>i</code> is represented by the numbers in the edges above. The pointer may be <code>nullptr</code>, whenever no such child exists. Each node except the root
+							node contains a pointer <code>Node* Node::parent</code> to its parent, while being equal to <code>nullptr</code> for the root node. To summarize:
+							<ul>
+								<li><code>Node* Node::children[26]</code> - Pointers to children</li>
+								<li><code>Node* Node::parent</code> - If not the root node, pointer to parent</li>
+							</ul>
+							Node that <code>Node::children[26]</code> and <code>Node::parent</code> are private. You should use the following for access:
+							<pre><code class="language-cpp">Node* Node::operator[](const int& idx);
+void Node::set_child(const int& idx, Node* ptr);
+Node*& Node::get_parent();</code></pre>
+						</p>
+						<h4 id="trie">Easy conversion between character and index</h4>
+						<p class="card-text">
+							You can use your own method using ASCII table, or use the provided <code>static</code> helper functions:
+							<pre><code class="language-cpp">int Dictionary::character_to_index(const char& ch);
+char Dictionary::index_to_character(const int& idx);</code></pre>
+						</p>
+						<br>
+						<h4 id="trie">Traversal</h4>
+						<img class="card-img-top" src="misc/traversal.png" alt="Example2">
+						<p class="card-text">
+							In this PA, we mainly use <b>pre-order traversal</b> for the trees. The illustration of pre-order traversal is given above. In words, pre-order traversal is a traversal
+							method which traverses the tree depth-first and in alphabetical order, where the contents of the node are retrieved <b>immediately</b> when the node is first visited. 
+							The 'expected output' of printing the keys of the above example would be (discarding the root):
+							<pre> a -> an -> and -> ant -> at -> ato -> atom -> b -> ba -> bad -> be -> i -> in -> it </pre>
+						</p>
+						<br>
+
+						<h4 id="dictionary">Implementation of dictionary</h4>
+						<p class="card-text">
+							The dictionary consists of two main classes, <code>Dictionary</code> and <code>Node</code>. The <code>Dictionary</code> class
+							contains a pointer to a root node, with all the supporting functions for manipulating and retrieving the contents of the dictionary.
+							The <code>Node</code> class contains a pointer to its parent, 26 pointers to potential children, and the type and definition
+							of the word.
+						<ul>
+							<li>
+								Dictionary
+								<ul>
+									<li>Constructor and destructors</li>
+									<li>Copy and move assignment</li>
+									<li>Add node - Adds a node with a specified key to the dictionary</li>
+									<li>Remove node - Remove all nodes starting with the specified key from the dictionary</li>
+									<li>Find node - Finds a node with the specified key, returns nullptr if none found</li>
+									<li>Print all elements - Prints the tree structure of the dictionary, depth first, in alphabetical order</li>
+									<li>Print all elements with type - Prints all words with the given word type</li>
+									<li>Merge - Merges two dictionaries together</li>
+									<li>Filter - Filters the dictionary by returning all elements with key starting with the given string</li>
+								</ul>
+							</li>
+							<li>
+								Node
+								<ul>
+									<li>parent - Pointer to parent of this node, may be null</li>
+									<li>children - Pointers to children of this node, may be null</li>
+									<li>meaning.meaning - The definition of the word</li>
+									<li>meaning.type - The type of the word (noun, verb, adjective etc.)</li>
+									<li>Constructor - The parents and children are set by default to <code>nullptr</code></li>
+									<li>Destructor - Deletes all of the children, but does not delete the parent.</li>
+								</ul>
+							</li>
+						</ul>
+						</p>
+						
+						<h4 id="dictionary">Information retrieval from dictionary</h4>
+						<p class="card-text">
+							Obviously not all nodes are words. To distinguish this, whenever <code>meaning.meaning</code> is not the empty string, we call
+							the node a 'word' or a 'valid word'. For example, printing all words belonging to the dictionary means that traversing all nodes
+							of the dictionary, whilst only printing the ones such that <code>meaning.meaning</code> is not empty. <b>You can safely assume</b>
+							that <code>meaning.meaning</code> is non-empty if and only if <code>meaning.type</code> is non-empty.
+						</p>
+
+						<h4>Assumptions for arguments of functions</h4>
+						<p class="card-text">
+							A common argument in the functions is <code>const char*</code>. This represents a string in the usual way, ending in <code>'\0'</code>,
+							and in addition the contents of the string are restricted to characters <code>a-z</code> (always lowercase). <b>Do not</b> <code>delete</code>
+							any <code>const char*</code> passed to your functions. The given <code>const char*</code> <b>may</b> be an empty string. The argument would not be
+							<code>nullptr</code> <b>unless</b> explicitly stated.
+						</p>
+
+						<h4>Requirements</h4>
+						<p class="card-text">
+							Here are a few clarifications for what is expected in this assignment. 
+						<ul>
+							<li>
+								You can use any C++ standard library, such as <code>&lt;string&gt;, &lt;vector&gt;, &lt;list&gt;</code> etc.
+							</li>
+							<li>
+								You may define additional global variables, helper functions, custom classes, or whatever you may want.
+							</li>
+							<li>
+								There may be various algorithms and implementation methods for doing the tasks below. You can freely choose to implement
+								them in your own way, such as lambda functions, recursive functions and so on, as long as the requirements of the tasks are met.
+							</li>
+							<li>
+								Although not recommended, you may modify the provided functions in <code>Dictionary.cpp</code>, <i>at your own risk</i>.
+							</li>
+							<li>
+								Note that some tasks require some conditions on the efficiency of the algorithm. See grading for more details.
+							</li>
+							<li>
+								The above points can be summarized as: you can do whatever you want as long as your program compiles and gives the same output as the demo program,
+								with no memory leak.
+							</li>
+							<li>
+								You are advised to <b>only</b> modify the file <code>Dictionary.cpp</code>. ZINC will only make use of your <code>Dictionary.cpp</code>
+								file, and modifications of other source files will be overwritten.
+							</li>
+						</ul>
+						</p>
+
+					</div>
+					<div class="card-footer text-muted">
+						End of Description
+					</div>
+				</div>
+
+				<div class="card mb-4 language-text">
+					<div class="card-body" id="tasks">
+						<h2 class="card-title">Tasks</h2>
+						<p class="card-text">
+							This section describes the functions that you will need to implement. You also have to implement the corresponding operator overloads for the respective functions, which mostly only consists of a single call to the function. They will be explicitly stated. In the following, all examples would refer to the following tree:
+						</p>
+						<img class="card-img-top" src="misc/example.png" alt="Example3">
+						<p class="card-text">
+							<small>
+								<em>
+									<a href='misc/example.png' target="_blank" rel="noopener noreferrer">Magnify image</a><br>
+								</em>
+							</small><br>
+							When the meaning or type is empty in the above diagram, this means that it is an empty string. Here is the PPT for PA11 in the Lab: <a href="./resources/PA11.pptx">PowerPoint</a>
+						</p>
+					</div>
+
+					<ul class="list-group list-group-flush language-cpp">
+						<li class="list-group-item">
+							<h4 class="card-title">Important: Ensure tree structure</h4>
+							In <i>all</i> the functions below, you should ensure the tree structure satisfies the conditions stated by <a href="#triedetail">Tries in detail</a> above. To quote:
+							<p align="justify"><i>
+								Each node has an array of 26 pointers <code>Node* Node::children[26]</code>, where the <code>i</code>th pointer corresponds to a child node with key equal to that of the
+								parent node plus a character corresponding to <code>i</code>. The index <code>i</code> is represented by the numbers in the edges above. The pointer may be <code>nullptr</code>, whenever no such child exists. Each node except the root
+								node contains a pointer <code>Node* Node::parent</code> to its parent, while being equal to <code>nullptr</code> for the root node. To summarize:
+								<ul>
+									<li><code>Node* Node::children[26]</code> - Pointers to children</li>
+									<li><code>Node* Node::parent</code> - If not the root node, pointer to parent</li>
+								</ul>
+							</i></p>
+							If the tree structure is <b>not</b> totally correct, you may risk segmentation fault errors in ZINC as the hidden test cases use <b>all</b> of the properties of the tree structure, which you would get zero marks for that task. There may also be a risk 
+							that your program works locally and segfaults on ZINC. As mentioned before, ZINC uses all the properties of the tree structure, while your program may not. It is your responsibility to check that your program runs on ZINC. 
+						</li>
+						<li class="list-group-item" id="constructor">
+							<h4 class="card-title">Copy constructor</h4>
+							<pre><code class="language-cpp">Dictionary::Dictionary(const Dictionary& d);</code></pre>
+							<strong>Description - </strong>Constructor to create a deep copy of <code>d</code>.
+						</li>
+
+						<li class="list-group-item" id="copyassign">
+							<h4 class="card-title">Copy assignment</h4>
+							<pre><code class="language-cpp">Dictionary& Dictionary::operator=(const Dictionary& d);</code></pre>
+							<strong>Description - </strong>Copy assignment to create a deep copy of <code>d</code>.
+							Hint: The original data has to be discarded to prevent memory leak!
+						</li>
+
+						<li class="list-group-item" id="addnode">
+							<h4 class="card-title">Add node</h4>
+							<pre><code>Node* Dictionary::add_node(const char* key);
+Node* Dictionary::operator+=(const char* key);</code></pre>
+							<strong>Description - </strong>Creates a new node with the given key. Returns the created node. If a node with given key already exists,
+							then return the already existing node. If the key is the empty string, return the root node. You can directly call add_node in the operator overload. <br><br>
+							
+							<i>Comments:</i> In the provided skeleton code of the full program, the contents of the Node will be updated <i>after</i> the Node with the key is created. It is therefore useful
+							to return a Node* so that the skeleton code obtains a pointer to the created node. However, the <code>operator+=</code> usually returns a reference to <code>this</code> in most applications.
+							This implementation of <code>operator+=</code> is admittedly, an ad-hoc implementation. <br><br>
+							
+							The comments are just for your interest, you don't have to worry about updating <code>Node.meaning</code> as it is afterwards done by the skeleton code.
+						</li>
+						<li class="list-group-item" id="removenode">
+							<h4 class="card-title">Remove node</h4>
+							<pre><code>void Dictionary::remove(const char* key);
+void Dictionary::operator-=(const char* key);</code></pre>
+							<strong>Description - </strong>Removes all the nodes with key starting with the given <code>key</code>. The node with key exactly equal to the given <code>key</code> should also be removed.
+							If no such nodes exists, do nothing. Remember to free up the memory used by all such nodes too. Of course the root node should not be deleted. You can directly call remove in the operator overload.
+						</li>
+						<li class="list-group-item" id="findnode">
+							<h4 class="card-title">Find node</h4>
+							<pre><code>Node* Dictionary::find_node(const char* key) const;</code></pre>
+							<strong>Description - </strong>Finds the node with the exact given <code>key</code>. Returns <code>nullptr</code> if no such node exists.
+							If the key is empty string, return the root node.
+						</li>
+						<li class="list-group-item" id="foreach">
+							<h4 class="card-title">For each</h4>
+							<pre><code>template&lt;typename T&gt; void Dictionary::foreach(T&& lambda) const;</code></pre>
+							<strong>Description - </strong>A function to do pre-order traversal on the tree. The function accepts a lambda function as argument,
+and then the lambda function would be called for every node in the tree (except the root node). 
+ The lambda function accepts two arguments, <code>(Node* current_node, vector<int>& current_key)</code>.
+ For each node accessed via pre-order traversal (except root node), call the lambda function. <br><br>
+ Of course current_node should be the pointer to the node accessed. current_key should contain
+ a list of integers which corresponds to the indices required to travel to current_node from
+ the root node. <br><br>
+With each line indicating the pointer to node, followed by an array representing the vector&lt;int&gt;, the lambda calls for the example are:
+							<pre>a [0]
+an [0, 13]
+and [0, 13, 3]
+ant [0, 13, 19]
+at [0, 19]
+ato [0, 19, 14]
+atom [0, 19, 14, 12]
+b [1]
+ba [1, 0]
+bad [1, 0, 3]
+be [1, 4]
+i [8]
+in [8, 13]
+it [8, 19]</pre>
+						</li>
+						<li class="list-group-item" id="printallelements">
+							<h4 class="card-title">Print all elements</h4>
+							<pre><code>void Dictionary::print_all_elements(ostream& o) const;
+std::ostream& operator<<(std::ostream& o, const Dictionary& dict) const;</code></pre>
+							<strong>Description - </strong>Prints out all nodes in pre-order traversal (alphabetical), <b>including</b> the nodes that are not words, but not the root node.
+							The syntax of the message should be <code>key (type) meaning [number of nodes printed]</code>, one line for each node. For convenience,
+							<code>cout << key_string_without_spaces << current_node << "[" << count << "]\n";</code>, where the predefined operator overload <code>ostream& operator<<(ostream& o, Node* n)</code> for printing
+							the meaning of the node is used.
+							Referring to the above example,
+							<pre>a ()  [1]
+an (indefinite article) ... [2]
+and (conjunction) ... [3]
+ant (noun) ... [4]
+at (preposition) ... [5]
+ato ()  [6]
+atom (noun) ... [7]
+b ()  [8]
+ba ()  [9]
+bad (adjective) ... [10]
+be (preposition) ... [11]
+i ()  [12]
+in (preposition) ... [13]
+it (pronoun) ... [14]</pre>
+							You are encouraged to use lambda functions and foreach for this task. The overloaded <code>&lt;&lt;</code> operator can be used for couting a dictionary directly. You can directly call print_all_elements in the implementation of
+the operator overload.
+						</li>
+
+						<li class="list-group-item" id="printtypeelements">
+							<h4 class="card-title">Print elements given type</h4>
+							<pre><code>void Dictionary::print_elements_given_type(const char* type) const</code></pre>
+
+							<strong>Description - </strong>Prints out all words in alphabetical order, and such that the word type is equal to <code>type</code>. Recall that a <code>Node</code> is a <i>word</i> if and only if
+							<code>meaning.meaning</code> is not the empty string. If <code>type == nullptr</code>, do not impose any restrictions on the word type. For the above example with <code>type = nullptr</code>, <br>
+							<pre>an (indefinite article) ... [1]
+and (conjunction) ... [2]
+ant (noun) ... [3]
+at (preposition) ... [4]
+atom (noun) ... [5]
+bad (adjective) ... [6]
+be (preposition) ... [7]
+in (preposition) ... [8]
+it (pronoun) ... [9]</pre>
+							For the above example with <code>type = "preposition"</code>, <br>
+							<pre>at (preposition) ... [1]
+be (preposition) ... [2]
+in (preposition) ... [3]</pre>
+							You are encouraged to use lambda functions and foreach for this task.
+						</li>
+						<li class="list-group-item" id="mergecopy">
+							<h4 class="card-title">Merge dictionaries (copy)</h4>
+							<pre><code>Dictionary merge(const Dictionary& d2) const;</code></pre>
+
+							<strong>Description - </strong>Merges <b>all the nodes</b> of the current dictionary with the other dictionary. That is, the set of keys in the new dictionary is exactly the union of the set of keys
+							in the original dictionaries. The original dictionaries should not be modified. If a word exists in both dictionaries <code>*this</code> and <code>d2</code>, use the word definition and type in <code>*this</code>.
+							The new dictionary should be a deep copy of both dictionaries. <br><br>
+							
+							You can initialize the name of the returned dictionary to be empty string. The name is mainly used internally by <code>main.cpp</code>, which would be set to be the user input (in the skeleton code).
+						</li>
+						<li class="list-group-item" id="mergemove">
+							<h4 class="card-title">Merge dictionaries (move)</h4>
+							<pre><code>Dictionary merge(Dictionary&& d2) const;</code></pre>
+
+							<strong>Description - </strong>Merges <b>all the nodes</b> of the current dictionary with the other dictionary. This time, the contents in <code>d2</code> should be moved to the new dictionary, and d2 is expected to
+							be destroyed right after.  The contents of <code>*this</code> should not be modified, and be deep copied to the new dictionary. <br><br>
+							You can initialize the name of the returned dictionary to be empty string.
+						</li>
+						<li class="list-group-item" id="filter">
+							<h4 class="card-title">Filter dictionary</h4>
+							<pre><code>Dictionary Dictionary::filter_starting_word(const char* key) const;</code></pre>
+
+							<strong>Description - </strong>Filters the dictionary by returning a new dictionary containing all the nodes with key starting with <code>key</code>. The set of keys of the resulting dictionary is exactly the subset of keys
+							in the original dictionary such that the key starts with the argument <code>key</code>. The necessary ancestor nodes of the node with <code>key</code> have to be newly created. If such ancestor nodes exists with <code>meaning.meaning</code> not empty,
+							its meaning and word type is to be discarded (set to empty string) in the new dictionary. <br><br>
+							For the node with <code>key</code> and its children, the meaning and word type have to be copied over. The contents of <code>*this</code> should not be modified, and
+							the new dictionary should be a deep copy containing the correct information. If <code>key</code> is <code>nullptr</code> or empty string, return a deep copy of <code>*this</code>. <br><br>
+							
+							For a more illustrative description, this is just copying the entire subtree starting with prefix <code>key</code> (including key), with the node having key equal to <code>key</code> as a (temporary) root of the subtree. Afterwards, we create necessary parent nodes
+							for the root of this newly created subtree so that the node would have equal key in the new tree. The newly created parent nodes will have meaning and word type to be empty string. If the subtree is empty, return an empty dictionary. For example, filtering with
+							<code>key = "an",key = "and"</code> would give:
+							<img class="card-img-top" src="misc/filter.png" alt="Example4"><br><br>
+							
+							You can initialize the name of the returned dictionary to be empty string.
+						</li>
+						<li class="list-group-item" id="mbonus">
+							<h4 class="card-title">Bonus: Efficiency and correctness of implementation of tree traversal</h4>
+							<b>This is not a speed programming competition.</b> You will be awarded bonus marks as long as all tasks 01-14 in ZINC are verified (see below for criteria). <br><br>
+							Accessing <code>Node::operator[](const int& idx)</code> each time increments <code>int NodeStats::pointers_accessed</code> by 1. The goal
+							is to make the number of calls to Node::operator[] as few as possible in the following:
+							<pre><code>Node* Dictionary::find_node(const char* key); //Requirement (1)
+void Dictionary::print_all_elements(); //Requirement (2)
+Dictionary Dictionary::merge(Dictionary&& d2) const; //Requirement (3)</code></pre>
+							<ul>
+							<li>
+								Requirement 1 - At most the length of the string represented by key
+							</li>
+							<li>
+								Requirement 2 - At most 26 x number of nodes in <code>*this</code> (including root)
+							</li>
+							<li>
+								Requirement 3 - At most [(26 x number of nodes in <code>*this</code> (including root)) <br>+ number of nodes in <code>*this</code> (excluding root)]
+							</li>
+						</ul>
+						<b>The bonus part will be obtained as long as requirements 1-3 are met. We do not time the actual running time or your program, nor do we compare the running time or number of operator[] calls between students.</b>
+						</li>
+					</ul>
+
+					<div class="card-footer text-muted">
+						End of Tasks
+					</div>
+				</div>
+				
+				<div class="card mb-4">
+					<div class="card-body" id="recommendations">
+						<h3 class="card-title">Recommendations &amp; Hints</h3>
+						<p class="card-text">
+							You are recommended to read the <a href="#submission">grading</a> before starting the assignment to understand how the functions are going to be tested in ZINC.
+							The following functions are useful for debugging your code:
+							<pre class="language-cpp"><code>int NodeStats::get_nodes_created(); // Total number of Nodes created (constructor)
+int NodeStats::get_nodes_deleted(); // Total number of Nodes deleted (destructor)
+int NodeStats::get_pointers_accessed(); // Total number of times Node::operator[] is called.
+void NodeStats::print_statistics();</code></pre>
+						</p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Recommendations &amp; Hints
+					</div>
+				</div>
+
+				<!-- Download section -->
+				<!-- ### Complete download section for the assignment ### -->
+				<div class="card mb-4">
+					<div class="card-body" id="download">
+						<h3 class="card-title">Resources &amp; Sample I/O</h3>
+						<ul>
+							<li>
+								Skeleton code (last updated on 15:20 9 Nov): <a href="./resources/PA11_skeleton.zip">PA11_Skeleton.zip</a><br>
+							</li>
+							<li>
+								Demo programs (last updated on 09:00 9 Nov):<br>
+								<a href="./resources/PA11_demo_x64.exe">Windows x64</a> /
+								<a href="./resources/PA11_demo_x86.exe">Windows x86</a> /
+								<a href="./resources/PA11_demo_linux">Linux</a> / 
+								<a href="./resources/PA11_demo_macosx_x86">MACOSX x86</a> / 
+								<a href="./resources/PA11_demo_macosx_arm">MACOSX arm</a><br>
+							</li>
+							<li>
+								<a href="./resources/PA11.pptx">Demo powerpoint in Lab</a>
+							</li>
+							<li>
+								Sample program inputs (word definitions by Dictionary.com):
+								<a href="./resources/sampleIO.zip">Sample Inputs</a>
+							</li>
+						</ul>
+						<h5>Changelog:</h5>
+						<ul>
+							<li>15:20 9 Nov - Fixed a problem in <a href="#faq2">Line 12 of the skeleton code</a> version of <code>Tasks.cpp</code>.</li>
+							<li>18:00 11 Nov - Updated sampleIO to include program outputs.</li>
+						</ul>
+						<p class="card-text">
+							If you encounter problems running the MacOS demo programs, you can try look for a Windows PC
+							on campus or use
+							the <a
+								href="https://itsc.hkust.edu.hk/services/academic-teaching-support/facilities/virtual-barn"
+								, target="_blank">Virtual Barn</a>
+							from anywhere to run the Windows demo program.
+						</p>
+						<p class="card-text">
+							<h4>Dictionary with real words</h4>
+							The test case 7 in sample inputs contain a dictionary with real words. You can try and play with it with the demo programs. You can remove the last 'end' line from test case 7 so the demo program does not exit immediately. The word definitions are from Dictionary.com.
+						</p>
+						<p class="card-text">
+							<h4>Errors in running demo program</h4>
+							The windows demo programs are compiled in HKUST virtual barn with MSVC compiler. If the programs cannot be run in your computer you can try using the Virtual barn.
+						</p>
+						<p class="card-text">
+							<h4>Auto comparison of sample inputs and sample outputs</h4>
+							The sample inputs and sample outputs might use <code>\n, \r\n</code> as end of line. This might interfere with automatically copy-pasting the sample inputs into the console, or auto comparison of outputs using scripts. Whether <code>\r\n, \n</code> is preferred depends on
+							your system, so you should manually check it with notepad++ whether the end of line used in the samples fit your use case. The sample outputs contain the "raw" outputs of the program, without any user inputs. For the "mixed" output containing also the user inputs for readability,
+							you may use the demo program with the sample inputs to generate them. 
+						</p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Resources &amp; Sample I/O
+					</div>
+				</div>
+
+				<!-- Submission and grading section -->
+				<!-- ### Complete submission and grading section for the assignment ### -->
+				<div class="card mb-4">
+					<div class="card-body" id="submission">
+						<h3 class="card-title">Submission &amp; Grading</h3>
+						<p class="card-text">
+							<strong>Deadline: 26 November 2022 Saturday HKT 23:59.</strong><br>
+							Submit a zip file to <a href="https://zinc.cse.ust.hk/">ZINC</a>.
+							Compress the single file <code>dictionary.cpp</code>, <b>not a folder containing
+								<code>dictionary.cpp</code></b>.
+						</p>
+
+						<h4>Grading Scheme</h4>
+						<p class="card-text">
+							Your score for this PA will be the sum of all test cases in ZINC. The table below
+							roughly shows the weight of each task. Remember the operator overloading functions have to be completed too. Partial (3-6) means the partial points you will get when Test Cases 3-6 are
+							completed but Test Cases 3-10 are not fully completed. For the other test cases, there is no partial completion. The bonus can
+							<b>only</b> be obtained when the other parts are 100%, and there is no memory leak. If there is memory leak in any task, there is a <code>x0.95</code> penalty for the total score.<br><br>
+							The list below <b>does not mean</b> that you are guaranteed to get the stated points if you implement the required functions correctly.
+							Wrong implementations of the rest of the functions may interfere with the program in uncertain ways, such as errors or memory leak.
+							If a dispute regarding ZINC auto grading arises, the COMP2012H teaching team reserves the right to final decision.
+						</p>
+						<br>
+						<table style="width:95%">
+							<tbody>
+								<tr>
+									<th style="width:90%">Test Case</th>
+									<th>Weight</th>
+								</tr>
+								<tr>
+									<td>01-02 : <a href="#constructor">Copy constructor</a>, <a href="#copyassign">Copy assignment</a></td>
+									<td>30%</td>
+								</tr>
+								<tr>
+									<td>03-10 : <a href="#addnode">Add node</a>, <a href="#removenode">Remove node</a>, <a href="#findnode">Find node</a>, <a href="#filter">Filter dictionary</a>, <a href="#foreach">For each</a>, <a href="#printallelements">Printing</a></td>
+									<td>30%</td>
+								</tr>
+								<tr>
+									<td><li>Partial (03-06) : <a href="#addnode">Add node</a>, <a href="#removenode">Remove node</a>, <a href="#findnode">Find node</a>, <a href="#filter">Filter dictionary</a></li> </td>
+									<td>20%</td>
+								</tr>
+								<tr>
+									<td>11-12 : <a href="#mergecopy">Merge dictionaries - copy and move</a></td>
+									<td>40%</td>
+								</tr>
+								<tr>
+									<td>Memory leak penalty</td>
+									<td>x0.95</td>
+								</tr>
+								<tr>
+									<td>Bonus (13-14) : <a href="#mbonus">Efficiency of implementations</a></td>
+									<td>5%</td>
+								</tr>
+							</tbody>
+						</table>
+						<p class="card-text">
+							The odd test cases are visible test cases from ZINC. You can view the inputs from sample IO. The even test cases are hidden test cases.
+						</p>
+						
+						<h4>ZINC auto grading</h4>
+						<p class="card-text">
+							For test cases 01-02 and 11-14, the odd test case is of the same format as the even test case, but they are different. Each of 01-02, 11-12, 13-14
+							runs the class <code>Tasks</code> in <code>Tasks.cpp</code> in place of the main program. <br><br>
+							For test cases 03-10, the odd test cases are in different format from the even test cases. The odd test cases contain a random permutation of the input
+							from the sample English dictionary (see sample I/O), with some query of the dictionary. The even test cases contains another tree, and elements are to be
+							deleted from the tree. Sample even test cases are provided, while the actual test cases are different, but with the same format. <br><br>
+							Your score in ZINC is a 6 digit number. The number starting from the 3rd digit from the right would be your raw score before factoring in the memory leak
+							penalty and bonus marks, out of 1000. For example, 100016 would mean 100%, while 50008 would mean 50%. The first two digits from the right would be 
+							the sum of memory leak completions and bonus tasks. Your final grade will be computed using the aforementioned grading scheme with this info.
+						</p>
+						<h4>Auto grading only functions (important)</h4>
+						<p class="card-text">
+							To facilitate separate grading, some functions in <code>Dictionary</code> are copied to the <code>Tasks</code> class. Of course those implementations are
+							removed in the skeleton code. The copies in the <code>Tasks</code> are provided in ZINC, but they will not be revealed. To test your program, you <i><b>have to</b></i>
+							implement your own functions for <code>zinc_replacement_</code> as the corresponding functions in <code>Dictionary</code>. You can use
+							CTRL+F on <code>Tasks.cpp</code> to find all the instances where the functions starting with <code>zinc_replacement_</code> are called.
+						</p>
+					</div>
+
+					<div class="card-footer text-muted">
+						End of Submission &amp; Grading
+					</div>
+				</div>
+
+				<!-- FAQ section -->
+				<!-- ### Complete FAQ section for the assignment ### -->
+				<div class="card mb-4">
+					<div class="card-body" id="faq">
+						<h3 class="card-title">Frequently Asked Questions</h3>
+						<p>
+							<b>Q</b>: My code doesn't work, here it is, can you help me fix it?<br>
+							<b>A</b>: As the assignment is a major course assessment, to be fair, you are supposed to
+							work on it
+							by yourself and we should never finish the tasks for you. We are happy to help with
+							explanations and
+							advice, but we are <b>not allowed</b> to directly debug for you.
+						</p>
+						<p id="faq2">
+							<b>Q</b>: There seems to be a compilation error for the unit <code>Tasks.cpp</code>. How do I fix it?<br>
+							<b>A</b>: A student in Piazza pointed out there was a typo in the skeleton code version of Tasks.cpp. The skeleton code is updated on 15:20 9 Nov.
+							If you have already written code using the previous version of the skeleton code, you can modify Line 12 of Tasks.cpp from <code>d.print_all_elements();</code>
+							to <code>d.print_all_elements(cout);</code>
+						</p>
+						<p id="faq3">
+							<b>Q</b>: My code works locally but not on ZINC. Why does this happen?<br>
+							<b>A</b>: According to <i>Auto grading only functions (important)</i> in <a href="#submission">Grading</a>, ZINC replaces some of the codes in Tasks.cpp with the 'official' implementations for separate grading.
+							The reason that your code works locally but not on ZINC is due to the differences in implementation of those functions. Some implementations require some aspects of the tree structure, while others don't. Your functions should make sure (see <a href="#tasks">important message in Tasks</a>)
+							the tree structure is kept <b>entirely</b> correct (see <a href="#triedetail">description</a> above). As a hint, you could debug your code by accessing a 'processed' dictionary directly with various methods, such as going from top to bottom,
+							or going from leaves to root and so on.
+						</p>
+						<p id="faq3">
+							<b>Q</b>: My code works locally but segfaults on ZINC. Why does this happen?<br>
+							<b>A</b>: This is precisely the above problem.
+						</p>
+					</div>
+					<div class="card-footer text-muted">
+						End of FAQ
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Sidebar Widgets Column -->
+			<div class="col-md-3">
+				<div class="sticky-top">
+					<!-- Menu Widget -->
+					<div class="card my-12">
+						<h5 class="card-header">Menu</h5>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<ul class="mb-0" style="padding-left:20px" type="circle">
+										<li>
+											<a href="#honor">Honor Code</a>
+										</li>
+										<li>
+											<a href="#objective">Objectives & ILOs</a>
+										</li>
+										<li>
+											<a href="#introduction">Introduction</a>
+										</li>
+										<li>
+											<a href="#description">Description</a>
+										</li>
+										<li>
+											<a href="#tasks">Tasks</a>
+											<ul style="padding-left:20px" type="square">
+											<li>
+												<a href="#constructor">Copy constructor</a>
+											</li>
+											<li>
+												<a href="#copyassign">Copy assignment</a>
+											</li>
+											<li>
+												<a href="#addnode">Add node</a>
+											</li>
+											<li>
+												<a href="#removenode">Remove node</a>
+											</li>
+											<li>
+												<a href="#findnode">Find node</a>
+											</li>
+											<li>
+												<a href="#foreach">For each</a>
+											</li>
+											<li>
+												<a href="#printallelements">Print all elements</a>
+											</li>
+											<li>
+												<a href="#printtypeelements">Print elements given type</a>
+											</li>
+											<li>
+												<a href="#mergecopy">Merge dictionaries (copy)</a>
+											</li>
+											<li>
+												<a href="#mergemove">Merge dictionaries (move)</a>
+											</li>
+											<li>
+												<a href="#filter">Filter dictionary</a>
+											</li>
+											<li>
+												<a href="#mbonus">Bonus</a>
+											</li>
+											</ul>
+										</li>
+										<li>
+											<a href="#recommendations">Recommendations &amp; Hints</a>
+										</li>
+										<li>
+											<a href="#download">Resources &amp; Sample I/O</a>
+										</li>
+										<li>
+											<a href="#submission">Submission &amp; Grading</a>
+										</li>
+										<li>
+											<a href="#faq">FAQ</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Maintenance widget -->
+					<div class="card my-4">
+						<h5 class="card-header">Page maintained by</h5>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<ul class="list-unstyled mb-0">
+										<li>
+											CHAU Yu Hei
+										</li>
+										<li>
+											<a href="mailto:yhchau@connect.ust.hk">yhchau@connect.ust.hk</a>
+										</li>
+										<li>Last Modified:
+											<script
+												type="text/javascript">document.write(document.lastModified);</script>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- Homepage widget -->
+					<div class="card my-4">
+						<h5 class="card-header">Homepage</h5>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<ul class="list-unstyled mb-0">
+										<li>
+											<a href="http://course.cse.ust.hk/comp2012h">Course Homepage</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.row -->
+	</div>
+
+	</div>
+	<!-- /.container -->
+
+	<!-- Footer -->
+	<footer class="py-5 bg-dark">
+		<div class="container">
+			<p class="m-0 text-center text-white">Maintained by COMP 2012H Teaching Team © 2021 HKUST Computer Science
+				and Engineering</p>
+		</div>
+		<!-- /.container -->
+	</footer>
+
+	<!-- Bootstrap core JavaScript -->
+	<script src="misc/jquery.js"></script>
+	<script src="misc/bootstrap.js"></script>
+
+
+
+
+</body>
+<grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
+
+</html>
