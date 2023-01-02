@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- ### Change assignment number ### -->
+	<title>COMP 2012H Assignment 10: AI Digit Recognition: Data Preprocessing and Network Testing</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="misc/bootstrap.css" rel="stylesheet">
+
+	<!-- Custom styles for this template -->
+	<link href="misc/blog-home.css" rel="stylesheet">
+
+	<!-- Prism syntax highlighter -->
+	<link href="misc/prism.css" rel="stylesheet">
+
+	<style>
+		pre {
+			background: #f4f4f4 !important;
+			border: 1px solid #ddd !important;
+			border-left: 3px solid #f36d33 !important;
+			color: #666 !important;
+			page-break-inside: avoid !important;
+			font-family: monospace !important;
+			font-size: 14px !important;
+			line-height: 1.6 !important;
+			margin-bottom: 1.6em !important;
+			max-width: 100% !important;
+			overflow: auto !important;
+			padding: 1em 1.5em !important;
+			display: block !important;
+			word-wrap: break-word !important;
+		}
+
+		table,
+		th,
+		td {
+			border: 1px solid black;
+		}
+
+		th,
+		td {
+			padding: 5px;
+		}
+
+		th {
+			text-align: left;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="misc/prettify.css">
+	<script src="misc/prompt.js"></script>
+</head>
+
+<body data-new-gr-c-s-check-loaded="8.880.0" data-gr-ext-installed="">
+	<script src="misc/prism.js"></script>
+
+	<!-- Page Content -->
+	<div class="container">
+
+		<div class="row">
+
+			<!-- Entries Column -->
+			<div class="col-md-9">
+
+				<h2 class="my-4">
+					<span style="color:darkblue">COMP 2012H</span>
+					<small>Honors Object-Oriented Programming and Data Structures</small>
+				</h2>
+
+				<!-- ### Change assignment number and title ### -->
+				<h3 class="my-4">
+					Assignment 10
+					<span style="color:#660066">AI Digit Recognition: Data Preprocessing and Network Testing</span>
+				</h3>
+
+				<!-- Honor Code section -->
+				<div class="card mb-4">
+					<div class="card-body" id="honor" style="background-color:#f4f4f4">
+						<h3 class="card-title">Honor Code</h3>
+						<p class="card-text">
+							We value academic integrity very highly. Please read the <a
+								href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a> section on our
+							course webpage to make sure you understand what is considered as plagiarism and what the
+							penalties are.
+							The following are some of the highlights:
+						</p>
+						<ul>
+							<li>
+								Do NOT try your "luck" - we use sophisticated plagiarism detection software to find
+								cheaters.
+								We also review codes for potential cases manually.
+							</li>
+							<li>
+								The penalty (for <b>BOTH</b> the copier and the copiee) is not just getting a zero in
+								your assignment.
+								Please read the <a href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a>
+								thoroughly.
+							</li>
+							<li>
+								Serious offenders will fail the course immediately, and there will be additional
+								disciplinary actions
+								from the department and university, upto and including expulsion.
+							</li>
+						</ul>
+						<p></p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Honor Code
+					</div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-body" id="objective" style="background-color:#f4f4f4">
+						<h3 class="card-title">Objectives & Intended Learning Outcomes</h3>
+						<p class="card-text">
+							The objective of this assignment is to familiarise you with Standard Template Library (STL).
+							After this assignment you should be able to:
+						</p>
+						<ol>
+							<li>
+								Choose and use proper STL containes to store data efficiently, and do manipulation in the stored data.
+							</li>
+							<li>
+								Use STL iterators to iterate through the elements of a container.
+							</li>
+							<li>
+								Use various STL algorithms to manipulate STL containers.
+							</li>
+							<li>
+								Develop and use function objects to further leverage STL library.
+							</li>
+						</ol>
+						<p></p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Objectives & Intended Learning Outcomes
+					</div>
+				</div>
+
+				<!-- Introduction section -->
+				<!-- ### Complete introduction section for the assignment ### -->
+				<div class="card mb-4">
+					<!-- ### Add an image representing the assignment content here ### -->
+					<img class="card-img-top" src="misc/pic_home.png" alt="Card image cap">
+					<div class="card-body language-text" id="introduction">
+						<p class="card-text">
+							<small>
+								<em>
+									MNIST digit dataset<br> Source:
+									<a href="https://ejleep1.tistory.com/932"
+										target="_blank">https://ejleep1.tistory.com/932</a>
+								</em>
+							</small>
+						</p>
+						<h3 class="card-title">Introduction</h3>
+						
+						<p class="card-text">
+							The goal of this assignment is to do data preprocessing and network testing for digit recognition. 
+							Digit recognition is the process to provide the ability to machines to recognize digits (human handwritten digits here).
+							To achieve this, we leverage a simple neural network and a digit dataset. 
+							Before the network be ready to perform digit recognition, 
+							it will have to go through a training phase and a testing phase.							
+						</p>
+						<ul>
+							<li>
+								During the training phase, "train" split of the dataset is used to teach the network how to make predictions. 
+								The "train" split contains a collection of image and label pairs. 
+								For example, as shown in the figure aboved, each digit image is accompanied with a corresponding label or ground truth. 
+								We train a network by feeding images to it and encouraging it to make predictions that are close to the corresponding labels.
+								Therefore, enough and high-quality "train" data are crital for training an accurate network. 
+								You will explore and build a sense on this throughout the assignment. 
+								Beisides, you can treat the network as a black box and skip how the neural network learns from the dataset.
+
+
+							</li>
+							<li>
+								During the testing phase, "test" split of the dataset is used to evaluate how well the trained network makes the correct predictions.
+								The "test" split also contains a collection of image and label pairs. Images are fed into the trained network as input one by one.
+								Then the predictions from the trained network are compared with the label. 
+								A prediction is called to be correct if it matches with the corresponding label. 
+							</li>
+						</ul>
+
+						<p class="card-text">
+							You will explore and build a sense on how a complete and class-balanced "train" data
+							 plays an important role in obtaining an accurate network throughout the assignment.
+							 "Class-balanced" means that each class in the dataset has roughly the same number of images and labels.
+							 The program pipeline is as follows:
+						</p>
+						<ol>
+							<li>
+								Train a network with the complete and class-balanced "train" data,
+								test it on the "test" data and report the overall and digit-wise accuracy.   
+							</li>
+							<li>
+								Remove part of the "train" data for a digit, making the dataset class-imbalanced. 
+								You then retrain a network, test it again and report the accuracy. 
+								Now the accuracy for that specific digit is expected to be lower than other digits.
+							</li>
+							<li>
+								Generate more "train" data for the above digit by augmenting the original images. 
+								Augmenting an image can be done by applying some geometrical transform without affecting the fidelity of the label, 
+								such as image shifting, resizng and cropping.
+							</li>
+						</ol>
+						
+						<p class="card-text">
+							In this assignment, you will implement part of the above pipeline mainly on data preprocessing and network testing 
+							by making use of STL containers, iterators, algorithms and function objects.
+						</p>
+
+							
+						
+					   
+						
+					</div>
+
+					<div class="card-footer text-muted">
+						End of Introduction
+					</div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-body language-text" id="description">
+						<h3 class="card-title">Description</h3>
+						<p class="card-text">
+							Please read the <a href="#faq">FAQ</a> and <a href="#change">Change Log</a> section
+							regularly, and do check it one day before the deadline to make sure you don't miss any
+							clarification, even if you have already submitted your work by then. You can also raise
+							questions on Piazza and remember to use the "pa10" tag.
+						</p>
+
+						<h4>Code structure</h4>
+						<p class="card-text">
+							The skeleton code structure is as follows:
+						</p>
+						<!-- <pre>PA10&#10;├── dataset&#10;&nbsp&nbsp&nbsp├── t10k-images-idx3-ubyte&#10;&nbsp&nbsp&nbsp├── t10k-labels-idx1-ubyte&#10;&nbsp&nbsp&nbsp├── train-images-idx3-ubyte&#10;&nbsp&nbsp&nbsp└── train-labels-idx1-ubyte&#10;├── includes&#10;&nbsp&nbsp&nbsp├── dataset.h&#10;&nbsp&nbsp&nbsp└── nn.h&#10;└── src&#10;&nbsp&nbsp&nbsp├── dataset.cpp&#10;&nbsp&nbsp&nbsp├── main.cpp&#10;&nbsp&nbsp&nbsp└── nn.cpp&#10; </pre> -->
+						<pre>PA10&#10;├── dataset.cpp&#10;├── dataset.h&#10;├── main.cpp&#10;├── nn.cpp&#10;├── nn.h &#10;├── train_test.cpp&#10;├── t10k-images-idx3-ubyte&#10;├── t10k-labels-idx1-ubyte&#10;├── train-images-idx3-ubyte&#10;└── train-labels-idx1-ubyte&#10; </pre>
+						<p class="card-text">
+							<code>main.cpp</code> contains the pipeline interface;
+
+						<p>
+							<code>nn.cpp</code> and
+							<code>nn.h</code>
+							hold the NN struct definition and the member function definitions as well as some layer structs definition that are used in the NN struct.
+						</p>
+						<p>
+							<code>dataset.cpp</code> and
+							<code>dataset.h</code>
+							hold the dataset class definition and the member function definitions as well as some global const, enum and new data type definitions.
+						</p>
+						
+						<p>
+							<code>train_test.cpp</code>
+							holds the training and testing related function definitions.
+						</p>
+
+						<p>
+							The last four files are the "train" and "test" split of the digit dataset, each split with one image file and one label file.
+						</p>
+						<p>
+							Your job is to complete <code>dataset.h</code>, <code>dataset.cpp</code> and <code>train_test.cpp</code> so that the pipeline can run through all the intended steps.
+						</p>
+
+
+						<h4>How is the digit dataset loaded, stored and accessed?</h4>
+						<p class="card-text">
+							The dataset is loaded into a <code>dataset</code> class object by calling the <code>void load_dataset()</code> member function,
+							 and in particular loaded into two variables for labels and two variables for images:
+							<ul>
+							<li>
+								<code>train_labels</code> and <code>test_labels</code>
+								<br>
+								<code>vector&ltuint8_t&gt </code> objects.
+								 Each element in the vector represents a label. 
+								 The <code>uint8_t</code> data type is defined as <code>unsigned char</code> with only 8-bits to save memory space.
+							</li>
+							<br>
+							<li>
+								<code>train_images</code> and <code>test_images</code>
+								<br>
+								<code>vector&ltarray&ltuint8_t, PIXELS&gt&gt</code> objects. 
+								Each <code>array&ltuint8_t, PIXELS&gt</code> element represents an image with height <code>ROWS</code>, width <code>COLS</code> 
+								and thereby <code>ROWS*COLS=PIXELS</code> pixels. 
+								<code>ROWS</code>, <code>COLS</code>, and <code>PIXELS</code> are constant variables defined in <code>dataset.h</code>.
+								<br>
+								<br>
+								Each pixel's brightness is represented by a <code>uint8_t</code> (<code>unsigned char</code>) number, whose range is from 0 (black) to 255 (white):
+								
+								<div style="text-align: center;">
+									<img class="card-img" src="misc/gray_img.png" alt="mainwindow" style="width: 90%;">
+								</div>
+								<p class="card-text">
+									<small>
+										<em>
+											Source:
+											<a href="https://github.com/NehaCkumari/MNIST-Handwritten-Digit-Recognition-using-CNN"
+												target="_blank">https://github.com/NehaCkumari/MNIST-Handwritten-Digit-Recognition-using-CNN</a>
+										</em>
+									</small>
+								</p>
+								
+								In an array, the pixels are arranged in the up-bottom and left-right order,
+								 as shown in the figure below:
+								
+								<div style="text-align: center;">
+									<img class="card-img" src="misc/pixel_order.png.jpg" alt="mainwindow" style="width: 80%;">
+								</div>
+								<p class="card-text">
+									<small>
+										<em>
+											Source:
+											<a href="https://processing.org/tutorials/pixels"
+												target="_blank">https://processing.org/tutorials/pixels</a>
+										</em>
+									</small>
+								</p>
+							
+							</li>
+							</ul>
+							<br>
+							Most of the funcitons you need to implement are class member functions,
+							which can directly access the four private dataset variables. 
+							At rare cases, you need to access these four private data members outside the class.
+							For that, we provide the following accessor member functions:	
+
+							<ul class="list-group list-group-flush language-cpp">
+								
+								
+								<pre><code>uint8_t get_a_label(const enum data_type mode, const size_t index) const;</code></pre>
+								<p>
+									<strong>Description - </strong>Return a label from <code>train_labels</code> or <code>test_labels</code> at a specific position.
+								</p>
+								<p><strong>Parameters</strong>
+									<ul>
+										<li>
+											<code>mode</code> - To indicate the dataset spilt to get a label, assumed to be either <code>TRAIN_LABEL</code> or <code>TEST_LABEL</code>.
+										</li>
+										<li>
+											<code>index</code> - The position at which the label is retrieved, assumed to be in valid range.
+										</li>
+									</ul>
+								</p>
+								<p>
+									<strong>Return value - </strong>The label.
+								</p>
+							
+								<pre><code>array&ltuint8_t, PIXELS&gt get_an_image(const enum data_type mode, const size_t index) const;</code></pre>
+								<p>
+									<strong>Description - </strong>Return an image from <code>train_images</code> or <code>test_images</code> at a specific position.
+								</p>
+								<p><strong>Parameters</strong>
+									<ul>
+										<li>
+											<code>mode</code> - To indicate the dataset spilt to get an image, assumed to be either <code>TRAIN_IMAGE</code> or <code>TEST_IMAGE</code>.
+										</li>
+										<li>
+											<code>index</code> - The position at which the image is retrieved, assumed to be in valid range.
+										</li>
+									</ul>
+								</p>
+								<p>
+									<strong>Return value - </strong>The image.
+								</p>
+								
+								<pre><code>vector&ltfloat&gt get_a_normalized_image(const enum data_type mode, const size_t index) const;</code></pre>
+								<p>
+									<strong>Description - </strong>Return an normalized image from <code>train_images</code> or <code>test_images</code> at a specific position.
+									Unlike an original image having integral pixel value in the range [0, 255], a normalized image has decimal pixel value in the range [0, 1].
+									
+								</p>
+								<p><strong>Parameters</strong>
+									<ul>
+										<li>
+											<code>mode</code> - To indicate the dataset spilt to get an image, assumed to be either <code>TRAIN_IMAGE</code> or <code>TEST_IMAGE</code>.
+										</li>
+										<li>
+											<code>index</code> - The position at which the image is retrieved, assumed to be in valid range.
+										</li>
+									</ul>
+								</p>
+								<p>
+									<strong>Return value - </strong>The image.
+								</p>
+								<p>
+									<strong>Notes - </strong>
+									By default, an image should be normalized before being fed into a neural network.
+								</p>
+								
+								<pre><code>size_t get_data_size(const enum data_type mode) const;</code></pre>
+								<p>
+									<strong>Description - </strong>Return the data size.
+								</p>
+								<p><strong>Parameters</strong>
+									<ul>
+										<li>
+											<code>mode</code> - To indicate the dataset spilt to return the size,
+											 can be <code>TRAIN_LABEL</code>, <code>TEST_LABEL</code>, <code>TRAIN_IMAGE</code> or <code>TEST_IMAGE</code>.
+										</li>
+									</ul>
+								</p>
+								<p>
+									<strong>Return value - </strong>The size.
+								</p>        
+							</ul>
+						</p>
+						
+
+						<h4 >Choose suitable STL containers for image manipulation</h4>
+						<p class="card-text">
+							Though the images are stored as an STL array after loading the dataset,
+								they may not be ready for image augmentation, such as shifting, resizing, cropping and padding.
+								Becuase the STL array length has to be set as compile-time constant.  
+								Thus, before applying these operations, an image in the STL array format need to be converted into other 
+								format with proper STL containers. 
+						</p>
+						<p>
+							<span style="color:red">Note that you have to define a new data type with name <code style="color:red">img_dt</code> 
+								using typedef definitions in <code style="color:red">dataset.h</code></span>,
+								before implementing some of the following functions involving <code>img_dt</code> usages.
+								Though this <code>img_dt</code> definition is not graded directly, choosing STL containers wisely and defining it properly
+								will ease your implementaion on related functions. 
+								Here are some general rules on choosing the right STL containers (particularly the sequential containers):
+								<ul>
+									<li>
+										Use <code>std:vector</code> as your default sequential container, especially as an alternative to built-in arrays.
+									</li>
+									<li>
+										If size is known in advance, use <code>std::array</code> instead of a built-in array.
+									</li>
+									<li>
+										If you add or remove elements frequently at both the front and back of a container, use <code>std::deque</code>.
+									</li>	
+									<li>
+										Use a <code>std::list</code> (not <code>std::deque</code>) if you need to insert/remove elements in the middle of the sequence
+									</li>
+									<li>
+										Do not use <code>std::list</code> if you need random access to objects.
+									</li>
+									<li>
+										You can define multi-dimentional containers by combining multiple same or different containers in a nested manner.
+									</li>							
+								</ul>
+								As the purpose of PA10 is to familiarize yourself with various STL templates, 
+								we strongly encourage you to walk through the following related documents, 
+									be aware of various off-the-shell operations,
+									and figure out ideal choices that fit in this assignment.
+									Here are some related links for your reference:
+									<ul>
+									<li>
+										Containers -
+										<a href="https://cplusplus.com/reference/stl/"
+											target="_blank">https://cplusplus.com/reference/stl/</a>,
+										
+											<a href="https://www.geeksforgeeks.org/containers-cpp-stl/"
+										target="_blank">https://www.geeksforgeeks.org/containers-cpp-stl/</a>
+									</li>
+									<li>
+										Algorithm -
+										<a href="https://cplusplus.com/reference/algorithm/"
+											target="_blank">https://cplusplus.com/reference/algorithm/</a>
+									</li>
+									<li>
+										Iterator -
+										<a href="https://cplusplus.com/reference/iterator/"
+											target="_blank">https://cplusplus.com/reference/iterator/</a>
+									</li>	
+									
+								</ul>
+						</p>
+								
+					</div>
+					<div class="card-footer text-muted">
+						End of Description
+					</div>
+				</div>
+
+				<div class="card mb-4 language-text">
+					<div class="card-body" id= "tasks">
+						<h3 class="card-title">Tasks</h3>
+						<p class="card-text">
+							Implement the following functions in the <code>dataset.cpp</code> 
+							except for the function <code>void testing(NN& nn, dataset& data)</code> in the <code>train_test.cpp</code>.
+							Note that you have to define a new data type with name <code>img_dt</code> 
+								using typedef definitions in <code>dataset.h</code> for related functions.
+						</p>
+						<p class="card-text">
+						
+
+					</div>
+
+					<ul class="list-group list-group-flush language-cpp">
+						<li class="list-group-item">
+							<pre><code class="language-cpp">void print_statistic(const enum data_type mode) const;</code></pre>
+							<strong>Description - </strong>
+							Calculate how many images are there for the train and test split and print the result.
+							<br>
+							Example output:
+							<pre>
+Number of train images for digit 0: 1994
+Number of train images for digit 1: 2281
+Number of train images for digit 2: 1929
+Number of train images for digit 3: 2076
+Number of train images for digit 4: 1945
+Number of train images for digit 5: 1775
+Number of train images for digit 6: 1971
+Number of train images for digit 7: 2093
+Number of train images for digit 8: 1922
+Number of train images for digit 9: 2014</pre>
+
+Another example output:
+							<pre>
+Number of test images for digit 0: 305
+Number of test images for digit 1: 378
+Number of test images for digit 2: 352
+Number of test images for digit 3: 349
+Number of test images for digit 4: 352
+Number of test images for digit 5: 307
+Number of test images for digit 6: 309
+Number of test images for digit 7: 347
+Number of test images for digit 8: 319
+Number of test images for digit 9: 315</pre>
+							<!-- <br> -->
+							<!-- <br> -->
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>mode</code> - specifiy the dataset split.
+								</li>
+							</ul>
+							<!-- <br> -->
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									There's one space after each colon regardless of the specific number.
+								</li>
+								<li>
+									You can assume the parameter <code>mode</code> to be either <code>TRAIN_IMAGE</code> or <code>TEST_IMAGE</code> only.
+								</li>
+								<li>
+									It's ok to have trailing spaces at the end of each row 
+									and new empty rows at the end of the output.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void testing(NN& nn, dataset& data);</code></pre>
+							<strong>Description - </strong> The testing phase to test the accuray of the trained neural network.
+							The <span style="color:red">normalized</span> images of the test split will be fed through the network
+							one by one to get the output. 
+							The output is a <code>vector&ltfloat&gt</float></code> with length 10. 
+							The index of the maximum element is called the prediction,
+							which is then further compared with the corresponding label to check whether the prediction is correct.
+							By iterating through all images, and do the comparisons, 
+							we can calculate and print the overall and digit-wise accuracy.
+							<br>Example output:
+							<pre>
+Overall accuracy: 78.94%
+Accuracy for digit 0: 95.41%
+Accuracy for digit 1: 96.30%
+Accuracy for digit 2: 82.10%
+Accuracy for digit 3: 84.24%
+Accuracy for digit 4: 84.94%
+Accuracy for digit 5: 48.21%
+Accuracy for digit 6: 79.94%
+Accuracy for digit 7: 79.83%
+Accuracy for digit 8: 62.07%
+Accuracy for digit 9: 71.11%</pre>
+							<!-- <br> -->
+							<!-- <br> -->
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>nn</code> - the trained neural network.
+								</li>
+								<li>
+									<code>data</code> - the dataset object for reference.
+								</li>
+							</ul>
+							<!-- <br> -->
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									The accuracy values are round to two decimal places. For example, 95.405% should become 95.41% and 95.404% should become 95.40%.
+								</li>
+								<li>
+									It's ok to have trailing spaces at the end of each row 
+									and new empty rows at the end of the output.
+								</li>
+								<li>
+									Please assume that each digit has at least one occurrence. 
+								</li>								
+							</ul>
+
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void remove_some_train_data(const uint8_t digit, const size_t size);</code></pre>
+							<strong>Description - </strong> Remove the last <code>size</code> data of <code>digit</code> from the 
+							<code>train_labels</code> and <code>train_images</code> vectors while keeping other data in their original order.
+							<br>
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>digit</code> - the digit to remove.
+								</li>
+								<li>
+									<code>size</code> - the number of data to remove.
+								</li>
+							</ul>
+							<!-- <br> -->
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									You can assume the parameter <code>digit</code> to be a valid integer in range [0, 9] 
+									and the <code>size</code> to be less than the number of that digit avaiable in the dataset.
+								</li>
+								
+							</ul>
+
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void print_image(const array&ltuint8_t, PIXELS&gt& img_ar) const;</code></pre>
+							<strong>Description - </strong> Visualize an image by print each pixel's integer value.
+							It serves as a helper function to check if your following image manipulation implementaion works.
+							<br>Example output of a digit 9:
+    							<pre>
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0  55 148 210 253 253 113  87 148  55   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0  87 232 252 253 189 210 252 252 253 168   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   4  57 242 252 190  65   5  12 182 252 253 116   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0  96 252 252 183  14   0   0  92 252 252 225  21   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0 132 253 252 146  14   0   0   0 215 252 252  79   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0 126 253 247 176   9   0   0   8  78 245 253 129   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0  16 232 252 176   0   0   0  36 201 252 252 169  11   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0  22 252 252  30  22 119 197 241 253 252 251  77   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0  16 231 252 253 252 252 252 226 227 252 231   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0  55 235 253 217 138  42  24 192 252 143   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0  62 255 253 109   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0  71 253 252  21   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0 253 252  21   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0  71 253 252  21   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0 106 253 252  21   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0  45 255 253  21   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0 218 252  56   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0  96 252 189  42   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0  14 184 252 170  11   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  14 147 252  42   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0</pre>
+							<!-- <br> -->
+							<!-- <br> -->
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>img_ar</code> - the image to visualize.
+								</li>
+							</ul>
+							<!-- <br> -->
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									Each pixel occupies 4 spaces including the white spaces,
+									e.g., there are 3 spaces before each pixel with value 0.
+								</li>
+								<li>
+									It's ok to have trailing spaces at the end of each row 
+									and new empty rows at the end of the output.
+								</li>
+							</ul>
+						</li>
+						
+						<li class="list-group-item">
+							<pre><code>void print_image(const img_dt& img) const;</code></pre>
+							<strong>Description - </strong> Same to the above print_image function but with diffent image's data type.
+    						<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>img</code> - the image to visualize.
+								</li>
+							</ul>
+							<!-- <br> -->
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									Refer to the above print_image function.
+								</li>
+								
+							</ul>
+						</li>
+
+
+						<li class="list-group-item">
+							<pre><code>img_dt convert_image_dt(const array&ltuint8_t, PIXELS&gt& img_ar) const;</code></pre>
+							<strong>Description - </strong> Convert an image in <code>array</code> type to <code>img_dt</code> type.
+							<!-- <br> -->
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>img_ar</code> - the image to convert.
+								</li>
+							</ul>
+							<strong>Return - </strong> the converted image.
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									You can assume the image to has a fixed size of 28 x 28 for this function.
+								</li>
+								
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>array&ltuint8_t, PIXELS&gt  convert_image_dt(const img_dt& img) const;</code></pre>
+							<strong>Description - </strong> Convert an image in <code>img_dt</code> type to <code>array</code> type.
+							<!-- <br> -->
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>img_ar</code> - the image to convert.
+								</li>
+							</ul>
+							<strong>Return - </strong> the converted image.
+							<br>
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									You can assume the image to has a fixed size of 28 x 28 for this function.
+								</li>
+								
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void shift_image(img_dt& img, const enum shift_type dir, const size_t p, const uint8_t value=0);</code></pre>
+							<strong>Description - </strong> Shift an image horizontaly, vertically or diagonally by the specified number of pixels.
+							The empty region after shifting are filled with the specified value.
+							<!-- <br> -->
+							<!-- <br> -->
+							<br>If we print the shifited image on the above untouched digit 9 with 
+							<code>dir = LEFT, p = 7</code>, we have the output:
+    							<pre>
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0  55 148 210 253 253 113  87 148  55   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0  87 232 252 253 189 210 252 252 253 168   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   4  57 242 252 190  65   5  12 182 252 253 116   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0  96 252 252 183  14   0   0  92 252 252 225  21   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0 132 253 252 146  14   0   0   0 215 252 252  79   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+ 126 253 247 176   9   0   0   8  78 245 253 129   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+ 232 252 176   0   0   0  36 201 252 252 169  11   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+ 252 252  30  22 119 197 241 253 252 251  77   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+ 231 252 253 252 252 252 226 227 252 231   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+  55 235 253 217 138  42  24 192 252 143   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0  62 255 253 109   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0  71 253 252  21   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0 253 252  21   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0  71 253 252  21   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0 106 253 252  21   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0  45 255 253  21   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0 218 252  56   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0  96 252 189  42   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0  14 184 252 170  11   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0  14 147 252  42   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0</pre>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>img</code> - the image to shift.
+								</li>
+								<li>
+									<code>dir</code> - the direction to shift. There are eight directions in total.
+								</li>
+								<li>
+									<code>p</code> - the number of pixels to shift.
+								</li>
+								<li>
+									<code>value</code> - the value to fill the empty region.
+								</li>
+							</ul>
+							<!-- <br> -->
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									<code>p</code> is non-negative. If it exceed the image width and height,
+									the entile image will be filled with the specified value.									
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void resize_image(img_dt& img, const size_t new_rows, const size_t new_cols);</code></pre>
+							<strong>Description - </strong>  Resizing an image using the nearest neighbour method. 
+							Let's see how this works. Suppose we have a 2x2 image and we want to resize it to 4x4 as shown below.
+							
+							<div style="text-align: center;">
+								<img class="card-img" src="misc/resize0.png" alt="mainwindow" style="width: 50%;">
+							</div>
+
+							Let's pick up the first pixel (denoted by 'P1') in the resized image. 
+							To assign it a value, we must find its nearest pixel in the input 2x2 image.
+							Let's first see some facts and assumtions used in this.
+							
+							<p>
+								<br>Assumption: a pixel is always represented by its center value. Each pixel in our input 2x2 image is of unit length and width.
+							</p>
+							For sake of simplicity, we start indexing from 0.5 which means that our first pixel is at 0.5 next at 1.5 and so on as shown below.
+
+							<div style="text-align: center;">
+								<img class="card-img" src="misc/resize1.png" alt="mainwindow" style="width: 20%;">
+							</div>
+
+							So for the above example, the location of each pixel in inut image is 
+							{'10': (0.5, 0.5), '20': (1.5, 0.5), '30': (0.5, 1.5), '40': (1.5, 1.5)}.
+
+							<p>
+								After finding the location of each pixel in the input image, follow these 2 steps:
+								<ol>
+									<li>
+										First, find the position of each pixel (of the resized image) in the input image. 
+										This is done by projecting the 4x4 image on the 2x2 image. 
+										SO, we can easily find out the coordinates of each resized image pixel, 
+										e.g., location of 'P1' in the input image is (0.25, 0.25), for 'P2' (0.75, 0.25) and so on.
+									</li>
+									<li>
+										Now, compare the above-calculated coordiantes of each unkown pixel with the input image pixels to find 
+										out the nearest pixel, e.g., 'P1' (0.25, 0.25) is nearest to 10 (0.5, 0.5). 
+										So we assign 'P1' value of 10. Similarly, for other pixels, we can find their nearest pixel.
+									</li>									
+								</ol>
+							</p>
+							<p>
+								The final result we get is shown in figure below:
+								<div style="text-align: center;">
+									<img class="card-img" src="misc/resize2.png" alt="mainwindow" style="width: 50%;">
+								</div>
+							</p>
+
+							<p>
+								Resizing to smaller images follow similar protocol.
+							</p>
+							<br>If we print the resized image on the above untouched digit 9 with 
+							<code>new_rows = 32</code> and <code>new_cols = 32</code>, we have the output:
+    							<pre>
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0  55 148 210 253 253 113 113  87 148  55   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0  87 232 252 253 189 210 252 252 252 253 168   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   4  57  57 242 252 190  65   5  12 182 182 252 253 116   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0  96 252 252 252 183  14   0   0  92 252 252 252 225  21   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0  96 252 252 252 183  14   0   0  92 252 252 252 225  21   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0 132 253 252 252 146  14   0   0   0 215 252 252 252  79   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0 126 253 247 176 176   9   0   0   8  78 245 253 253 129   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0  16 232 252 176   0   0   0   0  36 201 252 252 169 169  11   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0  22 252 252  30  22  22 119 197 241 253 252 251  77  77   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0  16 231 252 253 252 252 252 252 226 227 252 231   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0  55 235 253 217 217 138  42  24 192 252 143   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  62 255 253 109   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  62 255 253 109   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  71 253 252  21   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0 253 252  21   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  71 253 252  21   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0 106 253 252  21   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  45 255 253  21   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0 218 252  56   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  96 252 189  42  42   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  96 252 189  42  42   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  14 184 252 170 170  11   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  14 147 252 252  42   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0</pre>
+
+							<br>If we print the resized image on the above untouched digit 9 with 
+							<code>new_rows = 18</code> and <code>new_cols = 18</code>, we have the output:
+    							<pre>
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0 148 210 253 113 148   0   0   0   0   0
+   0   0   0   0   0   0   0  87 252 253 210 252 253   0   0   0   0   0
+   0   0   0   0   0   0 252 252  14   0  92 252 225   0   0   0   0   0
+   0   0   0   0   0 132 252 146   0   0 215 252  79   0   0   0   0   0
+   0   0   0   0 232 252   0   0  36 201 252 169   0   0   0   0   0   0
+   0   0   0   0 252 252  22 119 241 253 251  77   0   0   0   0   0   0
+   0   0   0   0  55 235 217 138  24 192 143   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0  62 255 109   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0 253  21   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0 106 253  21   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0  45 255  21   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0  96 189  42   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0  14 252 170   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0</pre>
+							<!-- <br> -->
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>img</code> - the image to resize.
+								</li>
+								<li>
+									<code>new_rows</code> - the rows or height of the resized image.
+								</li>
+								<li>
+									<code>new_cols</code> - the columns or width of the resized image.
+								</li>
+							</ul>
+							<!-- <br> -->
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									You can assume that the <code>new_rows</code> and <code>new_cols</code> are positive integers.
+								</li>
+								<s>
+								<li>
+									Please choose the top, left, or top left one when there is more than one pixel having the shortest distance. 
+								</li>
+								</s>
+								<li>
+								Dealing with such boundary cases are not our primary intent. For ease of the implemation,
+								 please choose the bottom,  right, or bottom right one when there is more than one pixel having the shortest distance. 
+								 For example, if there are exactly two pixels having the same shortest distance, choose the bottom (right) one if they
+								  are vetically (horizontally) adjacent nerghbors; if there are four pixels having the same shortest distance, choose the  bottom right one.
+								</li>
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void crop_image(img_dt& img, const size_t y0, const size_t x0, const size_t new_rows, const size_t new_cols);</code></pre>
+							<strong>Description - </strong> Crop the image to a patch with specified dimensions. 
+							The coordiantes specifiy the top-left pixel of the croped patch.
+							<br>If we print the cropped image on the above untouched digit 9 with 
+							<code>y0 = 1</code>, <code>x0 = 1</code>, <code>new_rows = 24</code> and <code>new_cols = 24</code>, we have the output:
+							<pre>
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0  55 148 210 253 253 113  87 148  55   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0  87 232 252 253 189 210 252 252 253 168   0   0   0   0
+   0   0   0   0   0   0   0   0   4  57 242 252 190  65   5  12 182 252 253 116   0   0   0   0
+   0   0   0   0   0   0   0   0  96 252 252 183  14   0   0  92 252 252 225  21   0   0   0   0
+   0   0   0   0   0   0   0 132 253 252 146  14   0   0   0 215 252 252  79   0   0   0   0   0
+   0   0   0   0   0   0 126 253 247 176   9   0   0   8  78 245 253 129   0   0   0   0   0   0
+   0   0   0   0   0  16 232 252 176   0   0   0  36 201 252 252 169  11   0   0   0   0   0   0
+   0   0   0   0   0  22 252 252  30  22 119 197 241 253 252 251  77   0   0   0   0   0   0   0
+   0   0   0   0   0  16 231 252 253 252 252 252 226 227 252 231   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0  55 235 253 217 138  42  24 192 252 143   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0  62 255 253 109   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0  71 253 252  21   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0 253 252  21   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0  71 253 252  21   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0 106 253 252  21   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0  45 255 253  21   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0 218 252  56   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0  96 252 189  42   0   0   0   0   0   0   0</pre>
+
+							<br>
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>img</code> - the image to crop.
+								</li>
+								<li>
+									<code>y0</code> - the row coordinate of the top-left pixel of the croped patch. 0 indicates the first row.
+								</li>
+								<li>
+									<code>x0</code> - the column coordinate of the top-left pixel of the croped patch. 0 indicates the first column.
+								</li>
+								<li>
+									<code>new_rows</code> - the rows or height of the resized image.
+								</li>
+								<li>
+									<code>new_cols</code> - the columns or width of the resized image.
+								</li>
+								
+							</ul>
+							<!-- <br> -->
+							<strong>Notes</strong>
+							<ul>
+								<li>
+									You can assume that the cropped patch is always within the input image.		
+								</li>
+								
+							</ul>
+						</li>
+
+						<li class="list-group-item">
+							<pre><code>void padding_image(img_dt& img, const size_t top=0, const size_t down=0, const size_t left=0, const size_t right=0, const uint8_t value=0);</code></pre>
+							<strong>Description - </strong> Pad specified value to the borders of the image. 
+							<br>If we print the padded image on the above cropped digit 9 with 
+							<code>top=1, down=2, left=2, right=1, value=1</code>, we have the output:
+<pre>
+   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
+   1   1   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   1
+   1   1   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   1
+   1   1   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   1
+   1   1   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   1
+   1   1   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   1
+   1   1   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   1
+   1   1   0   0   0   0   0   0   0   0   0   0   0  55 148 210 253 253 113  87 148  55   0   0   0   0   1
+   1   1   0   0   0   0   0   0   0   0   0   0  87 232 252 253 189 210 252 252 253 168   0   0   0   0   1
+   1   1   0   0   0   0   0   0   0   0   4  57 242 252 190  65   5  12 182 252 253 116   0   0   0   0   1
+   1   1   0   0   0   0   0   0   0   0  96 252 252 183  14   0   0  92 252 252 225  21   0   0   0   0   1
+   1   1   0   0   0   0   0   0   0 132 253 252 146  14   0   0   0 215 252 252  79   0   0   0   0   0   1
+   1   1   0   0   0   0   0   0 126 253 247 176   9   0   0   8  78 245 253 129   0   0   0   0   0   0   1
+   1   1   0   0   0   0   0  16 232 252 176   0   0   0  36 201 252 252 169  11   0   0   0   0   0   0   1
+   1   1   0   0   0   0   0  22 252 252  30  22 119 197 241 253 252 251  77   0   0   0   0   0   0   0   1
+   1   1   0   0   0   0   0  16 231 252 253 252 252 252 226 227 252 231   0   0   0   0   0   0   0   0   1
+   1   1   0   0   0   0   0   0  55 235 253 217 138  42  24 192 252 143   0   0   0   0   0   0   0   0   1
+   1   1   0   0   0   0   0   0   0   0   0   0   0   0  62 255 253 109   0   0   0   0   0   0   0   0   1
+   1   1   0   0   0   0   0   0   0   0   0   0   0   0  71 253 252  21   0   0   0   0   0   0   0   0   1
+   1   1   0   0   0   0   0   0   0   0   0   0   0   0   0 253 252  21   0   0   0   0   0   0   0   0   1
+   1   1   0   0   0   0   0   0   0   0   0   0   0   0  71 253 252  21   0   0   0   0   0   0   0   0   1
+   1   1   0   0   0   0   0   0   0   0   0   0   0   0 106 253 252  21   0   0   0   0   0   0   0   0   1
+   1   1   0   0   0   0   0   0   0   0   0   0   0   0  45 255 253  21   0   0   0   0   0   0   0   0   1
+   1   1   0   0   0   0   0   0   0   0   0   0   0   0   0 218 252  56   0   0   0   0   0   0   0   0   1
+   1   1   0   0   0   0   0   0   0   0   0   0   0   0   0  96 252 189  42   0   0   0   0   0   0   0   1
+   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
+   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1</pre>
+							<!-- <br> -->
+							<!-- <br> -->
+							<strong>Parameters</strong>
+							<ul>
+								<li>
+									<code>img</code> - the image to pad.
+								</li>
+								<li>
+									<code>top</code> - how many rows to pad on the top.
+								</li>
+								<li>
+									<code>down</code> - how many rows to pad on the bottom.
+								</li>
+								<li>
+									<code>left</code> - how many rows to pad on the left.
+								</li>
+								<li>
+									<code>right</code> - how many rows to pad on the right.
+								</li>
+								<li>
+									<code>value</code> - the value used to pad the image with default value 0.
+								</li>
+							</ul>
+							<!-- <br> -->
+							<!-- <strong>Notes</strong>
+							<ul>
+								<li>
+									
+								</li>
+								
+							</ul> -->
+						</li>
+
+					<div class="card-footer text-muted">
+						End of Part 1
+					</div>
+				</div>
+
+				<!-- Download section -->
+				<!-- ### Complete download section for the assignment ### -->
+				<div class="card mb-4">
+					<div class="card-body" id="download">
+						<h3 class="card-title">Resources &amp; Sample I/O</h3>
+						<ul>
+							<li>
+								Skeleton code: <a href="../Resources/pa10_skeleton.zip">
+									PA10_skeleton.zip</a>
+								<br>You are suggested to compile the program using our provided <code>Makefile</code>.
+							</li>
+							<!-- <li>
+								Demo programs (last update at <b>10/10 12:56</b>):<br>
+								<a href="../Resources/pa6_win.exe">Windows</a> /
+								<a href="../Resources/pa6_linux">Linux</a> /
+								<a href="../Resources/pa6_mac_x86">macOS x86</a> /
+								<a href="../Resources/pa6_mac_arm">macOS arm</a><br>
+								(If you find the demo program doesn't behave as you expect, please first download and
+								try the lastest version, if the problem is still there you can let me know. Thanks!)
+							</li> -->
+							<li>
+								Sample output file: 
+								you should get the output as in the <a href="../Resources/demo_output1.txt">demo output 1</a> 
+								(results writed to file) 
+								or the output as in the <a href="../Resources/demo_output2.txt">demo output 2</a> 
+								(results printed on the terminal)
+								after finishing all related tasks and run the main.cpp we provided without any unintended modification.
+								The exact accuracy might <strong> fluctuate a bit </strong>  due to the inconsistency of random number on different platform.
+													
+							</li>
+						</ul>
+						<!-- <p class="card-text">
+							If you encounter problems running the macOS demo programs, you can try look for a Windows PC
+							on campus or use
+							the <a
+								href="https://itsc.hkust.edu.hk/services/academic-teaching-support/facilities/virtual-barn"
+								, target="_blank">Virtual Barn</a>
+							from anywhere to run the Windows demo program.
+						</p> -->
+					</div>
+					<div class="card-footer text-muted">
+						End of Resources &amp; Sample I/O
+					</div>
+				</div>
+
+				<!-- Submission and grading section -->
+				<!-- ### Complete submission and grading section for the assignment ### -->
+				<div class="card mb-4">
+					<div class="card-body" id="submission">
+						<h3 class="card-title">Submission &amp; Grading</h3>
+						<p class="card-text">
+							<strong>Deadline: 19 November 2022 Saturday HKT 23:59.</strong><br>
+							Submit a zip file to <a href="https://zinc.cse.ust.hk/">ZINC</a> (The ZINC submisssion portal will be available soon).
+							Compress the source files <code>dataset.h</code>, <code>dataset.cpp</code> and <code>train_test.cpp</code> as <code>PA10.zip</code> directly,
+							<b>not a folder containing them</b>.
+						</p>
+
+						<p class="card-text">
+							<strong>Late Policy:</strong><br>
+							Please refer to the <a href="https://course.cse.ust.hk/comp2012h/#assignments">3-day late budget
+							  policy</a>.
+						  </p>
+						  
+						<p class="card-text">
+							You are strictly forbidden to modify the signature of given classes and functions</strong>.
+							However, you may overload the functions. When we grade your program, if we cannot find
+							the exact function whose signature is what we described in
+							<a href="#tasks">Tasks section</a>, you will have <strong>no score</strong> for <b>all related tasks</b>.
+						  </p>
+						  <p class="card-text">
+							Before deadline, the test cases on ZINC will only contain a few cases. If you passed
+							those tests, it only means your program can successfully run on ZINC and can pass
+							those test cases. The result is by no mean complete and the score are irrelavent to
+							your actual score.
+							In actual grading stage after deadline, we will use a <strong>totally different set of
+							  test cases</strong>, which is expected to be more complete and more strict,
+							to test the correctness your program.
+						  </p>
+			  
+						  <p class="card-text">
+							Please ensure that you submit to ZINC well before the deadline as <strong>all late
+							  submissions will be automatically rejected</strong>.
+						  </p>
+
+						
+
+						<h4>Grading Scheme</h4>
+						<p class="card-text">
+							In this assignment, we follow the Unit Test manner to grade your assignment on ZINC. Some test cases will
+							test single behavior of a task class. However, some tasks may depend on correct implementation of several
+							other functions, e.g., to test the <code>void shift_image(img_dt& img, const enum shift_type dir, const size_t p, const uint8_t value=0);</code> 
+							function, we would call the <code>convert_image_dt(const array&ltuint8_t, PIXELS&gt& img_ar);</code>
+							at first and the <code>print_image(const img_dt& img);</code> at last.
+
+							So, a errorneous implementation of the related helper functions can affect the grading on target functions.
+							The final grade of this assignment will be based on how many test cases you have passed, and no partial points will be given
+							to each test cases. So, please be careful implementing every task class and test your code thoroughly
+							before the ddl.
+						  </p>
+						<!-- <table style="width:95%">
+							<tbody>
+								<tr>
+									<th style="width:90%">Task Function</th>
+									<th>Grade</th>
+								</tr>
+								<tr>
+									<td>Task 1 - <code>void print_statistic(const enum data_type mode) const;</code></td>
+									<td>5%</td>
+								</tr>
+								<tr>
+									<td>Task 2 - <code>void testing(NN& nn, dataset& data);</code></td>
+									<td>15%</td>
+								</tr>
+								<tr>
+									<td>Task 3 - <code>void remove_some_train_data(const uint8_t digit, const size_t size);</code></td>
+									<td>10%</td>
+								</tr>
+								<tr>
+									<td>Task 4 - <code>void print_image(const array&ltuint8_t, PIXELS&gt& img_ar) const;</code></td>
+									<td>5%</td>
+								</tr>
+								<tr>
+									<td>Task 5 - <code>void print_image(const img_dt& img) const;</code></td>
+									<td>5%</td>
+								</tr>
+								<tr>
+									<td>Task 6 - <code>img_dt convert_image_dt(const array&ltuint8_t, PIXELS&gt& img_ar) const;</code></td>
+									<td>5%</td>
+								</tr>
+								<tr>
+									<td>Task 7 - <code>array&ltuint8_t, PIXELS&gt  convert_image_dt(const img_dt& img) const;</code></td>
+									<td>5%</td>
+								</tr>
+								<tr>
+									<td>Task 8 - <code>void shift_image(img_dt& img, const enum shift_type dir, const size_t p, const uint8_t value=0);</code></td>
+									<td>15%</td>
+								</tr>
+								<tr>
+									<td>Task 9 - <code>void resize_image(img_dt& img, const size_t new_rows, const size_t new_cols);</code></td>
+									<td>15%</td>
+								</tr>
+								<tr>
+									<td>Task 10 - <code>void crop_image(img_dt& img, const size_t y0, const size_t x0, const size_t new_rows, const size_t new_cols);</code></td>
+									<td>10%</td>
+								</tr>
+								<tr>
+									<td>Task 11 - <code>void padding_image(img_dt& img, const size_t top=0, const size_t down=0, const size_t left=0, const size_t right=0, const uint8_t value=0);</code></td>
+									<td>10%</td>
+								</tr>
+		
+							</tbody>
+						</table> -->
+						<h4>Memory Leak</h4>
+						<p class="card-text">
+							Please bear in mind that we will also check memory leak in test cases. If any of your
+							test cases have memory leak, you will receive a 10% penalty. This penalty will be applied
+							only once in this PA.
+						</p>
+					</div>
+					<div class="card-footer text-muted">
+						End of Submission &amp; Grading
+					</div>
+				</div>
+
+				<div class="card mb-4">
+					<div class="card-body" id="change">
+						<h3 class="card-title">Change Log</h3>
+						<ol>
+							<li>
+								<b>20:02 03/11/2022</b><br>
+								Update the skeleton code by adding <code>#include &ltnumeric&gt</code> to the <code>train_test.cpp</code> file.
+							</li>
+							<li>
+								<b>02:13 04/11/2022</b><br>
+								<ul>
+									<li>
+										Update the skeleton code by adding <code>#include &ltfstream&gt</code> to the <code>nn.h</code> file.
+									</li>
+									<li>
+										Add notes to the <code>convert_image_dt</code> functions, where you can assume the image to has a fixed size of 28 x 28.
+									</li>
+									<li>
+										Update the example output of <code>void testing(NN& nn, dataset& data);</code>, the demo_output1 and demo_output2 by removing the 
+										output for the so-called "digit 10".
+									</li>
+								</ul>	
+								<li>
+									<b>12:50 04/11/2022</b><br>
+									Update the skeleton code by 
+									replacing the statement 
+									<br>
+									<code>this->padding_image(img, (ROWS-rand_num)/2, ROWS-(ROWS-rand_num)/2, (COLS-rand_num)/2, COLS-(COLS-rand_num)/2);</code>
+									<br>
+									in the <code>compound_augment_image</code> function
+									with
+									<br>
+									 <code>this->padding_image(img, (ROWS-rand_num)/2, ROWS-(ROWS-rand_num)/2-rand_num, (COLS-rand_num)/2, COLS-(COLS-rand_num)/2-rand_num);</code>. 
+								</li>
+								<s>
+								<li>
+									<b>14:22 04/11/2022</b><br>
+									Add notes to the <code>resize_image</code> functions:
+									<br>
+									Please choose the top, left, or top left one when there is more than one pixel having the shortest distance. 
+								</li>
+								</s>
+								<li>
+									<b>20:50 04/11/2022</b><br>
+									Add notes to the <code>resize_image</code> functions:
+									<br>
+									Dealing with such boundary cases are not our primary intent. For ease of the implemation, please choose the bottom,  right, or bottom right one when there is more than one pixel having the shortest distance. 
+								</li>
+								<li>
+									<b>15:20 07/11/2022</b><br>
+									Add notes to the <code>testing</code> functions:
+									<br>
+									Please assume that each digit has at least one occurrence.  
+								</li>
+								<li>
+									<b>23:22 14/11/2022</b><br>
+									Add further notes to the <code>resize_image</code> functions:
+									<br>
+									For example, if there are exactly two pixels having the same shortest distance, choose the bottom (right) one
+									 if they are vetically (horizontally) adjacent nerghbors; if there are four pixels having the same shortest distance, choose the  bottom right one.
+								</li>
+								<li>
+									<b>10:45 18/11/2022</b><br>
+									Add further notes about the accuracy rounding in the <code>void testing(NN& nn, dataset& data);</code> function:
+									<br>
+									For example, 95.405% should become 95.41% and 95.404% should become 95.40%.
+								</li>
+								<li>
+									<b>12:18 20/11/2022</b><br>
+									Update the part3 accuracies in the demo output 1 and the demo output 2. This won't affect the tasks and requirement of your implementations.
+									
+								</li>
+																
+							</li>
+						</ol>
+					</div>
+					<div class="card-footer text-muted">
+						End of Change Log
+					</div>
+				</div>
+
+				<!-- FAQ section -->
+				<!-- ### Complete FAQ section for the assignment ### -->
+				<div class="card mb-4">
+					<div class="card-body" id="faq">
+						<h3 class="card-title">Frequently Asked Questions</h3>
+						<p>
+							<b>Q</b>: My code doesn't work, here it is, can you help me fix it?<br>
+							<b>A</b>: As the assignment is a major course assessment, to be fair, you are supposed to
+							work on it
+							by yourself and we should never finish the tasks for you. We are happy to help with
+							explanations and
+							advice, but we are <b>not allowed</b> to directly debug for you.
+						</p>
+						<p>
+							<b>Q</b>: Can we include extra libraries? For example, <cstdio> for printf, or <iomanip> for output formatting?								<br>
+							<b>A</b>: Yes, you can include those extra libraries. But remember to <b>put them under the files that are submitted for grading</b>.							.
+						</p>
+						<p>
+							<b>Q</b>: Which function to fed the image into the network?								<br>
+							<b>A</b>: Use the operator () of the NN class. For example: 
+							<br>
+							<code><pre>
+void testing(NN& nn, dataset& data){
+	vector<float> input = data.get_a_normalized_image(TEST_IMAGE, 0);
+	vector<float> output = nn(input);
+}</pre>
+							</code>.  
+							</b>.							.
+						</p> 
+
+					</div>
+					<div class="card-footer text-muted">
+						End of FAQ
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Sidebar Widgets Column -->
+			<div class="col-md-3">
+				<div class="sticky-top">
+					<!-- Menu Widget -->
+					<div class="card my-12">
+						<h5 class="card-header">Menu</h5>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<ul class="mb-0" style="padding-left:20px" type="circle">
+										<li>
+											<a href="#honor">Honor Code</a>
+										</li>
+										<li>
+											<a href="#objective">Objectives & ILOs</a>
+										</li>
+										<li>
+											<a href="#introduction">Introduction</a>
+										</li>
+										<li>
+											<a href="#description">Description</a>
+										</li>
+										<li>
+											<a href="#tasks">Tasks</a>
+										</li>
+									
+										<li>
+											<a href="#download">Resources &amp; Sample I/O</a>
+										</li>
+										<li>
+											<a href="#submission">Submission &amp; Grading</a>
+										</li>
+										<li>
+											<a href="#change">Change Log</a>
+										</li>
+										<li>
+											<a href="#faq">FAQ</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Maintenance widget -->
+					<div class="card my-4">
+						<h5 class="card-header">Page maintained by</h5>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<ul class="list-unstyled mb-0">
+										<li>
+											CHEN, Jierun
+										</li>
+										<li>
+											Email: <a
+												href="mailto:jierunchen@ust.hk">jierunchen@ust.hk</a>
+										</li>
+										<li>Last Modified:
+											<script
+												type="text/javascript">document.write(document.lastModified);</script>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- Homepage widget -->
+					<div class="card my-4">
+						<h5 class="card-header">Homepage</h5>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<ul class="list-unstyled mb-0">
+										<li>
+											<a href="http://course.cse.ust.hk/comp2012h">Course Homepage</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.row -->
+	</div>
+
+	</div>
+	<!-- /.container -->
+
+	<!-- Footer -->
+	<footer class="py-5 bg-dark">
+		<div class="container">
+			<p class="m-0 text-center text-white">Maintained by COMP 2012H Teaching Team © 2022 HKUST Computer Science
+				and Engineering</p>
+		</div>
+		<!-- /.container -->
+	</footer>
+
+	<!-- Bootstrap core JavaScript -->
+	<script src="misc/jquery.js"></script>
+	<script src="misc/bootstrap.js"></script>
+
+
+
+
+</body>
+<grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
+
+</html>
