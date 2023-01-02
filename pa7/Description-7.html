@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	
+	<!-- ### Change assignment number ### -->
+	<title>COMP 2012H Assignment 7: PortaWordle</title>
+	
+	<!-- Bootstrap core CSS -->
+	<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	
+	<!-- Custom styles for this template -->
+	<link href="css/blog-home.css" rel="stylesheet">
+	
+	<!-- For code highlighting -->
+	<link href="vendor/prism/prism.css" rel="stylesheet" />
+	
+	<style>
+		pre {
+			background: #f4f4f4;
+			border: 1px solid #ddd;
+			border-left: 3px solid #f36d33;
+			color: #666;
+			page-break-inside: avoid;
+			font-family: monospace;
+			font-size: 14px;
+			line-height: 1.6;
+			margin-bottom: 1.6em;
+			max-width: 100%;
+			overflow: auto;
+			padding: 1em 1.5em;
+			display: block;
+			word-wrap: break-word;
+		}
+		
+		span.input {
+			color: #00f700;
+			;
+		}
+		
+		/* table {
+			width: 100%;
+			display: inline-block;
+			overflow-x: auto;
+		}
+		
+		table caption {
+			font-size: medium;
+		}
+		
+		table thead th {
+			background-color: #ddd;
+		}
+		
+		table th,
+		table td {
+			text-align: left;
+			padding: 3px 6px;
+			border-width: 1px;
+			border-style: solid;
+			border-color: #aaa #aaa;
+		}
+		
+		table tr:nth-child(even) {
+			background-color: #eee;
+		} */
+		
+		blockquote {
+			border: 1px solid #b3b3b3;
+			border-left: 10px solid #b3b3b3;
+			border-radius: 0px;
+			background: #fafafa;
+			font-size: 18px;
+			font-family: Georgia, serif;
+			margin: 10px;
+			padding: 10px 20px;
+		}
+		
+		blockquote p {
+			margin: 0;
+			line-height: 30px;
+			padding-bottom: 20px;
+		}
+		
+		blockquote.small {
+			display: block;
+			font-size: 80%;
+			color: brown;
+			text-align: right;
+		}
+		
+		code {
+			/* color: goldenrod; */
+			font-size: 1em;
+			/* background: none !important; */
+		}
+		
+		figure.figure {
+			width: 100%;
+			text-align: center;
+		}
+		
+		.bd-callout {
+			padding: 1.25rem;
+			margin-top: 1.25rem;
+			margin-bottom: 1.25rem;
+			border: 1px solid #eee;
+			border-left-width: .25rem;
+			border-radius: .25rem;
+		}
+		
+		.bd-callout h4 {
+			margin-top: 0;
+			margin-bottom: .25rem;
+		}
+		
+		.bd-callout p:last-child {
+			margin-bottom: 0;
+		}
+		
+		.bd-callout code {
+			border-radius: .25rem;
+		}
+		
+		.bd-callout+.bd-callout {
+			margin-top: -.25rem;
+		}
+		
+		.bd-callout-info {
+			border-left-color: #5bc0de;
+		}
+		
+		.bd-callout-warning {
+			border-left-color: #f0ad4e;
+		}
+		
+		.bd-callout-danger {
+			border-left-color: #d9534f;
+		}
+		
+		.bd-callout-success {
+			border-left-color: #5cb85c;
+		}
+		
+		.bd-callout-primary {
+			border-left-color: #428bca;
+		}
+		
+		.bd-callout-info h6 {
+			color: #5bc0de;
+		}
+		
+		.bd-callout-warning h6 {
+			color: #f0ad4e;
+		}
+		
+		.bd-callout-danger h6 {
+			color: #d9534f;
+		}
+		
+		.bd-callout-success h6 {
+			color: #5cb85c;
+		}
+		
+		.bd-callout-primary h6 {
+			color: #428bca;
+		}
+	</style>
+</head>
+
+<body>
+	<script src="vendor/prism/prism.js"></script>
+	<!--     <script src="https://myCDN.com/prism@v1.x/components/prism-core.min.js"></script>
+		<script src="https://myCDN.com/prism@v1.x/plugins/autoloader/prism-autoloader.min.js"></script> -->
+		
+		<!-- Page Content -->	
+		<div class="container">
+			
+			<div class="row">
+				
+				<!-- Entries Column -->
+				<div class="col-md-9">
+					
+					<h2 class="my-4"><span style="color:darkblue">COMP 2012H</span>
+						<small>Honors Object-Oriented Programming and Data Structures</small>
+					</h2>
+					
+					<!-- ### Change assignment number and title ### -->
+					<h3 class="my-4">Assignment 7
+						<span style="color:#660066">PortaWordle</span>
+					</h3>
+					
+					<!-- Honor Code section -->
+					<div class="card mb-4">
+						<div class="card-body" id="honor" style="background-color:#f4f4f4">
+							<h3 class="card-title">Honor Code</h3>
+							<p class="card-text">
+								We value academic integrity very highly. Please read the <a
+								href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a> section on our
+								course webpage to make sure you understand what is considered as plagiarism and what the
+								penalties are.
+								The following are some of the highlights:
+							</p>
+							<ul>
+								<li>
+									Do NOT try your "luck" - we use sophisticated plagiarism detection software to find
+									cheaters.
+									We also review codes for potential cases manually.
+								</li>
+								<li>
+									The penalty (for <b>BOTH</b> the copier and the copiee) is not just getting a zero in
+									your assignment.
+									Please read the <a href="https://course.cse.ust.hk/comp2012h/#honorcode">Honor Code</a>
+									thoroughly.
+								</li>
+								<li>
+									Serious offenders will fail the course immediately, and there will be additional
+									disciplinary actions
+									from the department and university, upto and including expulsion.
+								</li>
+							</ul>
+							<p></p>
+						</div>
+						<div class="card-footer text-muted">
+							End of Honor Code
+						</div>
+					</div>
+					
+					<div class="card mb-4">
+						<div class="card-body" id="objective" style="background-color:#f4f4f4">
+							<h3 class="card-title">Objectives & Intended Learning Outcomes</h3>
+							<p class="card-text">
+								The objective of this assignment is to familiarise you with Qt programming.
+								After this assignment you should be able to:
+							</p>
+							<ol>
+								<li>Use Qt Designer to build the GUI of a program.</li>
+								<li>Use signals and slots to let Qt objects communicate with each other.</li>
+								<li>Implement a fully functional game in Qt.</li>
+							</ol>
+							<p></p>
+						</div>
+						<div class="card-footer text-muted">
+							End of Objectives & Intended Learning Outcomes
+						</div>
+					</div>
+					
+					<!-- Introduction section -->
+					<!-- ### Complete introduction section for the assignment ### -->
+					<div class="card mb-4">
+						
+						<!-- ### Add an image representing the assignment content here ### -->
+						<img class="card-img-top" src="images/wordle2.png" alt="Card image cap">
+						
+						<div class="card-body" id="introduction">
+							<p class="card-text">
+								<small>
+									<em>
+										The popular game Wordle on The New York Times<br>
+									</em>
+								</small>
+							</p>
+
+							<h3 class="card-title">Introduction</h3>
+							<p class="card-text">
+								To get yourself familiar with creating a Qt program, let's build the popular game Wordle!
+								Wordle is a word guessing game where you must try to guess a 5-letter word within 6 guesses.
+								Hints are given after each guess about whether each letters are correct, 
+								appear in a different position, or do not appear at all. You can play the game on the
+								<a href="https://www.nytimes.com/games/wordle/index.html">New York Times</a> website,
+								if you are not already familiar with how the game works.
+								The game only allows you to play once per day, which is why we will implement a Qt version
+								of the game so that you can play any time you'd like, and with several other modes you
+								can add in the bonus tasks!
+							</p>
+
+							<p>
+								In this assignment, you are required to:
+								<ul>
+									<li>Implement the Wordle coloring scheme and hard mode</li>
+									<li>Implement the user input keyboard (both physical and on-screen)</li>
+									<li>Implement GUI widgets for game mode options using Qt Designer</li>
+								</ul>
+								In addition, you may also attempt these tasks for bonus points:
+								<br>
+								<ul>
+									<li>Implement additional modes: Simultaneous games, Timed mode, Absurd mode</li>
+									<li>Write a solver to give the player an "optimal" next guess</li>
+									<li>Use word frequency to generate more common answers</li>
+								</ul>
+							</p>
+
+							<p>
+								Please read the <a href="https://course.cse.ust.hk/comp2012h/labs/supp-lab-Qt/qt-tutorial.pdf">Qt Programming tutorial notes</a> and 
+								<a href="https://course.cse.ust.hk/comp2012h/labs/supp-lab-Qt/index.html">lab example</a> before starting this assignment
+								to understand the basics of programming with Qt. We will use <b>Qt 6.3.2</b> for this assignment,
+								so please install the same version to ensure your program can be tested correctly
+								(Note that versions as low as 5.12 may still be able to run the skeleton code, but we have not 
+								tested with older versions yet).
+							</p>
+						</div>
+						<div class="card-footer text-muted">
+							End of Introduction
+						</div>
+					</div>
+					
+					<!-- Description section -->
+					<!-- ### Complete description section for the assignment ### -->
+					<div class="card mb-4">      
+						<div class="card-body" id="description">
+							<h3 class="card-title">Description</h3>
+							<p class="card-text">
+								Please read the <a href="#faq">FAQ</a> section regularly, and do check it
+								one day before the deadline to make sure you don't miss any clarification,
+								even if you have already submitted your work by then. You can also raise questions
+								on Piazza and remember to use the "pa7" tag.
+							</p>
+							<br/>
+
+							<h4 id="code-structure">Code structure</h4>
+							<p>
+								<div style="text-align: center;">
+									<img class="card-img" src="images/proj-hierarchy.png" alt="proj-hierarchy" style="width: 40%;">
+								</div>
+								<small><em>Hierarchy of the given skeleton files.</em></small>
+							</p>
+							<p>
+								At first glance, the skeleton code can look overwhelming with the number of files.
+								Don't worry though! This is because the project is built with testing in mind, so it is split into 2
+								sub-projects: <b>app</b> and <b>tests</b>. You can open the <code>app.pro</code> file in Qt Creator
+								to edit and build only the application - <u>it is recommended that you do this when you first start</u>,
+								so that you don't waste time building the test programs. The files in <b>tests</b> sub-project is only relevant
+								in the <a href="#tests">Testing and Grading</a> section.
+							</p>
+
+							<p>
+								There are multiple <code>.cpp</code> and <code>.h</code> files for the app. 
+								They are organized so that whenever you work on a task, you only need
+								to handle a few source files at a time.
+								Here is a quick breakdown of all the files.
+							</p>
+
+							<p>
+								<em>
+									<u>Note:</u> You may find a few topics in this assignment not yet covered in lectures.
+									Don't worry, you don't need to know them to complete the assignment. Any tasks that may
+									require you to use these topics will be explicitly stated and will have thorough instructions.
+								</em>
+
+								<ul>
+									<li>
+										<strong>Inheritance and polymorphism:</strong> These are extremely useful when
+										it comes to UI related classes, especially Qt. For this assignment, you don't
+										have to know a lot about them, they are simply a way to implement similar objects
+										(such as different game modes) where similar data members/functions can be reused
+										or reimplemented accordingly. You will learn more about this topic in PA8, so feel
+										free to come back to this assignment to understand the classes' relationships better.
+									</li>
+									<li>
+										<strong>Friend classes:</strong> These are only relevant for test classes, you don't
+										need to worry about them. Defining the test classes as "friends" of the main classes
+										allow them to access said classes' private data members, which helps with testing.
+									</li>
+									<li>
+										<strong>Exception handling:</strong> Used in <code>dictionary.cpp</code> and 
+										<code>mainwindow.cpp</code> as an easy way to exit sub-window's initialization 
+										should unexpected errors occur. You don't have to use this in the basic tasks;
+										for some of the bonus tasks, you can refer to existing code for reference.
+									</li>
+									<li>
+										<strong>Macros:</strong> A handy way to shorten repeating codes - any instances of macros
+										will be replaced with the macro definition during compilation (you can think of this
+										as similar to <code>Makefile</code> variables). If you are familiar with this,
+										feel free to use them if necessary; otherwise, just write your code normally.
+									</li>
+									<li>
+										<strong>Containers/Templates:</strong> Qt provides helpful containers such as <code>QSet</code> or
+										<code>QList</code>. These are very similar to standard containers in the STL library,
+										which will be taught in the lectures soon. These may be relevant when you try to do
+										the bonus tasks. You can think of containers like <code>QSet&lt;QString&gt;</code> as
+										"an object capable of storing strings that allows for easy insertion (<code>insert()</code>),
+										deletion (<code>remove()</code>), and look-up (<code>find()</code>)".
+									</li>
+								</ul>
+							</p>
+
+							<h5>main.cpp</h5>
+							<p>
+								This is simply the default main.cpp of Qt, where an application and a MainWindow is created.
+								This file does not need to be changed.
+							</p><br/>
+
+							<h5>mainwindow.cpp/.h</h5>
+							<p>
+								<div style="text-align: center;">
+									<img class="card-img" src="images/mainwindow.png" alt="mainwindow" style="width: 40%;">
+								</div>
+								<br>
+								These files handle the MainWindow view, which is what the user sees when the program first opens.
+								The UI for this window is designed in <b>mainwindow.ui</b>.
+								Here, the user can select the game mode and options. Upon clicking "Play", this window will be hidden,
+								and the corresponding RoundWindow will be shown.
+							</p><br/>
+
+							<h5>roundwindow.cpp/.h</h5>
+							<p>
+								<div style="text-align: center;">
+									<img class="card-img" src="images/roundwindow.png" alt="roundwindow" style="width: 40%;">
+								</div>
+								<br>
+								These files handle the RoundWindow view, which is what the user sees when starting a game.
+								The UI for this window is designed in <b>roundwindow.ui</b>.
+							</p>
+
+							<p>
+								Note that this is a <b>base</b> class, and for the most part should not be initialized as an object directly.
+								When user starts a game mode, MainWindow will initialize an object of one of the <b>derived</b> classes,
+								defined in the <code>[mode]roundwindow.cpp/.h</code> files.
+								You can consider this class as the "shared" properties of the different windows for each mode,
+								and implement the tasks normally.
+							</p><br/>
+
+							<h5>wordleround.cpp/.h</h5>
+							<p>
+								The WordleRound class handles the game logic for a game of Wordle.
+								Receives key input and update the guess boxes accordingly.
+								When a complete guess is entered, guess should be validated
+								before being colored according to <a href="#color-convention">Wordle coloring convention</a>.
+								Handles game over conditions as well.
+							</p>
+
+							<p>
+								Note that this is a <b>base</b> class, and for the most part should not be initialized as an object directly.
+								The derived RoundWindow class should initialize a corresponding WordleRound object of one of the <b>derived</b> classes,
+								defined in the <code>[mode]wordleround.cpp/.h</code> files.
+								You can consider this class as the "shared" properties of the different game modes,
+								and implement the tasks normally.
+							</p><br/>
+
+							<h5>regularroundwindow.cpp/.h, regularwordleround.cpp/.h</h5>
+							<p>
+								These are the derived classes of RoundWindow and WordleRound for the <b>Regular</b> mode.
+								Since the base classes are essentially sufficient for building a regular game,
+								not much is added within these files. There's no need to change these files.
+							</p><br/>
+
+							<h5>absurdroundwindow.cpp/.h, absurdwordleround.cpp/.h</h5>
+							<p>
+								These are the derived classes of RoundWindow and WordleRound for the <b>Absurd</b> mode.
+								You only need to modify these files for <a href="#bonustask1">Bonus Task 1</a>.
+							</p><br/>
+
+							<h5>multiroundwindow.cpp/.h, multiwordleround.cpp/.h</h5>
+							<p>
+								These are the derived classes of RoundWindow and WordleRound for the <b>Multiple</b> mode.
+								You only need to modify these files for <a href="#bonustask2">Bonus Task 2</a>.
+							</p><br/>
+
+							<h5>timedroundwindow.cpp/.h, timedwordleround.cpp/.h</h5>
+							<p>
+								These are the derived classes of RoundWindow and WordleRound for the <b>Timed</b> mode.
+								You only need to modify these files for <a href="#bonustask3">Bonus Task 3</a>.
+							</p><br/>
+
+							<h5>letterbox.cpp/.h</h5>
+							<p>
+								<div style="text-align: center;">
+									<img class="card-img" src="images/letterbox.png" alt="letterbox" style="width: 40%;">
+								</div>
+								<br>
+								The LetterBox class extends QLineEdit, the widget used for the guess boxes.
+								Initialized by WordleRound, then added to the UI.
+								Handles the backend of changing text and color, so that other classes
+								can simply call <code>setLetter()</code> and <code>setColor()</code>.
+							</p><br/>
+
+							<h5>keyboard.cpp/.h</h5>
+							<p>
+								<div style="text-align: center;">
+									<img class="card-img" src="images/onscreenkeyboard.png" alt="onscreenkeyboard" style="width: 50%;">
+								</div>
+								<br>
+								The Keyboard class holds the 26 Keys and the 2 QPushButtons for Del and Enter.
+								Initialized by RoundWindow. The keys are defined in the .ui file,
+								so they need to be added to the Keyboard after initialization.
+								Communicates with the current WordleRound when a key is pressed,
+								and receives key color updates from WordleRound.
+							</p><br/>
+
+							<h5>key.cpp/.h</h5>
+							<p>
+								The Key class extends QToolButton, the widget used for the 26 letter keys.
+								Handles the backend of changing color, so that other classes
+								can simply call <code>setColor()</code>.
+							</p><br/>
+
+							<h5>dictionary.cpp/.h</h5>
+							<p>
+								The Dictionary class maintains a set of all English words of given length, by extracting from <code>words_{}.txt</code>.
+								For <a href="#bonustask5">Bonus Task 5</a>, also maintain a list of common words with frequencies,
+								used to generate answers.
+								Initialized by WordleRound.
+							</p>
+							
+							<p>
+								There is also a DictionaryException class defined for exception throwing.
+								As mentioned in the note, you don't have to worry about this class.
+							</p><br/>
+
+							<h5>solver.cpp/.h</h5>
+							<p>
+								The Solver class maintains a set of remaining possible answers as the WordleRound progressed,
+								and calculates the "optimal" next guess to be hinted to the player.
+								You only need to modify these files in <a href="#bonustask4">Bonus Task 4</a>.
+							</p><br/>
+
+							<h5>mainwindow.ui, roundwindow.ui</h5>
+							<p>
+								These are the UI files that can be edited in Qt Creator's Designer mode.
+							</p><br/>
+
+							<h5>dictionary/, images/</h5>
+							<p>
+								Additional files used by the program. They are specified in <b>resources.qrc</b> so that
+								the program can locate them during runtime.
+							</p><br/>
+
+							<br/>
+
+							<h4 id="color-convention">Wordle color convention</h4>
+							<p>
+								In Wordle, 3 colors are used to hint the "correctness" of a letter:
+								<ul>
+									<li><b style="color:#6aaa64">Green</b> letters are in the correct positions.</li>
+									<li><b style="color:#c9b458">Yellow</b> letters are in the word, but are not in the correct positions.</li>
+									<li><b style="color:#787c7e">Grey</b> letters do not appear in the word at all.</li>
+								</ul> 
+								The coloring scheme can also get a bit tricky when a letter appears multiple times in the guess or the answer.
+								To illustrate this clearly, let's look at an example.
+							</p>
+
+							<p>
+								Suppose the answer to the Wordle game is "SLEEP". Here are the coloring schemes for some possible guesses:
+							</p>
+
+							<p>
+								<div style="text-align: center;">
+									<img class="card-img" src="images/pluck.png" alt="pluck" style="width: 40%;">
+								</div>
+								<br>
+
+								L is in the correct position, so it is <b style="color:#6aaa64">green</b>.
+								P is in the word but not in the correct position, so it is <b style="color:#c9b458">yellow</b>.
+								U, C, K don't appear in the word, so they are <b style="color:#787c7e">grey</b>.
+							</p>
+
+							<p>
+								<div style="text-align: center;">
+									<img class="card-img" src="images/asset.png" alt="asset" style="width: 40%;">
+								</div>
+								<br>
+
+								There are 2 Ss in the guess, but only 1 S in the answer. The first S is <b style="color:#c9b458">yellow</b>,
+								telling you that the correct S is not in this position. The second S is <b style="color:#787c7e">grey</b>,
+								telling you that <b>there is no extra S</b>, and the correct S is also not in this position.
+							</p>
+
+							<p>
+								<div style="text-align: center;">
+									<img class="card-img" src="images/plump.png" alt="plump" style="width: 40%;">
+								</div>
+								<br>
+
+								Same as above, except the second P is <b style="color:#6aaa64">green</b> because there is a P there.
+								The first P is <b style="color:#787c7e">grey</b> because there is no extra P.
+							</p>
+
+							<p>
+								<div style="text-align: center;">
+									<img class="card-img" src="images/geese.png" alt="geese" style="width: 40%;">
+								</div>
+								<br>
+
+								The second E is <b style="color:#6aaa64">green</b> because there is an E there.
+								The first E is <b style="color:#c9b458">yellow</b> because there is a 2nd E, which is not at this position.
+								The third E is <b style="color:#787c7e">grey</b> because there is no 3rd E, and there is no E at this position.
+							</p>
+
+							<p>
+								In addition to coloring the guesses, we also need to color the keyboard. The letters on the keyboard are colored
+								similar to the guesses to tell the player the current "correctness" status for each key.
+
+								<div style="text-align: center;">
+									<img class="card-img" src="images/keyboard.png" alt="keyboard" style="width: 70%;">
+								</div>
+								<br>
+								This keyboard is saying that the letter I has been found at the right position, 
+								and letters S, R, K are in the answer but at unknown positions. Grey letters are
+								known to not be in the answer, while light grey letters have not been used in any guesses.
+							</p>
+
+							<p>
+								Whenever a guess is made, the keyboard is updated with new key colors. Only the "highest"
+								color is kept: e.g. in the GEESE example, the key E would be colored <b style="color:#6aaa64">green</b>; 
+								in the ASSET example, the key S would be colored <b style="color:#c9b458">yellow</b>.
+							</p>
+
+							<p>
+								We will describe in detail how to implement this coloring scheme in the Tasks section.
+							</p>
+
+							<br/>
+							<br/>
+							<h4 id="demo-overview">Demo program overview</h4>
+							<p>
+								This section is a brief overview of the demo program, which is essentially how
+								your program is expected to behave if all tasks (including bonus tasks) are implemented
+								correctly. Feel free to try out and play the game yourself.
+							</p>
+
+							<p>
+								<div style="text-align: center;">
+									<img class="card-img" src="images/mainwindow.png" alt="mainwindow" style="width: 40%;">
+								</div>
+								<br>
+								When starting the program, you will be taken to the main window. You can select the game mode
+								and additional options for each mode, as well as word length. After clicking Play, the game
+								window will be shown.
+							</p>
+
+							<p>
+								<div style="text-align: center;">
+									<img class="card-img" src="images/roundwindowplayed.png" alt="roundwindowplayed" style="width: 40%;">
+								</div>
+								<br>
+								This is the window for Regular mode. This can be played exactly like the official Wordle version:
+								you can either press the buttons to input letters or use the keyboard to type. Popups appear
+								if the player types a non-English word or finishes the game.
+							</p>
+
+							<p>
+								In the Options menu, there are 4 options. "Give Up" ends the game and treat it as a loss.
+								"Reset Round" ends the current game and starts a new game with a new word.
+								"Cheat" reveals the answer. This is helpful if you would like to test game logic with the
+								demo program or your program. Finally, "Hint" will try to give the player an "optimal"
+								word to guess. This is implemented in <a href="#bonustask4">Bonus Task 4</a>.
+							</p>
+
+							<p>
+								For other game modes, there are a few UI changes. These are described in more detail
+								in the bonus task section, and you don't need to worry about them if you just plan
+								to do the basic tasks.
+							</p>
+							<br/>
+
+							<h4 id="remarks">Additional remarks</h4>
+							<p>
+								<ul>
+									<li>
+										All of the needed header files have been included in the source files, 
+										so you don't need to add any new includes. If you do add new includes,
+										<b>you are only allowed to add the given header files and Qt-provided header files</b>,
+										such as <code>&lt;QPushButton&gt;</code>.
+									</li>
+									<li>
+										<strong>You are strictly forbidden from modifying the provided files not for submission</strong>;
+										in other words, all of the .h header files and a few .cpp files. During grading, we will use
+										the version given in the skeleton code of these files, so any changes you made there will be
+										lost during actual grading.
+									</li>
+								</ul>
+							</p>
+							
+						</div>
+						<div class="card-footer text-muted">
+							End of Description
+						</div>
+					</div>
+					
+					<!-- Tasks section -->
+					<!-- ### Complete tasks section for the assignment ### -->
+					<div class="card mb-4">      
+						<div class="card-body" id="tasks">
+							<h3 class="card-title">Tasks</h3>
+							<p class="card-text">
+								The tasks are divided into 2 sections: Basic tasks and bonus tasks.
+								There are 5 tasks for each section, with weighting detailed below.
+								The bonus tasks are quite challenging so don't spend too much time 
+								on them; you will get a total of 15% bonus points for completing all
+								5 bonus tasks.
+							</p>
+
+							<p>
+								<em>
+									<u>Tip:</u> All tasks have comment blocks near them detailing what needs to be done in the code.
+									You can use the Search option in Qt Creator and look for the string <code>TODO</code>
+									to find which part of the code you need to edit.
+								</em>
+							</p>
+							<br/>
+
+							<h4 id="basictask">Basic Tasks</h4>
+							<br/>
+							<h5 id="task1">Task 1: Implement letter coloring scheme [20%]</h5>
+							<p>
+								You will need to implement the function
+								<pre><code class="language-cpp">QColor* analyzeGuess(const QString& guess, const QString& answer)</code></pre>
+								in <b>wordleround.cpp</b>. This function compares the 2 strings <code>guess</code>
+								and <code>answer</code>, and outputs an array of QColor corresponding to
+								the color sequence of <code>guess</code>. 
+							</p>
+							
+							<p>
+								To do this, you can use a 2-pass strategy:
+								Create 2 arrays, one to store the color sequence and the other to be
+								the "assigned" status of <code>answer</code>'s letters.
+
+								<div style="text-align: center;">
+									<img class="card-img" src="images/task1-1.png" alt="task1-1" style="width: 50%;">
+								</div>
+							</p>
+							
+							<p>
+								For the first pass, compare each of <code>guess</code> and <code>answer</code>'s letters.
+								If the letters are the same, color it <b style="color:#6aaa64">green</b> and set "assigned" to true.
+								Otherwise, color it <b style="color:#787c7e">grey</b> and set "assigned" to false.
+
+								<div style="text-align: center;">
+									<img class="card-img" src="images/task1-2.png" alt="task1-2" style="width: 50%;">
+								</div>
+							</p>
+
+							<p>
+								For the second pass, compare each of <code>guess</code>'s remaining letters with 
+								all of <code>answer</code>'s "unassigned" letters.
+								If a similar letter is found "unassigned", color it <b style="color:#c9b458">yellow</b> and set "assigned" to true.
+
+								<div style="text-align: center;">
+									<img class="card-img" src="images/task1-3.png" alt="task1-3" style="width: 50%;">
+								</div>
+								<small>
+									<em>
+										The rightmost E is grey because no "unassigned" E remains.<br>
+									</em>
+								</small>
+							</p>
+
+							<p>
+								Now the color array can be returned. Since the array length is not constant,
+								remember to manage any dynamically allocated variables and delete when unused.
+							</p>
+
+							<p>
+								If you think you can come up with a faster algorithm to complete this task
+								(the above algorithm is <code>O(n^2)</code>), feel free to give it a go, but
+								make sure it is correct by double checking color sequence output for special cases.
+							</p>
+
+							<p>
+								<em>
+									<u>Hint: </u> You can use the colors defined in <b>letterbox.h</b>.
+								</em>
+							</p>
+
+							<br/>
+							<h5 id="task2">Task 2: Implement on-screen keyboard [25%]</h5>
+							<p>
+								For this task, you need to modify some functions in <b>roundwindow.cpp</b> and <b>keyboard.cpp</b>.
+								You will also need to work with the <b>roundwindow.ui</b> to add the buttons to the UI.
+							</p>
+
+							<p>
+								First, open <b>roundwindow.ui</b>. Qt Creator should take you to the Design tab.
+								Find the QGridLayout named <code>gridLayoutKey</code> on the UI (you may also look at the widget list on the side bar).
+								Add 26 QToolButtons to the grid to resemble a keyboard. Set their text as <em>uppercase</em> letters.
+							</p>
+							<p>
+								<div style="text-align: center;">
+									<img class="card-img" src="images/keyboard-uiform.png" alt="keyboard-uiform" style="width: 50%;">
+								</div>
+								<small><em>Example grid layout of 26 keys and 2 buttons. Hint: widgets can span multiple grid cells.</em></small>
+							</p>
+							<p>
+								Rename the widgets to <code>toolButton_{LETTER}</code> so that you can access them in <b>roundwindow.cpp</b> later.
+								Select all keys, right click and choose <code>Promote to...</code>. Select Key as the class
+								to promote to, or type in the class name "Key" and header file "key.h". This will convert
+								the 26 QToolButtons to Key objects.
+							</p>
+							<p>
+								Also add 2 QPushButtons and set their text as "Del" and "Enter".
+								Rename the widgets to <code>pushButton_Del</code> and <code>pushButton_Enter</code>.
+							</p>
+
+							<p>
+								<em>
+									<strong>Important:</strong> While widget names can be anything as long as they
+									can be accessed in the code, please name the widgets as above so that they can be tested.
+									As an example, the key A should be named <code>toolButton_A</code>.
+								</em>
+							</p>
+
+							<p>
+								Then, go to the RoundWindow constructor
+								<pre><code class="language-cpp">RoundWindow::RoundWindow(QWidget *parent)</code></pre>
+								in <b>roundwindow.cpp</b>. As described in the Description section, the 26 keys and Del/Enter keys
+								defined in <b>roundwindow.ui</b> need to be added to the Keyboard after it is initialized.
+							</p>
+
+							<p>
+								<em>
+									<u>Tip:</u> The most straightforward way is to write 26 lines to add the letter keys.
+									However, this can be drastically shortened if you know how to use macro in C++.
+								</em>
+							</p>
+
+							<p>
+								Next, go to <b>keyboard.cpp</b> and implement the following functions:
+<pre><code class="language-cpp">void Keyboard::addKey(Key *key, const char keyChar)
+void Keyboard::addDelKey(QPushButton *key)
+void Keyboard::addEnterKey(QPushButton *key)
+</code></pre>
+								These functions should set the data members to the right buttons and connect the buttons' 
+								<code>clicked()</code> signals to the corresponding handling slots of Keyboard.
+							</p>
+
+							<p>
+								Finally, go to
+								<pre><code class="language-cpp">void Keyboard::updateKeyColor(const QChar& key, const QColor& color)</code></pre>
+								and implement the keyboard coloring scheme described above.
+								Simply put, the color of each key can only go up from <b style="color:#787c7e">grey</b> to 
+								<b style="color:#c9b458">yellow</b> and to <b style="color:#6aaa64">green</b>.
+							</p>
+
+							<br/>
+							<h5 id="task3">Task 3: Implement physical keyboard [15%]</h5>
+							<p>
+								The on-screen keyboard can be cumbersome to use. Therefore, we'd like to implement our existing keyboard
+								as an alternative input method. To do this, we need to override RoundWindow's <code>keyPressEvent()</code>
+								method, which gets called whenever the window receives physical keyboard input.
+							</p>
+
+							<p>
+								Simply put, you just need to complete the implementation of
+								<pre><code class="language-cpp">void RoundWindow::keyPressEvent(QKeyEvent *event)</code></pre>
+								in <b>roundwindow.cpp</b>. You can get the key being pressed with <code>event->key()</code>,
+								which will correspond to one of Qt's defined key enums. Depending on the key being pressed,
+								call the corresponding Keyboard function.
+							</p>
+
+							<p>
+								<em>
+									<u>Hint:</u> Slots can be called as a function normally.
+								</em>
+							</p>
+
+							<br/>
+							<h5 id="task4">Task 4: Implement round options [25%]</h5>
+							<p>
+								This task will involve editing the <b>mainwindow.ui</b> form, as well as <b>mainwindow.cpp</b>.
+								You will need to add the widgets that allow players to configure settings before playing.
+								While some of these are related to the extra modes implemented in bonus tasks, here we just
+								need to implement the widgets so that they appear correctly (pressing Play when an extra mode
+								is selected will not do anything yet).
+							</p>
+
+							<p>
+								First, open <b>mainwindow.ui</b>. Qt Creator should take you to the Design tab.
+								Find the QGridLayout. You will need to add the following items to the Grid:
+								<ul>
+									<li>QLabel <code>labelMode</code>, with text "Mode"</li>
+									<li>QComboBox <code>comboBoxMode</code>. Double click on the widget to add the following options:
+										<ul>
+											<li>Regular</li>
+											<li>Absurd</li>
+											<li>Multiple</li>
+											<li>Timed</li>
+										</ul>
+									</li>
+									<li>QLabel <code>labelNumWords</code>, with text "Number of Words"</li>
+									<li>QSpinBox <code>spinBoxNumWords</code>.
+										Set its minimum and maximum values to 2 and 8. Set its default value to 2.
+									</li>
+									<li>QLabel <code>labelTime</code>, with text "Time"</li>
+									<li>QComboBox <code>comboBoxTime</code>. Double click on the widget to add the following options:
+										<ul>
+											<li>1 minute</li>
+											<li>3 minutes</li>
+											<li>5 minutes</li>
+											<li>10 minutes</li>
+										</ul>
+									</li>
+									<li>QLabel <code>labelWordLength</code>, with text "Word Length"</li>
+									<li>QSpinBox <code>spinBoxWordLength</code>.
+										Set its minimum and maximum values to 1 and 31. Set its default value to 5.
+									</li>
+									<li>QCheckBox <code>checkBoxHardMode</code>, with text "Hard Mode"</li>
+								</ul>
+							</p>
+							<p>
+								<div style="text-align: center;">
+									<img class="card-img" src="images/modeselection-uiform.png" alt="modeselection-uiform" style="width: 40%;">
+								</div>
+								<small><em>Example grid layout of mode selection widgets.</em></small>
+							</p>
+
+							<p>
+								<em>
+									<strong>Important:</strong> While widget names can be anything as long as they
+									can be accessed in the code, please name the widgets as above so that they can be tested.
+								</em>
+							</p>
+
+							<p>
+								Next, go to <b>mainwindow.cpp</b> and complete the missing implementations. In particular:
+								<pre><code class="language-cpp">MainWindow::MainWindow(QWidget *parent)</code></pre>
+								Connect the Mode comboBox's signals to the corresponding MainWindow slots and hide the non-default options.
+								<pre><code class="language-cpp">void MainWindow::resetExtraOptions()</code></pre>
+								This function hides the widgets for Number of Words, Time and Hard Mode, since they are not used by all modes.
+								<pre><code class="language-cpp">void MainWindow::start()</code></pre>
+								Change <code>wordLength</code>, <code>mode</code> and <code>hardMode</code> to read from the widgets instead of using default values.
+								<pre><code class="language-cpp">void MainWindow::modeChanged(const QString &mode)</code></pre>
+								Implement this function to show widgets that correspond to selected mode. 
+								It should call <code>resetExtraOptions()</code> at the beginning, then show widgets based on mode.
+							</p>
+
+							<br/>
+							<h5 id="task5">Task 5: Implement hard mode [15%]</h5>
+							<p>
+								Wordle has a Hard Mode option where subsequent guesses must use all letters known to be in the word
+								(in other words, <b style="color:#c9b458">yellow</b> and <b style="color:#6aaa64">green</b> letters).
+								For example, if your guess was "SUPER" and the letter S is <b style="color:#6aaa64">green</b>, letters
+								E and R are <b style="color:#c9b458">yellow</b>, you must use S, E, R in your next guesses. The game
+								rejects invalid guesses just like non-English words.
+							</p>
+								
+							<p>
+								For this task, you will add some extra functions and cases to the implementations
+								you made in Task 2, so that if Hard Mode is enabled, extra validation is made when guessing.
+							</p>
+
+							<p>
+								Implement the 
+								<pre><code class="language-cpp">bool validHardModeGuess(const QString& guess, const bool correctLetters[])</code></pre>
+								function in <b>wordleround.cpp</b>, which checks if <code>guess</code> contains all letters deemed
+								"correct" by the array <code>correctLetters</code>.
+							</p>
+
+							<p>
+								<em>
+									<u>Hint:</u> <code>correctLetters</code> is a boolean array of length 26. If <code>correctLetters[3]</code>
+									is true, this means the (3+1)-th letter ("D") is "correct".
+								</em>
+							</p>
+
+							<p>
+								Next, modify the
+								<pre><code class="language-cpp">void WordleRound::registerEnterKey()</code></pre>
+								function to add Hard Mode validation, if hard mode is enabled. It should also maintain
+								the <code>correctLetters</code> array after each guess.
+							</p>
+							
+							<br/>
+							<h4 id="bonustask">Bonus Tasks</h4>
+							<br/>
+							<h5 id="bonustask1">Bonus Task 1: Implement Absurd mode [2%]</h5>
+							<p>
+								This task is inspired by <a href="https://qntm.org/files/absurdle/absurdle.html">Absurdle</a>,
+								an adversarial variant of the game where the answer changes so that it takes the player as many 
+								guesses as possible to find the right word. Essentially, the answer is only determined when
+								the set of player's guesses with colors could only have come from one possible answer.
+								However, this means the answer fully depends on user inputs and will be the same for a given
+								set of guesses (we can call this game "deterministic"), and has no replayability value.
+								Therefore, we will implement a slightly different version of the game, where the answer 
+								<b>changes by at most one letter after each guess</b>.
+							</p>
+
+							<p>
+								You will only have to modify <b>absurdwordleround.cpp</b>, <b>absurdroundwindow.cpp</b> and <b>mainwindow.cpp</b>. 
+								For MainWindow, you just need to initialize the AbsurdRoundWindow when the Absurd mode is selected.
+							</p>
+
+							<p>
+								In <b>absurdroundwindow.cpp</b>:
+								<ul>
+									<li>Complete the constructor (you may look at RegularRoundWindow's constructor as example).</li>
+									<li>For this mode, we don't color the keyboard since the answer changes, so no need to connect the signals.</li>
+								</ul>
+								In <b>absurdwordleround.cpp</b>: Implement 
+								<pre><code class="language-cpp">QString alterAnswer(const QString& answer, const QSet&lt;QString&gt;& allAnswers)</code></pre></li>
+								which finds a word from the set that differs from <code>answer</code> by exactly 1 letter. 
+								If no such word exists, the function returns <code>answer</code>.
+							</p>
+
+							<br/>
+							<h5 id="bonustask2">Bonus Task 2: Implement Multiple mode (Simultaneous games) [4%]</h5>
+							<p>
+								This task is inspired by <a href="https://dordle.online/">Dordle</a>, 
+								<a href="https://www.quordle.com/">Quordle</a>, and many other variants where
+								players need to guess more than one word at a time. The guess is used across all answers,
+								so there is a coloring sequence for each remaining unguessed word.
+							</p>
+
+							<p>
+								You will only have to modify <b>multiwordleround.cpp</b>, <b>multiroundwindow.cpp</b> and <b>mainwindow.cpp</b>. 
+								For MainWindow, you just need to initialize the MultiRoundWindow when the Multiple mode is selected.
+								The player can select how many words to guess at the same time (between 2 and 8).
+							</p>
+
+							<p>
+								In <b>multiroundwindow.cpp</b>:
+								<ul>
+									<li>Complete the constructor (you may look at RegularRoundWindow's constructor as example).</li>
+									<li>We need to add another 2D grid of LetterBox* for each extra words that need to be guessed.
+										The description in the skeleton code provides more detail on how to initialize them
+										and add them to the UI.
+										<ul>
+											<li>
+												<em>
+													<strong>Important:</strong> You need to add the <code>QGridLayouts</code> to the
+													horizontal layout so that the answers appear in order from left to right; that is,
+													<code>ansMulti[0]</code> corresponds to the leftmost column of LetterBox grid.
+													You can look at the demo program's behaviour for reference (use Cheat option to
+													see the answers). This is important for some test cases in grading.
+												</em>
+											</li>
+										</ul>
+									</li>
+								</ul>
+								In <b>multiwordleround.cpp</b>: Implement the following functions:
+<pre><code class="language-cpp">void MultiWordleRound::registerKey(const QChar& key)
+void MultiWordleRound::registerDelKey()
+void MultiWordleRound::revertGuess()
+void MultiWordleRound::registerEnterKey()
+</code></pre>
+								You can refer to the implementations in <b>wordleround.cpp</b>; these should mostly be the same except
+								that you need to handle a 3D array of LetterBox*. Since Hard Mode and Solver are
+								not applicable in this mode, you don't need to implement them.
+							</p>
+
+							<p>
+								<em>
+									<u>Note:</u> Some answers may end up the same, especially if there are not many available words.
+									This does not happen in Dordle, Quordle or other online variations, but for our game we allow it to happen.
+									We also just update the keyboard color based on values from all "sub-games", so it's possible to see
+									more than 5 green or yellow keys (in actual variations, the keys are colored in a grid).
+								</em>
+							</p>
+
+							<br/>
+							<h5 id="bonustask3">Bonus Task 3: Implement Timed mode [4%]</h5>
+							<p>
+								In this mode, the player will try to guess as many words as possible within a given duration.
+								For this task, you will need to make a few adjustments to the UI:
+								<ul>
+									<li>Add widgets to display time, number of guessed words, button to skip word</li>
+									<li>Add a widget to display invalid word, correct guess, etc. instead of popups,
+										since we don't want to be interrupted while playing under time constraints.
+									</li>
+								</ul>
+								While adding widgets can be done with Qt Designer, it would require creating another
+								.ui form specifically for the Timed mode. Here we use inheritance so that we can
+								reuse <b>roundwindow.ui</b>, so the extra widgets need to be added via code.
+							</p>
+
+							<p>
+								You will only have to modify <b>timedwordleround.cpp</b>, <b>timedroundwindow.cpp</b> and <b>mainwindow.cpp</b>. 
+								For MainWindow, you just need to initialize the TimedRoundWindow when the Timed mode is selected.
+							</p>
+
+							<p>
+								In <b>timedroundwindow.cpp</b>:
+								<ul>
+									<li>Complete the constructor (you may look at RegularRoundWindow's constructor as example).</li>
+									<li>We need to initialize several other widgets exclusive to this mode, look at the
+										description in the skeleton code for more detailed instructions. 
+									</li>
+									<li>Implement the <code class="language-cpp">void TimedRoundWindow::updateTimer()</code> function.
+										This is called every second in order to update the timer shown on the UI.
+									</li>
+								</ul>
+								In <b>timedwordleround.cpp</b>: The <code>invalidWord</code>, <code>invalidHardWord</code>, 
+								<code>roundWin</code>, <code>roundLose</code> signals are connected to RoundWindow's popup slots.
+								We don't want to have popups during the game, so use <code>disconnect</code> to remove them.
+								Then connect the signals, along with <code>scoreUpdated</code>, to the corresponding slots
+								in TimedRoundWindow.
+							</p>
+							<p>
+								Also implement the following functions:
+<pre><code class="language-cpp">void TimedWordleRound::endRound(const bool win)
+void TimedWordleRound::resetTimedRound()
+void TimedWordleRound::skipCurrentWord()
+</code></pre>
+							</p>
+
+							<br/>
+							<h5 id="bonustask4">Bonus Task 4: Implement Solver [3%]</h5>
+							<p>
+								This task is inspired by <a href="https://www.youtube.com/watch?v=v68zYyaEmEA">this video</a> from
+								YouTuber <a href="https://www.youtube.com/c/3blue1brown">3Blue1Brown</a>, who tried to find
+								the optimal Wordle starting guess using <a href="https://en.wikipedia.org/wiki/Information_theory">information theory</a>.
+								For each word, we calculate the average amount of "information" we expect to learn if
+								we used this word as a guess (also called <a href="https://en.wikipedia.org/wiki/Entropy_(information_theory)">entropy</a>).
+								The formula for entropy:
+							</p>
+							<p>
+								<div style="text-align: center;">
+									<img class="card-img" src="images/entropy.png" alt="entropy" style="width: 60%;">
+								</div>
+								where <code>X</code> is a random variable representing the color sequence that could appear from guessing this word.
+								<code>x</code> is one possible outcome of <code>X</code> (for example, GREY-YELLOW-GREEN-GREY-GREY),
+								and <code>p(x)</code> is the probability that <code>x</code> happens, given that the chosen word is used as
+								a guess and any of the remaining possible answers could be the actual answer. Therefore, you need to
+								calculate the color sequence for each possible answer with the given guess, and find the probability of
+								each color sequence happening (assume uniform probability for possible answers). We use log base 2 for reasons
+								described in the video, but any logarithm base would still work.
+							</p>
+							<p>
+								Finally, to get the "optimal" next guess, we select the word from the set of all possible guesses
+								with the highest entropy - we expect to gain the most amount of information, and hence reduce the
+								size of remaining answers, with this word.
+							</p>
+
+							<p>
+								<em>
+									<u>Note:</u> If there is only one possible answer left, all words will have entropy of 0
+									because the size of possible answers cannot be reduced further. In this case, solver should
+									hint the only remaining possible answer.
+								</em>
+							</p>
+
+							<p>
+								<em>
+									<u>Note:</u> We ignore Hard Mode in this bonus task because the solver can hint words not using
+									correct letters. If we were to implement Hard Mode, we just need to check if Hard Mode is
+									enabled, and use the set of remaining possible answers as the possible guesses in entropy calculation.
+									But you don't need to implement that for this assignment.
+								</em>
+							</p>
+
+							<p>
+								For this task, you only need to modify <b>solver.cpp</b> and <b>wordleround.cpp</b>.
+								In WordleRound, you just need to update <code class="language-cpp">void WordleRound::registerEnterKey()</code>
+								to call the function to update solver's set of remaining possible answers after each guess.
+							</p>
+
+							<p>
+								In <b>solver.cpp</b>, implement the following functions:
+								<pre><code class="language-cpp">double computeEntropy(const QString& word, const QSet&lt;QString&gt;& possibleAnswers)</code></pre>
+								This function calculates the entropy of a given word with the remaining possible answers using the formula calculated above.
+								Follow the detailed description in the skeleton to implement this function.
+								<pre><code class="language-cpp">QString Solver::hint()</code></pre>
+								This function returns the "optimal" next guess - the word with the highest entropy. If there is only one
+								possible answer left, the function returns that answer.
+								<pre><code class="language-cpp">void Solver::updateAnswers(const QString& guess, QColor* const colors)</code></pre>
+								This function updates the set of possible answers based on the result of newest guess. Answers that do not
+								result in the given color sequence is discarded from the set.
+							</p>
+
+							<p>
+								<em>
+									<u>Hint:</u> Header file <code>&lt;cmath&gt;</code> has been included in <b>solver.cpp</b>.
+								</em>
+							</p>
+
+							<p>
+								<em>
+									<u>Note:</u> Near the bottom of <b>wordleround.cpp</b>, you will see the 
+									<code class="language-cpp">QString WordleRound::getHint()</code> function.
+									This determines the condition for giving hint, since the computation time and space
+									can become enormous if there are too many letters or too many answers to loop from
+									(remember that we need a bin length of <code>3^word_length</code>).
+									The current settings is to only give hint for words at most 10 letters, and the
+									number of remaining answers times word length does not exceed 5000. You may modify
+									these numbers to do your own testing (my computer was able to handle 18 letters),
+									but don't forget to change back for submission.
+								</em>
+							</p>
+
+							<br/>
+							<h5 id="bonustask5">Bonus Task 5: Implement Word Frequency [2%]</h5>
+							<p>
+								If you tried playing the game for a while, you'll notice that a lot of games have
+								very obscure words as answers. This is because the word list (<b>words_{}.txt</b>)
+								contains all English words, many of which are very rarely used. In this task, we will
+								incorporate a separate list of most common English words (<b>answers_{}.csv</b>)
+								so that the answer word can be picked and will more likely be a common word that's guessable.
+							</p>
+
+							<p>
+								For this task, you only need to modify <b>dictionary.cpp</b>:
+							</p>
+
+							<p>
+								<pre><code class="language-cpp">Dictionary::Dictionary(int word_length)</code></pre>
+								In the constructor, add a section to read from <b>answers_{}.csv</b> and add them into the answer list.
+								You can make use of the WordFrequency struct.
+								<pre><code class="language-cpp">QString Dictionary::getRandomAnswer() const</code></pre>
+								Modify this function to instead return a random word from the answer list.
+								Word counts should determine how likely the word would be picked as the answer.
+								If answer somehow cannot be picked, you can fall back to the default behaviour of picking from the word set instead.
+								<pre><code class="language-cpp">QSet&lt;QString&gt; Dictionary::getAllAnswers()</code></pre>
+								Modify this function to instead return the words from answer list instead of word set.
+							</p>
+
+							<p>
+								<em>
+									<u>Note:</u> The words in <b>answers_{}.csv</b> are guaranteed to appear in <b>words_{}.txt</b>.
+								</em>
+							</p>
+
+						</div>
+						<div class="card-footer text-muted">
+							End of Tasks
+						</div>
+					</div>
+
+					<!-- Testing and grading section -->
+					<div class="card mb-4">            
+						<div class="card-body" id="tests">
+							<h3 class="card-title">Testing and Grading</h3> 
+							<p>
+								Due to ZINC system not being equipped to grade Qt projects, this assignment
+								will be graded manually. This is why we have provided you with a set of
+								test cases in <b>tests</b> sub-project, so that you can do testing on your own
+								after you have finished the tasks.
+							</p>
+							<p>
+								Open the <code>PA7.pro</code> project. Click on "Projects" on the top left corner
+								and navigate to the "Tests" section. You should see something like this:
+								<div style="text-align: center;">
+									<img class="card-img" src="images/tests.png" alt="tests" style="width: 40%;">
+								</div>
+							</p>
+							<p>
+								First, build the project. This will compile both the application and the test programs
+								(one for each test class).
+							</p>
+							<p>
+								<div style="text-align: center;">
+									<img class="card-img" src="images/test-panel.png" alt="test-panel" style="width: 80%;">
+								</div><br>
+								Then, open the Test Result panel. You can select either "Run All Tests" to run all 10 test classes,
+								or "Run Selected Tests" to run only the tests checked on the "Tests" section. 
+							</p>
+							<p>
+								<div style="text-align: center;">
+									<img class="card-img" src="images/test-result.png" alt="test-result" style="width: 80%;">
+								</div>
+								<small><em>Example of test report.</em></small>
+								<br>
+								After the tests complete, you can see the results of which test cases passed or failed. You can
+								click on them to see in detail which specific test failed.
+							</p>
+							<p>
+								<b>Important:</b> Many of the test cases require the unimplemented UI widgets in tasks 2 and 4,
+								or the physical keyboard in task 3. You need to make sure <b>the widgets are named according to specification</b>,
+								otherwise the tests cannot find those widgets. The tests have been designed to compile even if you
+								have not implemented the widgets or named them incorrectly, but would result in failed tests.
+							</p>
+							<p>
+								<em>
+									<u>Note:</u> During testing, some windows may pop up and close rapidly. This is normal as 
+									the test cases are running GUI tests. If a pop up window appears and do not close, close it manually
+									(this will most likely correlate to a failed test case where pop up window is not expected).
+								</em>
+							</p>
+							<p>
+								After submission deadline, your project will be graded <b>using a different test sub-project</b>,
+								with many more test cases. Your assignment will be graded based on how many test cases passed,
+								scaled according to task scoring scheme described above.
+							</p>
+						</div>
+						<div class="card-footer text-muted">
+							End of Testing and Grading
+						</div>
+					</div>
+					
+					<!-- Download section -->
+					<div class="card mb-4">            
+						<div class="card-body" id="download">
+							<h3 class="card-title">Resources &amp; Sample Program</h3>
+							<strong style="color:red">Last updated: 03:20 22/10/2022</strong>
+							<ul>
+								<li>Skeleton code:
+									<ul>
+										<li>Windows/Linux: <a href="../Resources/PA7.zip">PA7.zip</a></li>
+										<li>Mac: <a href="../Resources/PA7-mac.zip">PA7-mac.zip</a></li>
+									</ul>
+								</li>
+								<li>Demo program:
+									<ul>
+										<li>Windows executable: <a href="../Resources/app.exe">app.exe</a></li>
+										<li>Windows executable with dependencies: <a href="../Resources/PA7-bundle.zip">PA7-bundle.zip</a></li>
+										<li>Linux: <a href="../Resources/app-linux">app-linux</a></li>
+										<li>Mac (Intel): <a href="../Resources/app-mac-intel">app-mac-intel</a></li>
+										<li>Mac (M1): <a href="../Resources/app-mac-m1.zip">app-mac-m1.zip</a></li>
+									</ul>
+								</li>
+							</ul>
+							<p>
+								The Windows Qt executable cannot run by itself; it requires several Qt 
+								<a href="https://en.wikipedia.org/wiki/Dynamic-link_library">dynamic-link libraries</a>.
+								To run the provided executable, copy the folder <code>bin</code> inside the Qt distribution MinGW folder
+								(example: <code>Qt/6.3.2/mingw_64/bin</code>) to a different place, then put the <code>app.exe</code> inside.
+								Also copy the <code>platform</code> folder from plugins (example: <code>Qt/6.3.2/mingw_64/plugins/platform</code>)
+								inside the new folder. Now you can execute the <code>app.exe</code> program. Alternatively, download the .zip
+								with dependencies and run the <code>app.exe</code> inside.
+							</p>
+						</div>            
+						<div class="card-footer text-muted">
+							End of Download
+						</div>
+					</div>
+					
+					<!-- Submission section -->
+					<div class="card mb-4">            
+						<div class="card-body" id="submission">
+							<h3 class="card-title">Submission</h3> 
+							<p style="color:red">
+								<strong>Deadline: 23:59:00 on 29 October, 2022.</strong>
+							</p>
+							<h4>ZINC Submission</h4>
+							<p>
+								Submit the following files in .zip format to ZINC:
+<pre>absurdroundwindow.cpp
+absurdwordleround.cpp
+dictionary.cpp
+keyboard.cpp
+mainwindow.cpp
+multiroundwindow.cpp
+multiwordleround.cpp
+roundwindow.cpp
+solver.cpp
+timedroundwindow.cpp
+timedwordleround.cpp
+wordleround.cpp
+
+mainwindow.ui
+roundwindow.ui
+</pre>
+								In other words, submit <b>all .ui files and .cpp files, except key.cpp,
+								letterbox.cpp, main.cpp, regularroundwindow.cpp, regularwordleround.cpp</b>.
+								ZINC will only be used to check if you have submitted the correct files,
+								and whether you accidentally submitted the skeleton files. Even if you have
+								not completed a task related to some files, please still submit them
+								(you can use the skeleton files, which will only trigger ZINC warnings).
+								Grading will be done manually using a different test set after the deadline.
+							</p>
+						</div>
+						<div class="card-footer text-muted">
+							End of Submission
+						</div>
+					</div>
+						
+					<!-- FAQ section -->
+					<!-- ### Complete FAQ section for the assignment ### -->
+					<div class="card mb-4">            
+						<div class="card-body" id="faq">
+							<h3 class="card-title">Frequently Asked Questions</h3> 			  
+							<p>
+								Please see the <a href="https://course.cse.ust.hk/comp2012h/labs/supp-lab-Qt/qt-faq.html">Qt FAQ page</a>
+								for common questions related to Qt.
+							</p>
+							<p>
+								<b>Q</b>: My code doesn't work, there is an error/bug, here is the code, can you help me fix it?<br>
+								<b>A</b>: As the assignment is a major course assessment, to be fair, you are supposed to work on it
+								on your own and we should not finish the tasks for you. We are happy to help with explanations and
+								advice, but we shall not directly debug the code for you.
+							</p>
+							<p>
+								<b>Q</b>: Am I allowed to use local function declarations (function declaration inside an existing
+								function) for my helper functions? <br>
+								<b>A</b>: You are strongly discouraged from doing so, as that "feature" is a leftover merely for
+								backwards compatibility with C. In C++, it is superseded with class functions and lambda functions,
+								which will be taught later in this course. However, you are free to define your own helper functions
+								in the <code>.cpp</code> files that you submit.
+							</p>
+							<p>
+								<b>Q</b>: For tasks 2 and 4, do I need to position the widgets exactly according to the demo program/given
+								illustrations? <br>
+								<b>A</b>: No need, the test cases are designed so that as long as the widgets have the correct name, they
+								can be accessed by the test programs. You can position the widgets and give them some expansion policy
+								however you want. But it is important that <b>the widgets are named according to the specifications</b>.
+							</p>
+							<p>
+								<b>Q</b>: How can I access the widgets added via the .ui forms in the Window's code?<br>
+								<b>A</b>: Widgets added via the .ui form will become members of the data member <code>ui</code> of the Window class.
+								You can access the widget by using <code>ui->[widget_name]</code>.
+							</p>
+							<p>
+								<b>Q</b>: How do I print messages to the terminal? I would like to use it for debugging.<br>
+								<b>A</b>: You can use <code>qDebug()</code> the same way you would use <code>cout</code>. Note that <code>endl</code> is not needed. You will be able to see the debug messages in the Application Output terminal.
+							</p>
+						</div>
+						<div class="card-footer text-muted">
+							End of Frequently Asked Questions
+						</div>
+					</div>
+
+					<!-- Change Log section -->
+					<!-- ### Complete Change Log section for the assignment ### -->
+					<div class="card mb-4">            
+						<div class="card-body" id="changelog">
+							<h3 class="card-title">Change Log</h3> 			  
+							<p>
+								<b>17:20 - 14/10/22</b>: Added source code and demo program for MacOS, containing a few differences:
+								<ul>
+									<li><b>dictionary.h</b>: 
+										Changed the signature of DictionaryException <code>what()</code> so that the
+										code can compile.
+									</li>
+									<li><b>resource.qrc</b>: Changed encoding to UTF-8.</li>
+								</ul>
+								If the Mac executable does not work, please try
+								using the Windows executable/dependencies bundle on the virtual barn machines.
+							</p>
+							<p>
+								<b>14:45 - 19/10/22</b>: Added a FAQ question about widget accessing in code.
+							</p>
+							<p>
+								<b>03:15 - 22/10/22</b>: Updated the following source files:
+								<ul>
+									<li>multiwordleround.h</li>
+									<li>multiroundwindow.h</li>
+									<li>timedroundwindow.h</li>
+									<li>roundwindow.h</li>
+									<li>wordleround.h</li>
+								</ul>
+								The only changes are making the destructors of the classes <code>virtual</code>.
+								It should not affect the tasks or test cases - you should still be able to complete the assignment with the old files, but it is recommended that you use the new files in case of rare bugs.
+								<br><br>
+								Additionally, added a FAQ question about console debugging.
+							</p>
+						</div>
+						<div class="card-footer text-muted">
+							End of Change Log
+						</div>
+					</div>
+				</div>
+					
+					<!-- Sidebar Widgets Column -->
+					<div class="col-md-3">
+						<div class="sticky-top">
+							<!-- Menu Widget -->
+							<div class="card my-12">
+								<h5 class="card-header">Menu</h5>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-lg-12">
+											<ul class="mb-0" type="circle" style="padding-left:20px">
+												<li>
+													<a href="#honor">Honor Code</a>
+												</li>
+												<li>
+													<a href="#objective">Objectives & ILOs</a>
+												</li>
+												<li>
+													<a href="#introduction">Introduction</a>
+												</li>
+												<li>
+													<a href="#description">Description</a>
+													<!-- <ul>
+														<li><a href="#code-structure">Code structure</a></li>
+														<li><a href="#color-convention">Color convention</a></li>
+														<li><a href="#demo-overview">Demo overview</a></li>
+													</ul> -->
+												</li>
+												<li>
+													<a href="#tasks">Tasks</a>
+													<ul>
+														<li><a href="#task1">Task 1</a></li>
+														<li><a href="#task2">Task 2</a></li>
+														<li><a href="#task3">Task 3</a></li>
+														<li><a href="#task4">Task 4</a></li>
+														<li><a href="#task5">Task 5</a></li>
+														<li><a href="#bonustask1">Bonus Task 1</a></li>
+														<li><a href="#bonustask2">Bonus Task 2</a></li>
+														<li><a href="#bonustask3">Bonus Task 3</a></li>
+														<li><a href="#bonustask4">Bonus Task 4</a></li>
+														<li><a href="#bonustask5">Bonus Task 5</a></li>
+													</ul>
+												</li>
+												<li>
+													<a href="#tests">Testing &amp; Grading</a>
+												</li>
+												<li>
+													<a href="#download">Resources &amp; Sample Program</a>
+												</li>
+												<li>
+													<a href="#submission">Submission</a>
+												</li>
+												<li>
+													<a href="#faq">FAQ</a>
+												</li>
+												<li>
+													<a href="#changelog">Change Log</a>
+												</li>
+											</ul>
+										</div>                
+									</div>
+								</div>
+							</div>
+							
+							<!-- Maintainance widget -->
+							<div class="card my-4">
+								<h5 class="card-header">Page maintained by</h5>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-lg-12">
+											<ul class="list-unstyled mb-0">
+												<li>
+													DINH Anh Dung
+												</li>
+												<li>
+													Email: <a href="mailto:dzung@ust.hk">dzung@ust.hk</a>
+												</li>
+												<li>Last Modified: <script type="text/javascript">document.write(document.lastModified);</script></li>
+											</ul>
+										</div>				
+									</div>
+								</div>
+							</div>
+							
+							
+							<!-- Homepage widget -->
+							<div class="card my-4">
+								<h5 class="card-header">Homepage</h5>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-lg-12">
+											<ul class="list-unstyled mb-0">
+												<li>
+													<a href="http://course.cse.ust.hk/comp2012h">Course Homepage</a>
+												</li>
+											</ul>
+										</div>				
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /.row -->
+				
+			</div>
+			<!-- /.container -->
+			
+			<!-- Footer -->
+			<footer class="py-5 bg-dark">
+				<div class="container">
+					<p class="m-0 text-center text-white">Maintained by COMP 2012H Teaching Team &copy; 2021 HKUST Computer Science and Engineering</p>
+				</div>
+				<!-- /.container -->
+			</footer>
+			
+			<!-- Bootstrap core JavaScript -->
+			<script src="vendor/jquery/jquery.min.js"></script>
+			<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>	
+		</body>
+		
+		</html>
+		
