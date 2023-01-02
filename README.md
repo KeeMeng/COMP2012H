@@ -1,5 +1,6 @@
 # COMP2012H
 HKUST COMP2012H Programming Assignments
+
 There are a total of 11 PAs, and my implementations are in this repository
 
 - PA1: Calendar (C++ basic variables and control loops)
@@ -15,7 +16,11 @@ There are a total of 11 PAs, and my implementations are in this repository
 - PA11: A dictionary using trie (rvalue reference, move, data structures and ADT)
 
 Each PA include a descript html, which was downloaded from the course page
+
 Some PAs also contain a "cheatsheet" which combines multiple header files for quick access to class members
 
+--
+
 I have also included the sublime build files which I used to compile each programming assignment, and you can use it by adding it to your `Sublime Text/Packages/User` folder
+
 For more details, refer to https://www.sublimetext.com/docs/build_systems.html
